@@ -51,6 +51,15 @@ body{
     background-color: var(--emerald-600);
 }
 
+.link{
+    color: white;
+    text-decoration: none;
+}
+
+.link:hover{
+    color: var(--emerald-400);
+    font-weight: bold;
+}
 
 .landing-page-header{
     background-color: var(--zinc-800);
@@ -65,5 +74,11 @@ body{
     background: var(--emerald-600);
 }
 .image-container{
+    border: 2px solid black;
+    overflow: visible;
+}
+.landing-image{
+    max-width: 300px;
+    max-height: 300px;
     border: 2px solid black;
 }
