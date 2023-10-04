@@ -4,14 +4,15 @@
     --zinc-800:  #27272A;
     --emerald-600: #059669;
     --emerald-400: #34D399;
+    --zinc-300: #D4D4D8;
 }
 
 
-/* 
+
 body{
     width: 100vw;
     height: 100vh;
-} */
+}
 
 .content-container{
     width: 100%;
@@ -49,6 +50,7 @@ body{
     font-size: 20px;
     align-items: center;
     background-color: var(--emerald-600);
+    border-radius: 5px;
 }
 
 .link{
@@ -59,6 +61,19 @@ body{
 .link:hover{
     color: var(--emerald-400);
     font-weight: bold;
+}
+
+.landinglink{
+    color: var(--emerald-600);
+}
+.landinglink:hover{
+    color: var(--emerald-400);
+}
+
+.login-button:hover{
+    color: var(--emerald-400);
+    background-color: var(--zinc-800);
+    border-color: white;
 }
 
 .landing-page-header{
@@ -82,3 +97,29 @@ body{
     max-height: 300px;
     border: 2px solid black;
 }
+
+
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    background-color: var(--zinc-300) /* Change the color to your desired background color */
+}
+
+/* form{
+    border: 2px solid black;
+}
+
+.login-wrapper{
+    border: 2px solid black;
+}
+
+.login-header{
+    border: 2px solid black;
+}
+
+.super-wrapper{
+    border: 2px solid blue;
+    height:100%;
+} */
+
