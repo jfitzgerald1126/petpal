@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>P1 - Sign Up: Seeker</title>
+    <title>P1 - Login</title>
     <!--for our custom syling-->
     <link href="styles.css" rel="stylesheet">
     <!--boostrap setup-->
@@ -11,6 +11,7 @@
   </head>
   <body>
 
+    
     <div class="content-container d-flex align-items-center flex-row">
       <header class="landing-page-header position-fixed top-0 left-0 d-flex">
         <div class="Petpalcontainer fs-1 text-white fw-light ms-2 h-100 d-flex align-items-center">Petpal</div>
@@ -34,50 +35,32 @@
 
       <div class="super-wrapper w-100 h-100 d-flex align-items-center justify-content-center">
 
-        <div class="login-wrapper d-flex flex-column align-items-left w-75 mb-5 just">
+        <div class="login-wrapper d-flex flex-column align-items-left w-50 mb-5 just">
           <div class="login-header text-left ">
-            <h4 class="fw-light">Get started as a Seeker</h4>
-            <h1 class="display-3 fw-medium">Create a Seeker Account</h1>
-            <h4 class="fw-light">Already have an account ? <a href="login_page.html" class="landinglink">Log in</a></h4>
+            <h4 class="fw-light">Welcome Back User</h4>
+            <h1 class="display-3 fw-medium">Login to your account</h1>
+            <h4 class="fw-light">Dont't have an account ? <a href="landing_page.html" class="landinglink">Register</a></h4>
           </div>
 
 
-          <div class="w-100">
+          <div class="w-75">
             <form method="post">
-
-            <div class="w-50">
               <div class="mb-3 mt-5">
                 
                 <input type="email" class="form-control" id="username" name="email"placeholder="Email...">
               </div>
-
               <div class="mb-3">
-                <input type="text" class="form-control" id="password" name="password" placeholder="Full name...">
-                
-              </div>
-
-
-              
-
-            </div>
-            <div class="w-100 d-flex mb-5">
-              <div class="mb-3 w-50 me-1">
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
                 
               </div>
+             <!--note, form control classes are default configs provided by bootstrap-->
 
-              <div class="mb-3 w-50">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Confirm Password...">
+              <div class="mb-3">
+                <h5 class="fw-semibold text-danger">Incorrect username or password</h5>
               </div>
 
-            </div>
-               <!--note, form control classes are default configs provided by bootstrap-->
-
-
-   
-
               <div class="mb-3 d-flex justify-content-start">
-                <button type="submit" class="login-button">Register</button>
+                <button type="submit" class="login-button">Login</button>
               </div>
               
             </form>
@@ -85,6 +68,12 @@
 
         </div>
       </div>
+
+
+    </div>
+
+
+
 
 
 </body>

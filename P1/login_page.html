@@ -37,9 +37,9 @@
 
         <div class="login-wrapper d-flex flex-column align-items-left w-50 mb-5 just">
           <div class="login-header text-left ">
-            <p class="h4 fw-light">Welcome Back</p>
+            <h4 class="fw-light">Welcome Back User</h4>
             <h1 class="display-3 fw-medium">Login to your account</h1>
-            <p class="h4 fw-light">Dont't have an account ? <a href="landing_page.html" class="landinglink">Register</a></p>
+            <h4 class="fw-light">Dont't have an account ? <a href="landing_page.html" class="landinglink">Register</a></h4>
           </div>
 
 
@@ -53,10 +53,16 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
                 
               </div>
+              <!--note, form control classes are default configs provided by bootstrap-->
+
+           
+
 
               <div class="mb-3 d-flex justify-content-start">
-                <button type="submit" class="login-button">Login</button>
+                <button type="submit" class="login-button"><a href="login_page_fail.html" class="link">Login</a></button>
               </div>
+              <!--for now this is meant to go to the fail page as we dont have the tools
+              to make it actually see if the password is correct or not-->
               
             </form>
           </div>
