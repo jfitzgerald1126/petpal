@@ -123,3 +123,69 @@ input[type="password"] {
     height:100%;
 } */
 
+
+/* Pet Detail Page*/
+
+.pet-detail-grid{
+    display: grid;
+    padding: 10%;
+    padding-top: 10%;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 100%;
+    height: 600px;
+    column-gap: 1rem;
+    width: auto;
+}
+
+.pet-detail-frame {
+    width: 480px;
+    height: 400px;
+    overflow: hidden;
+    margin: auto;
+    justify-self: right;
+    object-fit: cover;
+}
+
+.pet-detail-img {
+    width: 100%;
+    height: 100%;
+}
+
+.pet-detail-grid-inner{
+    display: flex;
+    flex-direction: column;
+    justify-self: left;
+    width: 480px;
+    height: auto;
+}
+.pet-detail-heading-flex{
+    display: flex;
+    flex-direction: row;
+}
+
+.pet-detail-grid-icons{
+    display: grid;
+    grid-template-columns: 40% 40%;
+    grid-template-rows: 20% 20% 20%;
+    column-gap: 10%;
+    row-gap: 0.2rem;
+    width: auto;
+    height: auto;
+}
+
+.pet-detail-icon-text{
+    color:#A1A1AA;
+    font-family: "Hayes Valley Studio";
+    width: auto;
+}
+
+.pet-detail-header-text{
+    color:black;
+    font-family: "Hayes Valley Studio";
+}
+
+.pet-detail-text{
+    color:black;
+    font-family: "Hayes Valley Studio";
+
+}
