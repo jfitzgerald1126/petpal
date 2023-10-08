@@ -24,8 +24,6 @@
       
           <ul class="navbar h-100 mb-0 pt-0 pb-0">
             <li class="nav-item me-1">
-              <!-- <a class="nav-link fs-5 login-button" aria-current="page" href="login_page.html">Log In</a> -->
-
               <button type="button" class="login-button"><a href="landing_page.html" class="link">Go back</a></button>
             </li>
           </ul>
@@ -44,39 +42,35 @@
 
           <div class="w-100">
             <form method="post">
-            <div class="w-50">
-              <div class="mb-3 mt-5">
-                
-                <input type="email" class="form-control" id="username" name="email"placeholder="Email...">
+              <!--used form-control configurations from boostrap to align input boxes
+              https://getbootstrap.com/docs/5.3/forms/overview/#overview
+              -->
+              <div class="w-50">
+                <div class="mb-3 mt-5">
+                  <input type="email" class="form-control" id="email" name="email"placeholder="Email...">
+                </div>
+
+                <div class="mb-3">
+                  <input type="text" class="form-control" id="shelter_name" name="shelter_name" placeholder="Shelter name...">
+                </div>
+                <div class="mb-3">
+                  <input type="text" class="form-control" id="adress" name="adress" placeholder="Address...">
+                </div>
               </div>
 
-              <div class="mb-3">
-                <input type="text" class="form-control" id="password" name="password" placeholder="Shelter name...">
-                
+              <div class="w-100 d-flex mb-5">
+                  <!--custom alignment for passwords-->
+                <div class="mb-3 w-50 me-1">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
+                </div>
+
+                <div class="mb-3 w-50">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Confirm Password...">
+                </div>
               </div>
-              <div class="mb-3">
-                <input type="text" class="form-control" id="password" name="password" placeholder="Address...">
-              </div>
-
-
-            </div>
-
-            <div class="w-100 d-flex mb-5">
-                <!--custom alignment for passwords-->
-              <div class="mb-3 w-50 me-1">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
-                
-              </div>
-
-              <div class="mb-3 w-50">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Confirm Password...">
-              </div>
-
-            </div>
               
                <!--note, form control classes are default configs provided by bootstrap-->
-
-               <div class="mb-3">
+              <div class="mb-3">
                 <h5 class="fw-semibold text-danger">Invalid email or password</h5>
               </div>
 
