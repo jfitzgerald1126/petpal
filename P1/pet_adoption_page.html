@@ -26,10 +26,12 @@
         <div class="row mt-5 mx-auto">
           <!-- form -->
           <div class="col-md-6 col-12">
-            <h3 class="mb-4">Submit An Adoption Application</h3>
+            <h3 class="mb-5 fw-bold">Submit An Adoption Application</h3>
 
               <!-- TODO: add aria -->
-            <form>
+
+            <!-- floating label -->
+            <!-- <form>
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="name1" placeholder="name">
                 <label for="name1">Name</label>
@@ -56,6 +58,35 @@
               <div class="form-floating mb-3">
                 <textarea name="reason" id="reason" class="form-control" placeholder="Enter a reason here" style="height: 215px;"></textarea>
                 <label for="reason">Why do you want to adopt ronald?</label>
+              </div>
+
+              <button type="submit" class="btn btn-success">Submit Application</button>
+            </form> -->
+
+            <form>
+              <div class="mb-3">
+                <input type="text" class="form-control" id="name1" placeholder="Name">
+
+              </div>
+
+              <div class="mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="Email">
+              </div>
+
+              <div class="mb-3">
+                <input type="tel" class="form-control" id="tel" placeholder="Phone">
+              </div>
+
+              <div class="mb-3">
+                <select name="contactMethod" class="form-select" id="contactMethod">
+                  <option selected>Preferred contact method</option>
+                  <option value="email">Email</option>
+                  <option value="phone">Phone</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <textarea name="reason" id="reason" class="form-control" placeholder="Why do you want to adopt ronald?" style="height: 215px;"></textarea>
               </div>
 
               <button type="submit" class="btn btn-success">Submit Application</button>
