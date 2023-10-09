@@ -187,7 +187,7 @@ input[type="password"] {
     height: 40px;
     align-self: center;
     background-color: #059669;
-    color: #E4E4E7;
+    color: white;
 }
 
 .status-box{
@@ -198,12 +198,14 @@ input[type="password"] {
     width: 100px;
     height: 30px;
     align-self: center;
+    vertical-align:middle;
     margin-left: 10px;
 }
 .pet-detail-icon-text{
     color:#A1A1AA;
     font-family: "Hayes Valley Studio";
     width: auto;
+    margin: 0;
 }
 
 .pet-detail-header-text{
@@ -215,4 +217,25 @@ input[type="password"] {
     color:black;
     font-family: "Hayes Valley Studio";
 
+}
+
+.pet-detail-more-pets{
+    padding-top: 50px;
+    padding-left: 1rem;
+    color:black;
+    font-family: "Hayes Valley Studio";
+}
+
+.contact-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.more-pets-flex{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    align-content: center;
+    justify-content: center;
 }
