@@ -211,3 +211,8 @@ header{
     font-family: "Hayes Valley Studio";
 
 }
+
+
+.extra-images {
+    max-width: 150px;
+}
