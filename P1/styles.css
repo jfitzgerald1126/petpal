@@ -243,7 +243,7 @@ login-wrapper{
 }
 
 #email, #password, #name, #shelter_name, #adress{
-    background-color: var(--zinc-300);
+    background-color: var(--zinc-100);
 }
 /* form{
     border: 2px solid black;
