@@ -25,56 +25,50 @@
       <main class="container">
         <div class="row mt-5 mx-auto">
           <!-- form -->
-          <h3 class="mb-4">List a new pet for adoption</h3>
+          <h3 class="mb-5 fw-bold">List a new pet for adoption</h3>
 
             <!-- TODO: add aria -->
           <form>
             <div class="row">
               <div class="col-md-6 col-12">
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="name1" placeholder="name">
-                  <label for="name1">Name</label>
+                <div class="mb-3">
+                  <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="name" placeholder="Name">
                 </div>
     
-                <div class="form-floating mb-3">
-                  <select name="animal" class="form-select" id="animal">
+                <div class="mb-3">
+                  <select name="animal" class="form-select bg-zinc-100 text-zinc-500" id="animal">
                     <option selected>No selection</option>
                     <option value="dog">Dog</option>
                     <option value="cat">Cat</option>
                     <option value="other">Other (please spcifiy)</option>
                   </select>
-                  <label for="animal">Animal</label>
                 </div>
                 
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="breed" placeholder="breed">
-                  <label for="name1">Breed (optional)</label>
+                <div class="mb-3">
+                  <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="breed" placeholder="Breed (optional)">
                 </div>
     
-                <div class="form-floating mb-3">
-                  <input type="date" class="form-control" id="birthday" placeholder="birthday">
-                  <label for="birthday">Birthday (optional)</label>
+                <div class="mb-3">
+                  <input type="date" class="form-control bg-zinc-100 text-zinc-500" id="birthday" placeholder="Birthday (optional)">
+
                 </div>
     
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="caretaker" placeholder="caretaker">
-                  <label for="caretaker">Caretaker (optional)</label>
+                <div class="mb-3">
+                  <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="caretaker" placeholder="Caretaker (optional)">
                 </div>
     
-                <div class="form-floating mb-3">
-                  <textarea name="vaccine" id="vaccine" class="form-control" placeholder="Enter vaccine info" style="height: 122px;"></textarea>
-                  <label for="vaccine">Vaccination and Medical Information</label>
+                <div class="mb-3">
+                  <textarea name="vaccine" id="vaccine" class="form-control bg-zinc-100 text-zinc-500" placeholder="Vaccination and Medical Information" style="height: 122px;"></textarea>
                 </div>
     
-                <div class="form-floating mb-3">
-                  <textarea name="description" id="description" class="form-control" placeholder="Enter description" style="height: 177px;"></textarea>
-                  <label for="description">Description</label>
+                <div class="mb-3">
+                  <textarea name="description" id="description" class="form-control bg-zinc-100 text-zinc-500" placeholder="Description" style="height: 177px;"></textarea>
                 </div>
     
                 <button type="submit" class="btn btn-success ps-5 pe-5">List pet</button>
               </div>
               <div class="col-md-4 col-12">
-                <input type="file" class="form-control">
+                <input type="file" class="form-control bg-zinc-100 text-zinc-500">
                 <img src="upload-image.png" class="img-fluid mt-2" alt="upload-image placeholder">
 
                 <div class="extra-images">
