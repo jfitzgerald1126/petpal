@@ -1,10 +1,128 @@
 /*custom styling for specific elements*/
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 
 :root{
-    --zinc-800:  #27272A;
-    --emerald-600: #059669;
-    --emerald-400: #34D399;
-    --zinc-300: #D4D4D8;
+    /* Color styles */
+    --emerald-700: rgba(4, 120, 87, 1);
+    --emerald-600: rgba(5, 150, 105, 1);
+    --emerald-500: rgba(16, 185, 129, 1);
+    --emerald-400: rgba(52, 211, 153, 1);
+    --emerald-300: rgba(110, 231, 183, 1);
+    --emerald-200: rgba(167, 243, 208, 1);
+    --zinc-800: rgba(39, 39, 42, 1);
+    --zinc-700: rgba(63, 63, 70, 1);
+    --zinc-500: rgba(113, 113, 122, 1);
+    --zinc-400: rgba(161, 161, 170, 1);
+    --zinc-300: rgba(212, 212, 216, 1);
+    --zinc-200: rgba(228, 228, 231, 1);
+    --zinc-100: rgba(244, 244, 245, 1);
+    --zinc-50: rgba(250, 250, 250, 1);
+
+    /* Effect styles */
+    --shadow-1:  0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* TEXTS */
+.text-zinc-800 {
+    color: var(--zinc-800) !important;
+}
+.text-zinc-700 {
+    color: var(--zinc-700) !important;
+}
+.text-zinc-500 {
+    color: var(--zinc-500) !important;
+}
+.text-zinc-400 {
+    color: var(--zinc-400) !important;
+}
+.text-zinc-300 {
+    color: var(--zinc-300) !important;
+}
+.text-zinc-200 {
+    color: var(--zinc-200) !important;
+}
+.text-zinc-100 {
+    color: var(--zinc-100) !important;
+}
+.text-zinc-50 {
+    color: var(--zinc-50) !important;
+}
+.text-emerald-700 {
+    color: var(--emerald-700) !important;
+}
+.text-emerald-600 {
+    color: var(--emerald-600) !important;
+}
+.text-emerald-500 {
+    color: var(--emerald-500) !important;
+}
+.text-emerald-400 {
+    color: var(--emerald-400) !important;
+}
+.text-emerald-300 {
+    color: var(--emerald-300) !important;
+}
+.text-emerald-200 {
+    color: var(--emerald-200) !important;
+}
+/* SHADOWS */
+.shadow-1 {
+    box-shadow: var(--shadow-1) !important;
+}
+/* BACKGROUNDS */
+.bg-zinc-800 {
+    background-color: var(--zinc-800) !important;
+}
+.bg-zinc-700 {
+    background-color: var(--zinc-700) !important;
+}
+.bg-zinc-500 {
+    background-color: var(--zinc-500) !important;
+}
+.bg-zinc-400 {
+    background-color: var(--zinc-400) !important;
+}
+.bg-zinc-300 {
+    background-color: var(--zinc-300) !important;
+}
+.bg-zinc-200 {
+    background-color: var(--zinc-200) !important;
+}
+.bg-zinc-100 {
+    background-color: var(--zinc-100) !important;
+}
+.bg-zinc-50 {
+    background-color: var(--zinc-50) !important;
+}
+.bg-emerald-700 {
+    background-color: var(--emerald-700) !important;
+}
+.bg-emerald-600 {
+    background-color: var(--emerald-600) !important;
+}
+.bg-emerald-500 {
+    background-color: var(--emerald-500) !important;
+}
+.bg-emerald-400 {
+    background-color: var(--emerald-400) !important;
+}
+.bg-emerald-300 {
+    background-color: var(--emerald-300) !important;
+}
+.bg-emerald-200 {
+    background-color: var(--emerald-200) !important;
+}
+
+.fs-7 {
+    font-size: 14px !important;
+}
+
+.fs-8 {
+    font-size: 12px !important;
+}
+
+.fs-9 {
+    font-size: 10px !important;
 }
 
 
@@ -12,15 +130,20 @@
 body{
     width: 100vw;
     height: 100vh;
+    font-family: 'Manrope', sans-serif !important;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .content-container{
     width: 100%;
     height: 100%;
+    margin-top: 70px;
 }
 
 header{
     height:70px;
+    z-index: 1000;
 }
 
 .super-wrapper{
@@ -45,18 +168,19 @@ header{
     /* border: 2px solid red; */
 }
 /*borders are for testing to see if alignment is proper*/
-.login-button{
+.login-button {
     width: 150px;
     height: 40px;
     /* border: 2px solid blue; */
-    margin-top: auto;
+    /* margin-top: auto; */
     display: flex;
     justify-content: center;
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     align-items: center;
     background-color: var(--emerald-600);
     border-radius: 5px;
+    border: none;
 }
 
 .link{
@@ -197,17 +321,203 @@ header{
 }
 .pet-detail-icon-text{
     color:#A1A1AA;
-    font-family: "Hayes Valley Studio";
     width: auto;
 }
 
 .pet-detail-header-text{
     color:black;
-    font-family: "Hayes Valley Studio";
 }
 
 .pet-detail-text{
     color:black;
-    font-family: "Hayes Valley Studio";
+}
 
+
+
+/* SEARCH PAGE */
+.search-bar {
+    background-color: #F4F4F5;
+    border-radius: 100px;
+    border: 1px solid var(--zinc-300, #D4D4D8);
+    background: #F4F4F5;
+    width: 300px;
+    height: 40px;
+    padding: 10px 15px;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.dropdown-toggle {
+    font-weight: 500 !important;
+    color: var(--zinc-500) !important;
+    background-color: var(--zinc-50) !important;
+    font-size: 14px !important;
+    border: 1px solid var(--zinc-300) !important;
+}
+
+.dropdown-menu {
+    background-color: var(--zinc-50) !important;
+    color: var(--zinc-500) !important;
+    font-size: 14px !important;
+    border: 1px solid var(--zinc-300) !important;
+    transform: translateY(10px);
+}
+
+.filtering-sidebar {
+    max-width: 300px;
+    flex: 1;
+}
+
+.filtering-sidebar .filtering-category-options > .filtering-option {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--zinc-500);
+    margin-bottom: 2px;
+}
+
+.listing-card-grid {
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-left: 20px;
+}
+
+.pet-card {
+    width: 250px;
+    height: 375px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: var(--shadow-1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.pet-card > .pet-img {
+    width: 250px;
+    height: 175px;
+    background-color: #D4D4D8;
+    position: relative;
+}
+
+.pet-card > .pet-img > .pet-status {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: rgba(255, 255, 255, 0.80);
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 10px;
+    color: var(--zinc-700);
+    padding: 2px 5px;
+}
+
+.pet-card > .pet-details {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    position: relative;
+}
+
+.pet-card > .pet-details > .pet-listed-date {
+    color: var(--zinc-400);
+    font-weight: 500;
+    font-size: 10px;
+    right: 10px;
+    position: absolute;
+}
+
+.pet-card > .pet-details > .pet-name {
+    font-size: 18px;
+    color: var(--zinc-700);
+    font-weight: 700;
+}
+
+.pet-card > .pet-details > .pet-info {
+    color: var(--zinc-400);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.pet-card > .pet-details > .pet-description {
+    color: var(--zinc-700);
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+body .mobile-search-filtering-container {
+    display: none !important;
+}
+
+@media screen and (max-width: 800px) {
+    body .search-filtering-container {
+        display: none !important;
+    }
+
+    body .mobile-search-filtering-container {
+        display: block !important;
+    }
+
+    body .search-top-container, body .search-results-container {
+        padding: 1rem !important;
+    }
+    
+    body .filtering-sidebar {
+        display: none !important;
+    }
+
+    .listing-card-grid {
+        margin: 0;
+        justify-content: space-evenly;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .pet-card {
+        width: 300px;
+        height: 100px;
+        flex-direction: row;
+        margin: 0; 
+    }
+
+    .pet-card > .pet-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .pet-card > .pet-img > .pet-status {
+        right: 8px;
+        bottom: 8px;
+        font-size: 8px;
+    }
+
+    .pet-card > .pet-details {
+        width: 200px;
+    }
+    
+    .pet-card > .pet-details > .pet-name {
+        font-size: 14px;
+    }
+    .pet-card > .pet-details > .pet-info {
+        font-size: 10px;
+        font-weight: 500;
+    }
+    
+    .pet-card > .pet-details > .pet-description {
+        display: none;
+    }
+
+    .listing-card-grid {
+        gap: 0.5rem;
+    }
 }

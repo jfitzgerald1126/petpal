@@ -8,9 +8,220 @@
     <link href="styles.css" rel="stylesheet">
     <!--boostrap setup-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  
+    <script>
+      function toggleDropdown() {
+        if (document.getElementById("dropdownMenuButton").dataset.expanded == "false") {
+          document.getElementById("dropdownMenu").style.display = "block";
+          document.getElementById("dropdownMenuButton").dataset.expanded = "true";
+        }
+        else {
+          document.getElementById("dropdownMenu").style.display = "none";
+          document.getElementById("dropdownMenuButton").dataset.expanded = "false";
+        }
+      }
+
+      function toggleDropdownMobile() {
+        if (document.getElementById("dropdownMenuButtonMobile").dataset.expanded == "false") {
+          document.getElementById("dropdownMenuMobile").style.display = "block";
+          document.getElementById("dropdownMenuButtonMobile").dataset.expanded = "true";
+        }
+        else {
+          document.getElementById("dropdownMenuMobile").style.display = "none";
+          document.getElementById("dropdownMenuButtonMobile").dataset.expanded = "false";
+        }
+      }
+    </script>
   </head>
   <body>
 
+    <!-- NAVBAR -->
+    <header class="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
+      <div class="Petpalcontainer fs-3 text-white fw-medium mx-3">Petpal</div>
+      <button class="login-button mx-3"><a href="landing_page.html" class="link">Go back</a></button>
+    </header>
 
-</body>
+    <div class="content-container">
+      <!-- SEARCH AND FILTERING -->
+      <div class="search-top-container d-flex flex-column w-100 px-5 pt-5">
+        <h1 class="fs-3 fw-bold text-zinc-800">Browse Pets</h1>
+        <div class="search-filtering-container d-flex flex-row w-100 pt-3 align-items-center justify-content-between">
+          <div class="d-flex flex-row align-items-center">
+            <input type="text" class="search-bar text-zinc-600" placeholder="🔍 search"/>
+            <span class="text-zinc-400 fs-8 ms-3 fw-medium">111, Yonge St, Toronto ON - 10km</span>
+          </div>
+
+          <div class="d-flex flex-row align-items-center">
+            <span class="text-zinc-400 fs-8 mx-3 fw-medium">7 results found</span>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" onclick="toggleDropdown()" id="dropdownMenuButton" data-expanded="false">
+                Sort By
+              </button>
+              <div class="dropdown-menu" id="dropdownMenu">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mobile-search-filtering-container d-flex flex-column w-100 mt-2">
+          <input type="text" class="search-bar text-zinc-600 w-100" placeholder="🔍 search"/>
+          <div class="d-flex flex-row align-items-center justify-content-between w-100 mt-3 px-2">
+            <span class="text-zinc-400 fs-8 fw-medium">111, Yonge St, Toronto ON - 10km</span>
+            <span class="text-zinc-400 fs-8 fw-medium">7 results found</span>
+          </div>
+          <div class="d-flex flex-row align-items-center justify-content-between w-100 mt-3 px-2">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" onclick="toggleDropdownMobile()" id="dropdownMenuButtonMobile" data-expanded="false">
+                Sort By
+              </button>
+              <div class="dropdown-menu" id="dropdownMenuMobile">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+            <button class="btn btn-secondary dropdown-toggle" type="button" onclick="toggleDropdownMobile()" id="dropdownMenuButtonMobile" data-expanded="false">
+              Filter By
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="search-results-container d-flex flex-row w-100 px-5 pt-5">
+        <!-- SIDEBAR -->
+        <div class="filtering-sidebar d-flex flex-column me-5">
+          <h3 class="font-weight-medium fs-5 text-zinc-700">Filtering</h3>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Status</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+            </div>
+          </div>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Status</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+            </div>
+          </div>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Status</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PET CARDS -->
+        <div class="listing-card-grid">
+          <div class="pet-card">
+            <div class="pet-img">
+              <div class="pet-status">adopted</div>
+            </div>
+            <div class="pet-details">
+              <div class="pet-listed-date">Listed 20/03/2023</div>
+              <h4 class="pet-name">Ronald</h4>
+              <span class="pet-info">Annex Dog Rescue</span>
+              <span class="pet-info">German Shepherd</span>
+              <span class="pet-info">2 years</span>
+              <span class="pet-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex</span>
+            </div> 
+          </div>
+          <div class="pet-card">
+            <div class="pet-img">
+              <div class="pet-status">adopted</div>
+            </div>
+            <div class="pet-details">
+              <div class="pet-listed-date">Listed 20/03/2023</div>
+              <h4 class="pet-name">Ronald</h4>
+              <span class="pet-info">Annex Dog Rescue</span>
+              <span class="pet-info">German Shepherd</span>
+              <span class="pet-info">2 years</span>
+              <span class="pet-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex</span>
+            </div> 
+          </div>
+          <div class="pet-card">
+            <div class="pet-img">
+              <div class="pet-status">adopted</div>
+            </div>
+            <div class="pet-details">
+              <div class="pet-listed-date">Listed 20/03/2023</div>
+              <h4 class="pet-name">Ronald</h4>
+              <span class="pet-info">Annex Dog Rescue</span>
+              <span class="pet-info">German Shepherd</span>
+              <span class="pet-info">2 years</span>
+              <span class="pet-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex</span>
+            </div> 
+          </div>
+          <div class="pet-card">
+            <div class="pet-img">
+              <div class="pet-status">adopted</div>
+            </div>
+            <div class="pet-details">
+              <div class="pet-listed-date">Listed 20/03/2023</div>
+              <h4 class="pet-name">Ronald</h4>
+              <span class="pet-info">Annex Dog Rescue</span>
+              <span class="pet-info">German Shepherd</span>
+              <span class="pet-info">2 years</span>
+              <span class="pet-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex</span>
+            </div> 
+          </div>
+          <div class="pet-card">
+            <div class="pet-img">
+              <div class="pet-status">adopted</div>
+            </div>
+            <div class="pet-details">
+              <div class="pet-listed-date">Listed 20/03/2023</div>
+              <h4 class="pet-name">Ronald</h4>
+              <span class="pet-info">Annex Dog Rescue</span>
+              <span class="pet-info">German Shepherd</span>
+              <span class="pet-info">2 years</span>
+              <span class="pet-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex</span>
+            </div> 
+          </div>
+          <div class="pet-card">
+            <div class="pet-img">
+              <div class="pet-status">adopted</div>
+            </div>
+            <div class="pet-details">
+              <div class="pet-listed-date">Listed 20/03/2023</div>
+              <h4 class="pet-name">Ronald</h4>
+              <span class="pet-info">Annex Dog Rescue</span>
+              <span class="pet-info">German Shepherd</span>
+              <span class="pet-info">2 years</span>
+              <span class="pet-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex</span>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
 </html>
