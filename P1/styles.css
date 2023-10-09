@@ -334,3 +334,58 @@ header{
     font-family: "Hayes Valley Studio";
 
 }
+
+.profile-wrapper{
+    border:2px solid black;
+    padding-right: auto;
+    padding-left: auto;
+    height:40%;
+}
+
+.headshot-wrapper{
+    border:2px solid black;
+    height: 100px;
+    border-radius: 50%;
+    width: 100px;
+}
+
+
+.picture-and-contact{
+    border:2px solid blue;
+    padding-left:20px;
+    padding-right:20px;
+}
+.bio{
+    height:200px;
+    margin-bottom: 20px;
+}
+.headshot{
+    height:100px;
+    width:100px;
+    object-fit: cover;
+}
+
+.edit-button{
+    width: 150px;
+    height: 40px;
+    color: white;
+    font-size: 20px;
+    align-items: center;
+    background-color: var(--emerald-600);
+    border-radius: 5px;
+}
+.edit-button:hover{
+    color: var(--emerald-400);
+    background-color: var(--zinc-800);
+    border-color: white;
+}
+
+
+.application-wrapper{
+    border: 2px solid black;
+}
+
+.application-table{
+    overflow-y: scroll;
+    height:200px;
+}
