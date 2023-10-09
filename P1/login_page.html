@@ -25,8 +25,6 @@
       
           <ul class="navbar h-100 mb-0 pt-0 pb-0">
             <li class="nav-item me-1">
-              <!-- <a class="nav-link fs-5 login-button" aria-current="page" href="login_page.html">Log In</a> -->
-
               <button type="button" class="login-button"><a href="landing_page.html" class="link">Go back</a></button>
             </li>
           </ul>
@@ -40,22 +38,23 @@
             <h4 class="fw-light">Welcome Back User</h4>
             <h1 class="display-3 fw-medium">Login to your account</h1>
             <h4 class="fw-light">Dont't have an account ? <a href="landing_page.html" class="landinglink">Register</a></h4>
+            <!--for now our landing page serves as the way to either register as a user or shelter-->
           </div>
 
 
           <div class="w-75">
             <form method="post">
+
+              <!--used form-control configurations from boostrap to align input boxes
+              https://getbootstrap.com/docs/5.3/forms/overview/#overview , https://getbootstrap.com/docs/5.3/forms/form-control/
+              -->
               <div class="mb-3 mt-5">
-                
-                <input type="email" class="form-control" id="username" name="email"placeholder="Email...">
+                <input type="email" class="form-control" id="email" name="email"placeholder="Email...">
               </div>
               <div class="mb-3">
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
-                
               </div>
               <!--note, form control classes are default configs provided by bootstrap-->
-
-           
 
 
               <div class="mb-3 d-flex justify-content-start">
@@ -63,6 +62,7 @@
               </div>
               <!--for now this is meant to go to the fail page as we dont have the tools
               to make it actually see if the password is correct or not-->
+              <!--once we have functionality to actually pass around views, ill take out the anchor tags-->
               
             </form>
           </div>

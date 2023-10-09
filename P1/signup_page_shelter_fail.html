@@ -31,7 +31,7 @@
       </header>
 
       <div class="super-wrapper w-100 h-100 d-flex align-items-center justify-content-center">
-        
+
         <div class="login-wrapper d-flex flex-column align-items-left w-75 mb-5 h-100">
           <div class="login-header text-left ">
             <h4 class="fw-light">Get started as a Shelter</h4>
@@ -43,9 +43,9 @@
           <div class="w-100">
             <form method="post">
               <!--used form-control configurations from boostrap to align input boxes
-              https://getbootstrap.com/docs/5.3/forms/overview/#overview , https://getbootstrap.com/docs/5.3/forms/form-control/
+              https://getbootstrap.com/docs/5.3/forms/overview/#overview, https://getbootstrap.com/docs/5.3/forms/form-control/
               -->
-              
+              <!--repeititve code was copy pasted from page's associated non-error screen -->
               <div class="w-50">
                 <div class="mb-3 mt-5">
                   <input type="email" class="form-control" id="email" name="email"placeholder="Email...">
@@ -54,17 +54,13 @@
                 <div class="mb-3">
                   <input type="text" class="form-control" id="shelter_name" name="shelter_name" placeholder="Shelter name...">
                 </div>
-
-
                 <div class="mb-3">
                   <input type="text" class="form-control" id="adress" name="adress" placeholder="Address...">
                 </div>
               </div>
 
-
-
               <div class="w-100 d-flex mb-5">
-                <!--custom alignment for passwords-->
+                  <!--custom alignment for passwords-->
                 <div class="mb-3 w-50 me-1">
                   <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
                 </div>
@@ -75,9 +71,13 @@
               </div>
               
                <!--note, form control classes are default configs provided by bootstrap-->
+              <div class="mb-3">
+                <h5 class="fw-semibold text-danger">Invalid email or password</h5>
+              </div>
+
 
               <div class="mb-3 d-flex justify-content-start">
-                <button type="submit" class="login-button"><a href="signup_page_shelter_fail.html" class="link">Register</a></button>
+                <button type="submit" class="login-button"><a href="signup_page_seeker_fail.html" class="link">Register</a></button>
               </div>
 
               <!--once we have functionality to actually pass around views, ill take out the anchor tags-->
