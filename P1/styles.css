@@ -322,7 +322,7 @@ login-wrapper{
     height: 40px;
     align-self: center;
     background-color: #059669;
-    color: #E4E4E7;
+    color: white;
 }
 
 .status-box{
@@ -333,11 +333,13 @@ login-wrapper{
     width: 100px;
     height: 30px;
     align-self: center;
+    vertical-align:middle;
     margin-left: 10px;
 }
 .pet-detail-icon-text{
     color:#A1A1AA;
     width: auto;
+    margin: 0;
 }
 
 .pet-detail-header-text{
@@ -352,6 +354,26 @@ login-wrapper{
 
 .extra-images {
     max-width: 150px;
+}
+.pet-detail-more-pets{
+    padding-top: 50px;
+    padding-left: 1rem;
+    color:black;
+    font-family: "Hayes Valley Studio";
+}
+
+.contact-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.more-pets-flex{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    align-content: center;
+    justify-content: center;
 }
 .profile-wrapper{
     /* border:2px solid black; */
@@ -467,6 +489,7 @@ login-wrapper{
     flex-direction: column;
     overflow: hidden;
     flex-shrink: 0;
+
 }
 
 .pet-card > .pet-img {
@@ -474,6 +497,13 @@ login-wrapper{
     height: 175px;
     background-color: #D4D4D8;
     position: relative;
+    
+}
+
+.pet-img > img {
+    width: 250px;
+    height: 175px;
+    object-fit: cover;
 }
 
 .pet-card > .pet-img > .pet-status {
@@ -587,6 +617,7 @@ body .mobile-search-filtering-container {
 }
 
 @media screen and (max-width: 800px) {
+    /* SEARCH */
     body .search-filtering-container {
         display: none !important;
     }
@@ -606,6 +637,13 @@ body .mobile-search-filtering-container {
     .listing-card-grid {
         margin: 0;
         justify-content: space-evenly;
+    }
+    /* SHELTER DETAIL */
+    
+    .shelter-container {
+        flex-direction: column-reverse;
+        gap: 30px;
+        padding: 0.5rem;
     }
 }
 
@@ -646,5 +684,32 @@ body .mobile-search-filtering-container {
 
     .listing-card-grid {
         gap: 0.5rem;
+    }
+}
+
+@media screen and (max-width: 460px) {
+    .shelter-container {
+        gap: 0;
+        width: 100%;
+    }
+    .shelter-details-container {
+        width: 100% !important;
+    }
+    body .shelter-info-container {
+        flex-direction: column !important;
+        gap: 5px;
+        margin-bottom: -10px;
+    }
+    body .shelter-info-container > div {
+        gap: 5px;
+    }
+    
+    .shelter-container .shelter-cover-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .shelter-container .shelter-image-carousel {
+        width: 100%;
     }
 }
