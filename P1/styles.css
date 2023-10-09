@@ -356,7 +356,6 @@ login-wrapper{
 .extra-images {
     max-width: 150px;
 }
-<<<<<<< HEAD
 .pet-detail-more-pets{
     padding-top: 50px;
     padding-left: 1rem;
@@ -376,7 +375,7 @@ login-wrapper{
     gap: 50px;
     align-content: center;
     justify-content: center;
-=======
+}
 .profile-wrapper{
     /* border:2px solid black; */
     padding-right: auto;
@@ -425,7 +424,6 @@ login-wrapper{
 .application-table{
     overflow-y: scroll;
     height:200px;
->>>>>>> f620cd98d72f925446ac9d5e580d8e4f653ee1e2
 }
 
 
@@ -492,6 +490,7 @@ login-wrapper{
     flex-direction: column;
     overflow: hidden;
     flex-shrink: 0;
+
 }
 
 .pet-card > .pet-img {
@@ -499,6 +498,13 @@ login-wrapper{
     height: 175px;
     background-color: #D4D4D8;
     position: relative;
+    
+}
+
+.pet-img > img {
+    width: 250px;
+    height: 175px;
+    object-fit: cover;
 }
 
 .pet-card > .pet-img > .pet-status {
