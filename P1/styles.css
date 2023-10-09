@@ -396,6 +396,7 @@ header{
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .pet-card > .pet-img {
@@ -457,6 +458,62 @@ header{
 
 body .mobile-search-filtering-container {
     display: none !important;
+}
+
+
+.shelter-container {
+    flex-direction: row;
+    gap: 30px;
+    padding: 0.5rem;
+}
+
+.shelter-container > .shelter-images-container, .shelter-container > .shelter-details-container {
+    flex: 1;
+    padding-top: 30px;
+    max-width: 400px;
+}
+
+.shelter-container .shelter-cover-image {
+    width: 400px;
+    height: 300px;
+    border-radius: 5px;
+    background-color: #D4D4D8;
+}
+
+.shelter-container .shelter-image-carousel {
+    height: 130px;
+    margin-top: 30px;
+    width: 400px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.shelter-container .shelter-image-carousel .shelter-image {
+    height: 100px;
+    width: 150px;
+    border-radius: 5px;
+    background-color: #D4D4D8;
+    flex-shrink: 0;
+}
+
+.our-friends-container {
+    max-width: 100%;
+    max-width: fit-content;
+    align-self: center;
+}
+
+.shelter-pets-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    width: fit-content;
+    overflow-x: auto;
+    padding: 20px 0;
+    overflow-y: hidden;
+    gap: 2rem;
 }
 
 @media screen and (max-width: 800px) {
