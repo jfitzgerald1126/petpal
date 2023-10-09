@@ -150,6 +150,20 @@ header{
     padding-top: 70px;
     height: 100%;
 }
+
+login-wrapper{
+    width:75%;
+}
+
+@media screen and (max-width:340px){
+    .login-wrapper {
+        /* border: 2px solid black; */
+        width: 100%;
+    }
+    /* .super-wrapper{
+        width:100vw;
+    } */
+}
 .petpaltext{
     width: 50%;
     height: 75%;
@@ -236,9 +250,7 @@ header{
     border: 2px solid black;
 }
 
-.login-wrapper{
-    border: 2px solid black;
-}
+
 
 .login-header{
     border: 2px solid black;
@@ -247,6 +259,10 @@ header{
 .super-wrapper{
     border: 2px solid blue;
     height:100%;
+} */
+
+/* .login-wrapper{
+    border: 2px solid black;
 } */
 
 
