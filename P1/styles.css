@@ -237,6 +237,10 @@ login-wrapper{
     height: 70px;
 }
 
+.extra-images {
+    width: 133px;
+}
+
 
 .adopt-color{
     background: var(--emerald-600);
