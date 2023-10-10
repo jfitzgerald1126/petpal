@@ -712,3 +712,23 @@ body .mobile-search-filtering-container {
         width: 100%;
     }
 }
+
+.reciever{
+    background-color: var(--emerald-500);
+}
+
+.sender{
+    background-color: var(--zinc-400);
+}
+
+.chat-button{
+    background-color: var(--emerald-500);
+}
+
+.chat-button:hover{
+    background-color: var(--emerald-700);
+}
+
+.message-field{
+    width: 80%;
+}

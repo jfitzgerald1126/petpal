@@ -10,8 +10,7 @@
     <!--for our custom syling-->
     <link href="styles.css" rel="stylesheet">
 
-
-   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
       <!-- header -->
@@ -26,7 +25,7 @@
 
       <!-- main -->
       <main class="container">
-        <h3 class="mt-5 fw-bold">View David's Application</h3>
+        <h3 class="mt-5 fw-bold">View Your Application</h3>
         <div class="row mt-5">
           <!-- form -->
           <div class="col-md-6 col-12">
@@ -56,35 +55,35 @@
                 <textarea name="reason" id="reason" class="form-control bg-zinc-100 text-zinc-500" readonly style="height: 215px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Id natus, minus dolorum in assumenda facilis fuga quisquam. Quia vitae animi est autem quod illum possimus at expedita minus ex? Esse deserunt a sed deleniti non doloribus molestias, delectus veniam? Incidunt minus repudiandae cumque alias illum nam illo vel similique non.</textarea>
               </div>
 
-              <button type="submit" class="btn btn-success mb-md-0 mb-3">Accept application</button>
 
-              <button class="btn btn-danger mb-md-0 mb-3">Reject application</button>
+              <button class="btn btn-danger mb-md-0 mb-3">Withdraw application</button>
             </form>
 
             <!--some code from documentation page, modified for the purposes of this assignment
             https://getbootstrap.com/docs/5.3/components/collapse/#how-it-works -->
             <a class="btn chat-button mt-5 text-white" data-bs-toggle="collapse" href="#collapseBox">
-              Chat with the Applicant
-          </a>
-          <div class="collapse" id="collapseBox">
-              <div class="card card-body">
-                  <div class="sender mb-3 border  rounded text-white">hello</div>
-                  <div class="reciever text-white mb-3 rounded">hello, I'm Dave, I want to check my app status</div>
-                  <div class="sender mb-3 border rounded text-white">Hello Dave, our team is almost done reviewing your application</div>
-                  <div class="reciever text-white mb-3 rounded text-white">Awesome, I cant wait to take him home</div>
+                Chat with the Shelter
+            </a>
+            <div class="collapse" id="collapseBox">
+                <div class="card card-body">
+                    <div class="reciever mb-3 border  rounded text-white">hello</div>
+                    <div class="sender text-white mb-3 rounded">hello, I'm Dave, I want to check my app status</div>
+                    <div class="reciever mb-3 border rounded text-white">Hello Dave, our team is almost done reviewing your application</div>
+                    <div class="sender text-white mb-3 rounded text-white">Awesome, I cant wait to take him home</div>
 
 
-                  <div class="card-footer rounded pt-3 d-flex flex-row">
-                    <input type="text" class="message-field rounded" placeholder="Type something..."/>
-                    <button class="btn btn-success rounded-circle" >
-                        >
-                    </button>
-                  </div>
-
-              </div>
-
-              
-          </div>
+                    <div class="card-footer rounded pt-3 d-flex flex-row">
+                        <input type="text" class="message-field rounded" placeholder="Type something..."/>
+                        <button class="btn btn-success rounded-circle" >
+                            >
+                        </button>
+                    </div>
+                </div>
+                
+                
+            </div>
+            
+           
           </div>
   
           <!-- card -->
