@@ -402,7 +402,9 @@ login-wrapper{
 }
 
 
-
+.shelter-link-text{
+    color: var(--zinc-400);
+}
 .pet-container .pet-image-carousel {
     height: 130px;
     margin-top: 30px;
