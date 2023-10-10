@@ -31,6 +31,14 @@
           document.getElementById("dropdownMenuButtonMobile").dataset.expanded = "false";
         }
       }
+
+      function closeMobileFilterModal() {
+        document.getElementById("mobileFilteringModal").style.display = "none";
+      }
+
+      function openMobileFilterModal() {
+        document.getElementById("mobileFilteringModal").style.display = "block";
+      }
     </script>
   </head>
   <body>
@@ -52,15 +60,19 @@
           </div>
 
           <div class="d-flex flex-row align-items-center">
-            <span class="text-zinc-400 fs-8 mx-3 fw-medium">7 results found</span>
+            <span class="text-zinc-400 fs-8 mx-3 fw-medium">6 results found</span>
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle" type="button" onclick="toggleDropdown()" id="dropdownMenuButton" data-expanded="false">
                 Sort By
               </button>
-              <div class="dropdown-menu" id="dropdownMenu">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
+              <div class="dropdown-menu dropdown-menu-right-screen-edge" id="dropdownMenu">
+                <a class="dropdown-item" href="#">Name</a>
+                <a class="dropdown-item" href="#">Size</a>
+                <a class="dropdown-item" href="#">Newer listings</a>
+                <a class="dropdown-item" href="#">Older listings</a>
+                <a class="dropdown-item" href="#">Distance</a>
+                <a class="dropdown-item" href="#">Youngest first</a>
+                <a class="dropdown-item" href="#">Oldest first</a>
               </div>
             </div>
           </div>
@@ -77,14 +89,138 @@
                 Sort By
               </button>
               <div class="dropdown-menu" id="dropdownMenuMobile">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" href="#">Name</a>
+                <a class="dropdown-item" href="#">Size</a>
+                <a class="dropdown-item" href="#">Newer listings</a>
+                <a class="dropdown-item" href="#">Older listings</a>
+                <a class="dropdown-item" href="#">Distance</a>
+                <a class="dropdown-item" href="#">Youngest first</a>
+                <a class="dropdown-item" href="#">Oldest first</a>
               </div>
             </div>
-            <button class="btn btn-secondary dropdown-toggle" type="button" onclick="toggleDropdownMobile()" id="dropdownMenuButtonMobile" data-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle" type="button" onclick="openMobileFilterModal()" id="filterMenuButtonMobile">
               Filter By
             </button>
+            <div id="mobileFilteringModal">
+              <button class="modalCloseButton" onclick="closeMobileFilterModal()">×</button>
+              <h3 class="font-weight-medium fs-5 text-zinc-700">Filtering</h3>
+              <div class="filtering-category-container w-100">
+                <h6 class="font-weight-medium fs-6 text-zinc-500">Status</h6>
+                <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Available</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Withdrawn</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Adopted</span>
+                  </div>
+                </div>
+              </div>
+              <div class="filtering-category-container w-100">
+                <h6 class="font-weight-medium fs-6 text-zinc-500">Gender</h6>
+                <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Male</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Female</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Other</span>
+                  </div>
+                </div>
+              </div>
+              <div class="filtering-category-container w-100">
+                <h6 class="font-weight-medium fs-6 text-zinc-500">Size</h6>
+                <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Small</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Medium</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Large</span>
+                  </div>
+                </div>
+              </div>
+              <div class="filtering-category-container w-100">
+                <h6 class="font-weight-medium fs-6 text-zinc-500">Age</h6>
+                <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>0 - 6 months</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>6 months - 1 year</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>1 - 3 years</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>3 - 10 years</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>10+ years</span>
+                  </div>
+                </div>
+              </div>
+              <div class="filtering-category-container w-100">
+                <h6 class="font-weight-medium fs-6 text-zinc-500">Animal</h6>
+                <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Dog</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Cat</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Hamster</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Reptile</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Bird</span>
+                  </div>
+                </div>
+              </div>
+              <div class="filtering-category-container w-100">
+                <h6 class="font-weight-medium fs-6 text-zinc-500">Breed</h6>
+                <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>German shepard</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Labrador</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Bulldog</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Golden retriever</span>
+                  </div>
+                </div>
+              </div>
+              <div class="filtering-category-container w-100">
+                <h6 class="font-weight-medium fs-6 text-zinc-500">Color</h6>
+                <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Black</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Brown</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>White</span>
+                  </div>
+                  <div class="filtering-option">
+                    <input type="checkbox"/><span>Golden</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -101,38 +237,112 @@
                 <input type="checkbox"/><span>Available</span>
               </div>
               <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
+                <input type="checkbox"/><span>Withdrawn</span>
               </div>
               <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
-              </div>
-            </div>
-          </div>
-          <div class="filtering-category-container w-100">
-            <h6 class="font-weight-medium fs-6 text-zinc-500">Status</h6>
-            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
-              <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
-              </div>
-              <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
-              </div>
-              <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
+                <input type="checkbox"/><span>Adopted</span>
               </div>
             </div>
           </div>
           <div class="filtering-category-container w-100">
-            <h6 class="font-weight-medium fs-6 text-zinc-500">Status</h6>
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Gender</h6>
             <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
               <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
+                <input type="checkbox"/><span>Male</span>
               </div>
               <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
+                <input type="checkbox"/><span>Female</span>
               </div>
               <div class="filtering-option">
-                <input type="checkbox"/><span>Available</span>
+                <input type="checkbox"/><span>Other</span>
+              </div>
+            </div>
+          </div>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Size</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Small</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Medium</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Large</span>
+              </div>
+            </div>
+          </div>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Age</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>0 - 6 months</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>6 months - 1 year</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>1 - 3 years</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>3 - 10 years</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>10+ years</span>
+              </div>
+            </div>
+          </div>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Animal</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Dog</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Cat</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Hamster</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Reptile</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Bird</span>
+              </div>
+            </div>
+          </div>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Breed</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>German shepard</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Labrador</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Bulldog</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Golden retriever</span>
+              </div>
+            </div>
+          </div>
+          <div class="filtering-category-container w-100">
+            <h6 class="font-weight-medium fs-6 text-zinc-500">Color</h6>
+            <div class="filtering-category-options w-100 ps-2 d-flex flex-column">
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Black</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Brown</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>White</span>
+              </div>
+              <div class="filtering-option">
+                <input type="checkbox"/><span>Golden</span>
               </div>
             </div>
           </div>
