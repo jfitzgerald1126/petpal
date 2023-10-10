@@ -156,13 +156,12 @@ login-wrapper{
 
 @media screen and (max-width:340px){
     .login-wrapper {
-        /* border: 2px solid black; */
+        
         width: 100%;
     }
-    /* .super-wrapper{
-        width:100vw;
-    } */
+   
 }
+
 .petpaltext{
     width: 50%;
     height: 75%;
