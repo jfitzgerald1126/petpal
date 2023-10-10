@@ -26,60 +26,56 @@
         <div class="row mt-5 mx-auto">
           <!-- form -->
           <!-- TODO: change name based on pet name -->
-          <h3 class="mb-4">Edit Ronald's Listing</h3>
+          <h3 class="mb-5 fw-bold">Edit Ronald's Listing</h3>
 
             <!-- TODO: add aria -->
           <form>
             <div class="row">
               <div class="col-md-6 col-12">
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="name1" placeholder="name" value="Ronald Mcdonald">
-                  <label for="name1">Name</label>
+                <div class="mb-3">
+                  <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="name" placeholder="Name" value="Ronald Mcdonald">
                 </div>
     
-                <div class="form-floating mb-3">
-                  <select name="animal" class="form-select" id="animal">
-                    <option>No selection</option>
+                <div class="mb-3">
+                  <select name="animal" class="form-select bg-zinc-100 text-zinc-500" id="animal">
+                    <option>Select animal</option>
                     <option selected value="dog">Dog</option>
                     <option value="cat">Cat</option>
-                    <option value="other">Other (please spcifiy)</option>
+                    <option value="other">Other</option>
                   </select>
-                  <label for="animal">Animal</label>
                 </div>
                 
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="breed" placeholder="breed" value="Poodle">
-                  <label for="name1">Breed (optional)</label>
+                <div class="mb-3">
+                  <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="breed" placeholder="Breed (optional)" value="Poodle">
                 </div>
     
-                <div class="form-floating mb-3">
-                  <input type="date" class="form-control" id="birthday" placeholder="birthday">
-                  <label for="birthday">Birthday (optional)</label>
+                <div class="mb-3">
+                  <input type="date" class="form-control bg-zinc-100 text-zinc-500" id="birthday" placeholder="Birthday (optional)">
                 </div>
     
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="caretaker" placeholder="caretaker" value="Bob Ross">
-                  <label for="caretaker">Caretaker (optional)</label>
+                <div class="mb-3">
+                  <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="caretaker" placeholder="Caretaker (optional)" value="Bob Ross">
                 </div>
     
-                <div class="form-floating mb-3">
-                  <textarea name="vaccine" id="vaccine" class="form-control" placeholder="Enter vaccine info" style="height: 122px;"></textarea>
-                  <label for="vaccine">Vaccination and Medical Information</label>
+                <div class="mb-3">
+                  <textarea name="vaccine" id="vaccine" class="form-control bg-zinc-100 text-zinc-500" placeholder="Vaccine and Medical Information" style="height: 122px;"></textarea>
                 </div>
     
-                <div class="form-floating mb-3">
-                  <textarea name="description" id="description" class="form-control" placeholder="Enter description" style="height: 177px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo veniam ducimus et, quae explicabo quam error repellendus iste necessitatibus, quia nobis! Illum doloremque vero ducimus libero possimus expedita distinctio eveniet ipsam tempora quas, at repudiandae eius obcaecati consequuntur, incidunt, laudantium asperiores veritatis illo quisquam? Dolores, ullam ut. Laborum, voluptate tempora.</textarea>
-                  <label for="description">Description</label>
+                <div class="mb-3">
+                  <textarea name="description" id="description" class="form-control bg-zinc-100 text-zinc-500" placeholder="Enter description" style="height: 177px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo veniam ducimus et, quae explicabo quam error repellendus iste necessitatibus, quia nobis! Illum doloremque vero ducimus libero possimus expedita distinctio eveniet ipsam tempora quas, at repudiandae eius obcaecati consequuntur, incidunt, laudantium asperiores veritatis illo quisquam? Dolores, ullam ut. Laborum, voluptate tempora.</textarea>
                 </div>
-                <button type="submit" class="btn btn-success ps-5 pe-5">List pet</button>
-              </div>
-              <div class="col-md-4 col-12">
-                <input type="file" class="form-control">
-                <img src="cheems.jpg" class="img-fluid mt-2" alt="upload-image placeholder">
 
-                <div class="extra-images">
-                  <p class="mt-5">Extra Images</p>
-                  <img src="upload-image.png" class="img-fluid" alt="upload-image placeholder">
+                <button type="submit" class="btn btn-success ps-5 pe-5 mb-md-0 mb-3">List pet</button>
+              </div>
+              <div class="col-md-6 col-12 d-flex justify-content-center">
+                <div class="flex-container">
+                  <input type="file" class="form-control bg-zinc-100 text-zinc-500 mt-md-0 mt-3">
+                  <img src="dog.png" class="img-fluid mt-2" alt="upload-image placeholder">
+  
+                  <div class="extra-images">
+                    <p class="mt-5">Extra Images</p>
+                    <img src="upload-image.png" class="img-fluid" alt="upload-image placeholder">
+                  </div>
                 </div>
 
               </div>

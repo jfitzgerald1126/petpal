@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P1 - Edit Pet Listing</title>
+  <!--boostrap setup-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"
+    defer></script>
+  <!--for our custom syling-->
+  <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- header -->
+  <header>
+    <nav class="navbar navbar-expand-md bg-body-secondary">
+      <div class="container-fluid">
+        <a href="landing_page.html" class="navbar-brand">PetPal</a>
+        <a href="signup_page_seeker.html" class="btn btn-success">Get started</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- main -->
+  <main class="container">
+    <div class="row mt-5 mx-auto">
+      <!-- form -->
+      <h3 class="mb-5 fw-bold">Edit Shelter Profile</h3>
+      <form>
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <div class="mb-3">
+              <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="shelter-name"
+                placeholder="Shelter Name" value="" required>
+            </div>
+
+            <div class="mb-3">
+              <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="shelter-email"
+                placeholder="Shelter Email" value="" required>
+            </div>
+
+            <div class="mb-3">
+              <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="shelter-phone"
+                placeholder="Shelter Phone" required>
+            </div>
+
+            <div class="mb-3">
+              <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="shelter-address"
+                placeholder="Shelter Address" value="">
+            </div>
+
+            <div class="mb-3">
+              <textarea name="shelter-bio" id="shelter-bio" class="form-control bg-zinc-100 text-zinc-500"
+                placeholder="Description" style="height: 122px;"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success ps-5 pe-5 mb-md-0 mb-3">Update Profile</button>
+          </div>
+          <div class="col-md-6 col-12 d-flex justify-content-center">
+            <div class="flex-container">
+              <input type="file" class="form-control bg-zinc-100 text-zinc-500 mt-md-0 mt-3">
+              <img src="shelter.jpg" class="img-fluid mt-2" alt="upload-image placeholder">
+
+              <div class="extra-images">
+                <p class="mt-5">Extra Images</p>
+                <img src="upload-image.png" class="img-fluid" alt="upload-image placeholder">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+
+</body>
+
+</html>

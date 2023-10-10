@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>P1 - Pet Adoption</title>
+    <title>P1 - Pet Adoption - Fail</title>
     <!--boostrap setup-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
@@ -31,22 +31,21 @@
 
               <!-- TODO: add aria -->
 
-
             <form>
               <div class="mb-3">
-                <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="name" placeholder="Name">
+                <input type="text" class="form-control bg-zinc-100 text-zinc-500" id="name" placeholder="Name" disabled>
               </div>
 
               <div class="mb-3">
-                <input type="email" class="form-control bg-zinc-100 text-zinc-500" id="floatingInput" placeholder="Email">
+                <input type="email" class="form-control bg-zinc-100 text-zinc-500" id="floatingInput" placeholder="Email" disabled>
               </div>
 
               <div class="mb-3">
-                <input type="tel" class="form-control bg-zinc-100 text-zinc-500" id="tel" placeholder="Phone">
+                <input type="tel" class="form-control bg-zinc-100 text-zinc-500" id="tel" placeholder="Phone" disabled>
               </div>
 
               <div class="mb-3">
-                <select name="contactMethod" class="form-select bg-zinc-100 text-zinc-500" id="contactMethod">
+                <select name="contactMethod" class="form-select bg-zinc-100 text-zinc-500 " id="contactMethod" disabled>
                   <option selected>Preferred contact method</option>
                   <option value="email">Email</option>
                   <option value="phone">Phone</option>
@@ -54,11 +53,15 @@
               </div>
 
               <div class="mb-3">
-                <textarea name="reason" id="reason" class="form-control bg-zinc-100 text-zinc-500" placeholder="Why do you want to adopt ronald?" style="height: 215px;"></textarea>
+                <textarea name="reason" id="reason" class="form-control bg-zinc-100 text-zinc-500" placeholder="Why do you want to adopt ronald?" style="height: 215px;" disabled></textarea>
               </div>
 
-              <button type="submit" class="btn mb-md-0 mb-3 btn-success">Submit Application</button>
+              <button type="submit" class="btn mb-md-0 mb-3 btn-success" disabled>Submit Application</button>
             </form>
+
+            <div class="alert alert-warning mt-3" role="alert">
+                Application already submitted!
+            </div>
           </div>
   
           <!-- card -->
