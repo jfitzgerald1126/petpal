@@ -269,114 +269,144 @@ login-wrapper{
 
 /* Pet Detail Page*/
 
-.pet-detail-grid{
-    display: grid;
-    padding: 10%;
-    padding-top: 10%;
-    grid-template-columns: 60% 40%;
-    grid-template-rows: 100%;
-    height: 600px;
-
-    width: auto;
+.pet-container {
+    flex-direction: row;
+    gap: 30px;
+    padding: 0.5rem;
 }
 
-.pet-detail-frame {
-    width: 480px;
-    height: 400px;
-    overflow: hidden;
-    margin: auto;
-    justify-self: right;
+.pet-container > .pet-images-container, .pet-container > .pet-details-container {
+    flex: 1;
+    padding-top: 30px;
+    max-width: 400px;
+}
+
+.pet-container .pet-cover-image {
+    width: 400px;
+    height: 300px;
+    border-radius: 5px;
+    background-color: #D4D4D8;
+}
+
+.pet-cover-image > img {
+    width: 400px;
+    height: 300px;
     object-fit: cover;
 }
 
-.pet-detail-img {
-    width: 100%;
-    height: 100%;
-}
-
-.pet-detail-grid-inner{
-    display: flex;
-    flex-direction: column;
-    justify-self: left;
-    width: 480px;
-    height: auto;
-}
-.pet-detail-heading-flex{
-    display: flex;
-    flex-direction: row;
-}
-
-.pet-detail-grid-icons{
-    display: grid;
-    grid-template-columns: 40% 40%;
-    grid-template-rows: 20% 20% 20%;
-    column-gap: 10%;
-    row-gap: 0.2rem;
-    width: auto;
-    height: auto;
-}
-
-.adopt-me-button{
-    margin-left: auto;
-    border-radius: 10px;
-    border-style:none;
+.pet-adopt-button{
     width: 150px;
     height: 40px;
-    align-self: center;
-    background-color: #059669;
     color: white;
+    font-size: 20px;
+    align-items: center;
+    background-color: var(--emerald-600);
+    border-radius: 5px;
+    margin-left: 20px;
 }
 
-.status-box{
-    color: #E4E4E7;
-    background-color: #34D399;
-    text-align: center;
-    border-radius: 10px;
-    width: 100px;
-    height: 30px;
-    align-self: center;
-    vertical-align:middle;
-    margin-left: 10px;
-}
-.pet-detail-icon-text{
-    color:#A1A1AA;
-    width: auto;
-    margin: 0;
-}
-
-.pet-detail-header-text{
-    color:black;
+.pet-adopt-fail-button{
+    width: 150px;
+    height: 40px;
+    color: black;
+    font-size: 20px;
+    align-items: center;
+    background-color: var(--zinc-400);
+    border-radius: 5px;
+    margin-left: 20px;
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
-.pet-detail-text{
-    color:black;
-    font-family: "Hayes Valley Studio";
 
-}
 
-.extra-images {
-    max-width: 150px;
-}
-.pet-detail-more-pets{
-    padding-top: 50px;
-    padding-left: 1rem;
-    color:black;
-    font-family: "Hayes Valley Studio";
-}
-
-.contact-boxes {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.more-pets-flex{
+.pet-container .pet-image-carousel {
+    height: 130px;
+    margin-top: 30px;
+    width: 400px;
+    overflow-x: auto;
+    overflow-y: hidden;
     display: flex;
     flex-direction: row;
-    gap: 50px;
-    align-content: center;
-    justify-content: center;
+    gap: 10px;
 }
+
+.pet-container .pet-image-carousel .pet-rotating-image {
+    height: 100px;
+    width: 150px;
+    border-radius: 5px;
+    background-color: #D4D4D8;
+    flex-shrink: 0;
+}
+
+.our-friends-container {
+    max-width: 100%;
+    max-width: fit-content;
+    align-self: center;
+}
+
+.shelter-pets-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    width: fit-content;
+    overflow-x: auto;
+    padding: 20px 0;
+    overflow-y: hidden;
+    gap: 2rem;
+}
+
+
+.pet-rotating-image > img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 800px) {
+    .pet-container {
+        flex-direction: column-reverse;
+        gap: 30px;
+        padding: 0.5rem;
+    }
+}
+@media screen and (max-width: 460px) {
+    .pet-container {
+        gap: 0;
+        width: 100%;
+    }
+    .pet-details-container {
+        width: 100% !important;
+    }
+    body .pet-info-container {
+        flex-direction: column !important;
+        gap: 5px;
+        margin-bottom: -10px;
+    }
+    body .pet-info-container > div {
+        gap: 5px;
+    }
+    
+    .pet-container .pet-cover-image {
+        width: 100%;
+        height: 200px;
+    }
+    .pet-cover-image > img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .pet-container .pet-image-carousel {
+        width: 100%;
+    }
+}
+
+
 .profile-wrapper{
     /* border:2px solid black; */
     padding-right: auto;
@@ -662,6 +692,11 @@ body .mobile-search-filtering-container {
         height: 100px;
     }
 
+    .pet-card > .pet-img > img {
+        width: 100px;
+        height: 100px;
+    }
+
     .pet-card > .pet-img > .pet-status {
         right: 8px;
         bottom: 8px;
@@ -687,8 +722,8 @@ body .mobile-search-filtering-container {
     .listing-card-grid {
         gap: 0.5rem;
     }
+    
 }
-
 @media screen and (max-width: 460px) {
     .shelter-container {
         gap: 0;
