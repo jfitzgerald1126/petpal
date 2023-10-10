@@ -12,10 +12,37 @@
   <body>
 
         <!-- NAVBAR -->
-        <header class="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
-          <div class="Petpalcontainer fs-3 text-white fw-medium mx-3">Petpal</div>
-          <button class="login-button mx-3"><a href="landing_page.html" class="link">Go back</a></button>
-        </header>
+    <header class="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
+      <div class="mx-3 d-flex flex-row">
+        <a class="petpalLogo fs-3 text-white fw-medium text-decoration-none" href="index.html">Petpal</a>
+        <div class="navLinksContainer">
+          <a class="text-white fw-medium text-decoration-none" href="index.html">Home</a>
+          <a class="text-white fw-medium text-decoration-none" href="profile_shelter.html#active_pets">Pets</a>
+          <a class="text-white fw-medium text-decoration-none" href="profile_shelter.html#applications">Applications</a>
+        </div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="notificationDropdown dropdown">
+          <div class="notificationBell">
+            <img src="bell.png"/>
+          </div>
+          <div class="dropdown-menu" id="notifications">
+            <a class="dropdown-item" href="#" >You recieved a new message from Robby Jack <span>| Oct 12, 2023</span></a>
+            <a class="dropdown-item" href="#" >You recieved an adoption application for Ronald from Robby Jack <span>| Oct 11, 2023</span></a>
+          </div>
+        </div>
+        <div class="profileDropdown dropdown">
+          <div class="pfp">
+            <img src="shelter.png"/>
+          </div>
+          <div class="dropdown-menu" id="profileDropdown">
+            <a class="dropdown-item" href="profile_shelter.html" >My profile</a>
+            <a class="dropdown-item" href="edit_shelter_profile.html" >Edit profile</a>
+            <a class="dropdown-item" href="#" >Log out</a>
+          </div>
+        </div>
+      </div>
+    </header>
     
         <div class="content-container d-flex flex-column align-items-center">
           <!-- SHELTER INFO -->
@@ -43,12 +70,12 @@
                 </div>
               </div>
               <p class="text-zinc-600 fs-8 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo cursus diam a egestas. Morbi laoreet quam ex, id bibendum purus blandit eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean ornare vulputate ex, eget efficitur felis tempus sit amet. Nam feugiat lacus nunc, a tincidunt elit commodo sit amet. Nunc ut mattis elit. Donec vitae consectetur leo. Aliquam suscipit nibh et pharetra pretium. Maecenas elit urna, sollicitudin quis neque in, malesuada eleifend odio. Sed rhoncus tincidunt nibh, sit amet fermentum enim sodales sed.</p>
-              <div class="bg-zinc-300" style="width: 300px;height:150px;border-radius: 5px;"></div>
+              <button class="primary-button"><a href="landing_page.html" class="link">Edit profile</a></button>
             </div>
           </div>
 
           <!-- APPLICATIONS -->
-          <div class="our-friends-container w-100 px-5 mt-5 mb-2 d-flex flex-column align-items-start">
+          <div id="applications" class="our-friends-container w-100 px-5 mt-5 mb-2 d-flex flex-column align-items-start">
             <h1 class="text-zinc-700 fs-3 fw-bold">Pending Applications</h1>
             <div class="pending-applications">
               <table class="table application-table w-100 mt-2">
@@ -100,7 +127,7 @@
 
 
           <!-- PETS OF SHELTER -->
-          <div class="our-friends-container w-100 px-5 mt-3 d-flex flex-column align-items-start">
+          <div id="active_pets" class="our-friends-container w-100 px-5 mt-3 d-flex flex-column align-items-start">
             <div class="d-flex flex-row">
               <h1 class="text-zinc-700 fs-3 fw-bold">Active Listings</h1>
               <button class="primary-button mx-3">List new pet</button>
@@ -108,7 +135,7 @@
               <div class="shelter-pets-container">
                 <div class="pet-card">
                   <div class="pet-img">
-                    <div class="pet-status">adopted</div>
+                    <div class="pet-status">available</div>
                   </div>
                   <div class="pet-details">
                     <div class="pet-listed-date">Listed 20/03/2023</div>
@@ -121,7 +148,7 @@
                 </div>
                 <div class="pet-card">
                   <div class="pet-img">
-                    <div class="pet-status">adopted</div>
+                    <div class="pet-status">available</div>
                   </div>
                   <div class="pet-details">
                     <div class="pet-listed-date">Listed 20/03/2023</div>
@@ -134,7 +161,7 @@
                 </div>
                 <div class="pet-card">
                   <div class="pet-img">
-                    <div class="pet-status">adopted</div>
+                    <div class="pet-status">available</div>
                   </div>
                   <div class="pet-details">
                     <div class="pet-listed-date">Listed 20/03/2023</div>
@@ -155,7 +182,7 @@
               <div class="shelter-pets-container">
                 <div class="pet-card">
                   <div class="pet-img">
-                    <div class="pet-status">adopted</div>
+                    <div class="pet-status">withdrawn</div>
                   </div>
                   <div class="pet-details">
                     <div class="pet-listed-date">Listed 20/03/2023</div>

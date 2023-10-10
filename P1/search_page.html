@@ -32,6 +32,15 @@
         }
       }
 
+      function setSortOption(option) {
+        document.getElementById("dropdownMenuButton").innerHTML = option;
+        document.getElementById("dropdownMenuButtonMobile").innerHTML = option;
+        document.getElementById("dropdownMenu").style.display = "none";
+        document.getElementById("dropdownMenuButton").dataset.expanded = "false";
+        document.getElementById("dropdownMenuMobile").style.display = "none";
+        document.getElementById("dropdownMenuButtonMobile").dataset.expanded = "false";
+      }
+
       function closeMobileFilterModal() {
         document.getElementById("mobileFilteringModal").style.display = "none";
       }
@@ -45,8 +54,36 @@
 
     <!-- NAVBAR -->
     <header class="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
-      <div class="Petpalcontainer fs-3 text-white fw-medium mx-3">Petpal</div>
-      <button class="login-button mx-3"><a href="landing_page.html" class="link">Go back</a></button>
+      <div class="mx-3 d-flex flex-row">
+        <a class="petpalLogo fs-3 text-white fw-medium text-decoration-none" href="index.html">Petpal</a>
+        <div class="navLinksContainer">
+          <a class="text-white fw-medium text-decoration-none" href="index.html">Home</a>
+          <a class="text-white fw-medium text-decoration-none" href="search_page.html">Search</a>
+          <a class="text-white fw-medium text-decoration-none" href="profile_seeker.html">Applications</a>
+        </div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="notificationDropdown dropdown">
+          <div class="notificationBell">
+            <img src="bell.png"/>
+          </div>
+          <div class="dropdown-menu" id="notifications">
+            <a class="dropdown-item" href="#" >You recieved a new message from Annex Dog Rescue <span>| Oct 12, 2023</span></a>
+            <a class="dropdown-item" href="#" >Your adoption application for Ronald was accepted by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
+            <a class="dropdown-item" href="#" >Your adoption application for Bert was rejected by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
+          </div>
+        </div>
+        <div class="profileDropdown dropdown">
+          <div class="pfp">
+            <img src="user.png"/>
+          </div>
+          <div class="dropdown-menu" id="profileDropdown">
+            <a class="dropdown-item" href="profile_seeker.html" >My profile</a>
+            <a class="dropdown-item" href="edit_seeker_profile.html" >Edit profile</a>
+            <a class="dropdown-item" href="#" >Log out</a>
+          </div>
+        </div>
+      </div>
     </header>
 
     <div class="content-container">
@@ -66,13 +103,14 @@
                 Sort By
               </button>
               <div class="dropdown-menu dropdown-menu-right-screen-edge" id="dropdownMenu">
-                <a class="dropdown-item" href="#">Name</a>
-                <a class="dropdown-item" href="#">Size</a>
-                <a class="dropdown-item" href="#">Newer listings</a>
-                <a class="dropdown-item" href="#">Older listings</a>
-                <a class="dropdown-item" href="#">Distance</a>
-                <a class="dropdown-item" href="#">Youngest first</a>
-                <a class="dropdown-item" href="#">Oldest first</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Name')">Name</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Smallest')">Smallest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Largest')">Largest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Newer listings')">Newer listings</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Older listings')">Older listings</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Closest')">Closest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Youngest')">Youngest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Oldest')">Oldest</a>
               </div>
             </div>
           </div>
@@ -89,13 +127,14 @@
                 Sort By
               </button>
               <div class="dropdown-menu" id="dropdownMenuMobile">
-                <a class="dropdown-item" href="#">Name</a>
-                <a class="dropdown-item" href="#">Size</a>
-                <a class="dropdown-item" href="#">Newer listings</a>
-                <a class="dropdown-item" href="#">Older listings</a>
-                <a class="dropdown-item" href="#">Distance</a>
-                <a class="dropdown-item" href="#">Youngest first</a>
-                <a class="dropdown-item" href="#">Oldest first</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Name')">Name</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Smallest')">Smallest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Largest')">Largest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Newer listings')">Newer listings</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Older listings')">Older listings</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Closest')">Closest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Youngest')">Youngest</a>
+                <a class="dropdown-item" href="#" onclick="setSortOption('Oldest')">Oldest</a>
               </div>
             </div>
             <button class="btn btn-secondary dropdown-toggle" type="button" onclick="openMobileFilterModal()" id="filterMenuButtonMobile">

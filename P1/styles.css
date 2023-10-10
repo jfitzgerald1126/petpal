@@ -163,26 +163,53 @@ login-wrapper{
    
 }
 
-.petpaltext{
-    width: 50%;
-    height: 75%;
-    border: 2px solid blue;
-    margin-top: auto;
-}
 
 .form-control::placeholder {
     color: var(--zinc-500);
 }
 
-.Petpalcontainer{
-    width: 20%;
-    /* border: 2px solid red; */
+.navLinksContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-left: 35px;
+    align-items: center;
+    font-size: 18px;
 }
 
-.navbar{
-    list-style: none;
-    /* border: 2px solid red; */
+.pfp {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 40px;
+    object-fit: contain;
+    margin-right: 20px;
+    border: 2px solid white;
 }
+
+.notificationBell {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+    transform: translateY(5px);
+}
+
+.notificationDropdown:hover #notifications {
+    display: block;
+}
+
+.profileDropdown:hover  #profileDropdown{
+    display: block;
+}
+
+#profileDropdown, #notifications {
+    transform: translateX(-90%);
+}
+
+.dropdown-item span {
+    color: var(--zinc-400);
+}
+
 /*borders are for testing to see if alignment is proper*/
 .login-button, .primary-button {
     width: 150px;
@@ -236,16 +263,38 @@ login-wrapper{
     width: 100%;
     height: 70px;
 }
-/* .landing-page-info{
-    border: 2px solid black
-} */
+
+.extra-images {
+    width: 133px;
+}
+
 
 .adopt-color{
     background: var(--emerald-600);
 }
+
 .image-container{
     /* border: 2px solid black; */
     overflow: visible;
+}
+.landing-page-info{
+    /* border: 2px solid black; */
+    width: 50%;
+}
+/* .landing-container{
+    border: 2px solid red;
+} */
+
+@media screen and (max-width:390px) {
+    .landing-container{
+        flex-direction: column;
+    }
+    .landing-page-info{
+        width: 100%;
+    }
+    .image-container{
+        width: 100%;
+    }
 }
 .landing-image{
     max-width: 300px;
@@ -845,6 +894,7 @@ table a {
         padding-left: 1rem !important;
         padding-right: 1rem !important;
     }
+    
 }
 /* profile responsiveness */
 @media screen and (max-width: 650px) {
@@ -856,6 +906,41 @@ table a {
     .profile-wrapper{
         align-items: center;
     }
+
+    
+.form-control::placeholder {
+    color: var(--zinc-500);
+}
+
+body .petpalLogo {
+    font-size: 18px !important;
+}
+
+.navLinksContainer {
+    gap: 10px;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.pfp {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 30px;
+    margin-right: 10px;
+}
+
+.notificationBell {
+    width: 20px !important;
+    height: 20px !important;
+    object-fit: contain;
+    margin-right: 20px;
+    transform: translateY(-1px);
+}
+.notificationDropdown .dropdown-item {
+    font-size: 8px;
+}
+
 }
 
 
