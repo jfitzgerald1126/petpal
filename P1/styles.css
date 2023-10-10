@@ -314,6 +314,27 @@ login-wrapper{
     margin-left: 20px;
 }
 
+.view-app-button{
+    width: 150px;
+    height: 40px;
+    color: white;
+    font-size: 13px;
+    align-items: center;
+    background-color: var(--emerald-600);
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
+.edit-listing-button{
+    width: 150px;
+    height: 40px;
+    color: white;
+    font-size: 20px;
+    background-color: var(--emerald-600);
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
 .pet-adopt-fail-button{
     width: 150px;
     height: 40px;
