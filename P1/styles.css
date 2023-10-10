@@ -369,7 +369,9 @@ login-wrapper{
     gap: 2rem;
 }
 
-
+.pet-icon-list{
+    padding-top: 0;
+}
 .pet-rotating-image > img {
     width: 150px;
     height: 100px;
@@ -390,11 +392,13 @@ login-wrapper{
     }
     .pet-details-container {
         width: 100% !important;
+        
     }
     body .pet-info-container {
         flex-direction: column !important;
         gap: 5px;
         margin-bottom: -10px;
+        
     }
     body .pet-info-container > div {
         gap: 5px;
@@ -412,6 +416,9 @@ login-wrapper{
 
     .pet-container .pet-image-carousel {
         width: 100%;
+    }
+    .pet-icon-list{
+        padding-top: 30px;
     }
 }
 
