@@ -169,6 +169,9 @@ login-wrapper{
     margin-top: auto;
 }
 
+.form-control::placeholder {
+    color: var(--zinc-500);
+}
 
 .Petpalcontainer{
     width: 20%;
