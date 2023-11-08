@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'applications.apps.ApplicationsConfig',
     'chat.apps.ChatConfig',
-    'comments.apps.CommentsConfig',
+    'comment',
     'notifications.apps.NotificationsConfig',
     'pets.apps.PetsConfig',
     'pet.apps.PetConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
