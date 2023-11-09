@@ -1,4 +1,5 @@
 from django.db import models
+# from accounts.models import Shelter
 
 class Shelter:
     pass
@@ -8,7 +9,9 @@ class Pet(models.Model):
     STATUS_OPTIONS = [('L', 'listed'), ('W', 'withdrawn'), ('A', 'adopted')]
     SIZE_OPTIONS = [('S', 'small'), ('M', 'medium'), ('L', 'large')]
 
-    shelter = models.ForeignKey(Shelter, related_name='shelter', on_delete=models.CASCADE)
+    # shelter = models.ForeignKey(Shelter, related_name='shelter', on_delete=models.CASCADE)
+
+    shelter = models.CharField(max_length=200, blank=False, null=False)
     animal = models.CharField(max_length=200, blank=False, null=False)
     breed = models.CharField(max_length=200, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)

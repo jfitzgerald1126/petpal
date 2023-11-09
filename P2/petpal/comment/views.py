@@ -10,7 +10,7 @@ from django.core.exceptions import PermissionDenied
 # Create your views here.
 
 
-class SeekerCommentCrate(ListCreateAPIView):
+class SeekerCommentCreate(ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
@@ -34,3 +34,10 @@ class AdminCommentCreate(ListCreateAPIView):
     permission_classes = [IsAdminUser]
     queryset = Comment.objects.all()
     # see all the comments for all the shelters
+
+
+class AdminCommentRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    serializer_class = AdminCommentSerializer
+    permission_classes = [IsAdminUser]
+    def get_object(self):
+        return get_object_or_404(Comment, pk=self.kwargs['comment_id'])
