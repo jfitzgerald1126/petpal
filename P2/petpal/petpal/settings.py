@@ -44,13 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # our apps
-    'accounts.apps.AccountsConfig',
-    'applications.apps.ApplicationsConfig',
-    'chat.apps.ChatConfig',
+    'accounts',
+    'application',
+    'chat',
     'comment',
-    'notifications.apps.NotificationsConfig',
-    'pets.apps.PetsConfig',
-    'pet.apps.PetConfig',
+    'notification',
+    'pet',
     'rest_framework',
 ]
 
