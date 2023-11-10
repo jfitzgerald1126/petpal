@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     "notification",
     "pet",
     "rest_framework",
-    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
