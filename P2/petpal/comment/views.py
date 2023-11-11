@@ -20,11 +20,11 @@ class SeekerCommentCreate(ListCreateAPIView):
 
     def perform_create(self, serializer):
         shelter = get_object_or_404(Shelter, pk=self.kwargs['shelter_id'])
-        seeker = self.request.user
+        commenter = self.request.user
         # retreive the shelter object from the database
-        if not isinstance(seeker, Seeker):
-           raise PermissionDenied("Only Seekers can create comments.")
-        serializer.save(shelter_id=shelter, seeker_id=seeker)
+        # if not isinstance(seeker, Seeker):
+        #    raise PermissionDenied("Only Seekers can create comments.")
+        serializer.save(shelter_id=shelter, commenter_id=commenter)
         # set the shelter_id of the comment to the shelter object
 
 

@@ -11,7 +11,7 @@ class Comment(models.Model):
     # seeker_id = models.ForeignKey(Seeker, on_delete=models.CASCADE)
 
     shelter_id = models.IntegerField(default=1, blank=False, null=False)
-    seeker_id = models.IntegerField(default=1, blank=False, null=False)
+    commenter_id = models.IntegerField(default=1, blank=False, null=False)
     rating = models.IntegerField(
         default=1,
         validators=[MaxValueValidator(5), MinValueValidator(1)],
