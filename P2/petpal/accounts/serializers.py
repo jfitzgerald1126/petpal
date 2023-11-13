@@ -7,6 +7,18 @@ from django.core.exceptions import ValidationError
 
 
 class SeekerSerializer(ModelSerializer):
+    class Meta:
+        model = Seeker
+        fields = "__all__"
+
+
+class ShelterSerializer(ModelSerializer):
+    class Meta:
+        model = Shelter
+        fields = "__all__"
+
+
+class SeekerCreateSerializer(ModelSerializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True, style={"input_type": "password"})
     confirm_password = serializers.CharField(
@@ -15,7 +27,14 @@ class SeekerSerializer(ModelSerializer):
 
     class Meta:
         model = Seeker
-        fields = "__all__"
+        fields = [
+            "username",
+            "password",
+            "confirm_password",
+            "email",
+            "phone_number",
+            "address",
+        ]
 
     def validate(self, data):
         # Validate that passwords match
@@ -34,6 +53,7 @@ class SeekerSerializer(ModelSerializer):
             "username": validated_data.pop("username"),
             "password": validated_data.pop("password"),
         }
+        validated_data.pop("confirm_password", None)
 
         # Create a new user
         user = User.objects.create_user(**user_data)
@@ -43,7 +63,33 @@ class SeekerSerializer(ModelSerializer):
         return seeker
 
 
-class ShelterSerializer(ModelSerializer):
+class SeekerUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Seeker
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+            "description",
+            "address",
+            "age",
+        ]
+
+
+class ShelterUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Shelter
+        fields = [
+            "email",
+            "phone_number",
+            "description",
+            "address",
+            "website",
+        ]
+
+
+class ShelterCreateSerializer(ModelSerializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True, style={"input_type": "password"})
     confirm_password = serializers.CharField(
@@ -52,7 +98,17 @@ class ShelterSerializer(ModelSerializer):
 
     class Meta:
         model = Shelter
-        fields = "__all__"
+        fields = [
+            "username",
+            "password",
+            "confirm_password",
+            "shelter_name",
+            "email",
+            "phone_number",
+            "description",
+            "address",
+            "website",
+        ]
 
     def validate(self, data):
         # Validate that passwords match
@@ -71,7 +127,7 @@ class ShelterSerializer(ModelSerializer):
             "username": validated_data.pop("username"),
             "password": validated_data.pop("password"),
         }
-
+        validated_data.pop("confirm_password", None)
         # Create a new user
         user = User.objects.create_user(**user_data)
 
