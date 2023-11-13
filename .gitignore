@@ -1,1 +1,4 @@
 P2/petpal/Makefile
+__pycache__/
+env/
+migrations/
