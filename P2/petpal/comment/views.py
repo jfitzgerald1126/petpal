@@ -6,28 +6,48 @@ from comment.serializers import CommentSerializer, AdminCommentSerializer
 from accounts.models import Shelter, Seeker
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
-
+from django.contrib.auth.models import User
+from rest_framework import permissions
 # Create your views here.
 
+class IsNotShelter(permissions.BasePermission):
+    message = "You do not have permission to comment on your own shelter"
+    def has_object_permission(self, request, view, shelter):
+        # comment = obj
+        return shelter.user != request.user
 
 class SeekerCommentCreate(ListCreateAPIView):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotShelter]
 
     def get_queryset(self):
-        return Comment.objects.filter(shelter_id=self.kwargs['shelter_id'])
+        return Comment.objects.filter(shelter_id=self.kwargs['shelter_id']).order_by('date')
     # only get the comments for the specific shelter
 
     def perform_create(self, serializer):
         shelter = get_object_or_404(Shelter, pk=self.kwargs['shelter_id'])
-        commenter = self.request.user
-        # retreive the shelter object from the database
-        # if not isinstance(seeker, Seeker):
-        #    raise PermissionDenied("Only Seekers can create comments.")
+        commenter = get_object_or_404(User, pk=self.request.user.id)
+        print(self.request.user.id, shelter.user_id)
+        self.check_object_permissions(self.request, shelter)
         serializer.save(shelter_id=shelter, commenter_id=commenter)
         # set the shelter_id of the comment to the shelter object
 
+# class IsCommenter(permissions.BasePermission):
+#     message = "You do not have permission to update or delete this comment"
+#     def has_object_permission(self, request, view, comment):
+#         # comment = obj
+#         return comment.commenter_id == request.user
 
+# class SeekerCommentRetreiveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+#     serializer_class = CommentSerializer
+#     permission_classes = [IsAuthenticated, IsCommenter]
+#     # if not IsCommenter:
+#     #     raise PermissionDenied("You are not the commenter, you cannot update or delete this comment")
+#     def get_object(self):
+#         comment = get_object_or_404(Comment, pk=self.kwargs['comment_id'])
+#         self.check_object_permissions(self.request, comment)  
+#         # dunno why it wont work without this line but f it we ball
+#         return comment
 
 class AdminCommentCreate(ListCreateAPIView):
     serializer_class = AdminCommentSerializer
