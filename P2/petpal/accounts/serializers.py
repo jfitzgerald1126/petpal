@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
 
 class SeekerSerializer(ModelSerializer):
@@ -41,6 +42,13 @@ class SeekerCreateSerializer(ModelSerializer):
         if data["password"] != data["confirm_password"]:
             raise serializers.ValidationError("Passwords do not match.")
 
+        if User.objects.filter(username=data["username"]).exists():
+            raise serializers.ValidationError("Username is already taken.")
+
+        try:
+            validate_email(data["email"])
+        except ValidationError:
+            raise serializers.ValidationError("Invalid email address.")
         try:
             validate_password(data["password"], self.instance)
         except ValidationError as e:
@@ -115,6 +123,13 @@ class ShelterCreateSerializer(ModelSerializer):
         if data["password"] != data["confirm_password"]:
             raise serializers.ValidationError("Passwords do not match.")
 
+        if User.objects.filter(username=data["username"]).exists():
+            raise serializers.ValidationError("Username is already taken.")
+
+        try:
+            validate_email(data["email"])
+        except ValidationError:
+            raise serializers.ValidationError("Invalid email address.")
         try:
             validate_password(data["password"], self.instance)
         except ValidationError as e:
