@@ -21,9 +21,11 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class SeekerListCreateView(generics.ListCreateAPIView):
-    queryset = []
     serializer_class = SeekerCreateSerializer
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return []
 
 
 class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
