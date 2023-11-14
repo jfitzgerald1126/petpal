@@ -18,11 +18,10 @@ class CommentPagination(pagination.PageNumberPagination):
 
 class IsNotShelter(permissions.BasePermission):
     message = "You do not have permission to comment on your own shelter"
-    def has_object_permission(self, request, view, comment):
+    def has_object_permission(self, request, view, shelter):
         # comment = obj
-        print(comment.shelter_id.user, request.user)
-        
-        return comment.shelter_id.user != request.user
+        print(shelter.user, request.user)
+        return shelter.user != request.user
 
 class ShelterCommentCreate(ListCreateAPIView):
     serializer_class = CommentSerializer
@@ -36,9 +35,8 @@ class ShelterCommentCreate(ListCreateAPIView):
         shelter = get_object_or_404(Shelter, pk=self.kwargs['shelter_id'])
         commenter = self.request.user
         # print(self.request.user.id, shelter.user_id)
-        # self.check_object_permissions(self.request, shelter)
-
-
+        self.check_object_permissions(self.request, shelter)
+        # im not sure why you need to explicitly check permissions here but it wont work without it
         serializer.save(shelter_id=shelter, commenter_id=commenter)
         # set the shelter_id of the comment to the shelter object
 
