@@ -20,7 +20,6 @@ class Pet(models.Model):
     description = models.CharField(max_length=600, null=False, blank=False)
     birthday = models.DateField(null=True, blank=True)
     listed = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to="images/", null=True, blank=True)
     size = models.CharField(
         max_length=50, null=False, blank=False, choices=SIZE_OPTIONS
     )

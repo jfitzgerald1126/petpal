@@ -6,6 +6,7 @@ from .serializers import (
     ShelterCreateSerializer,
     SeekerUpdateSerializer,
     ShelterUpdateSerializer,
+    ShelterSerializer,
 )
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -32,11 +33,19 @@ class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         cur_seeker = get_object_or_404(Seeker, id=self.kwargs["pk"])
         cur_user = get_object_or_404(User, id=self.request.user.id)
+        cur_app = get_object_or_404(Application, id=1)
         if hasattr(cur_user, "shelter"):
             applications = Application.objects.filter(
-                seeker_id=cur_seeker.id, pet__shelter_id=cur_user.id, status="active"
+                seeker_id=cur_seeker.id,
+                pet__shelter_id=cur_user.shelter.id,
+                status="accepted",
             )
-            if applications:
+            applications2 = Application.objects.filter(
+                seeker_id=cur_seeker.id,
+                pet__shelter_id=cur_user.shelter.id,
+                status="pending",
+            )
+            if applications or applications2:
                 return cur_seeker
         elif hasattr(cur_user, "seeker"):
             if cur_seeker.id == cur_user.seeker.id:
@@ -51,6 +60,12 @@ class ShelterListCreateView(generics.ListCreateAPIView):
     serializer_class = ShelterCreateSerializer
     permission_classes = [AllowAny]
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ShelterSerializer
+        else:
+            return ShelterCreateSerializer
+
 
 class ShelterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ShelterUpdateSerializer
@@ -58,4 +73,9 @@ class ShelterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         cur_shelter = get_object_or_404(Shelter, id=self.kwargs["pk"])
-        return cur_shelter
+        if hasattr(self.request.user, "shelter"):
+            if cur_shelter.id == self.request.user.shelter.id:
+                return cur_shelter
+        raise PermissionDenied(
+            "You do not have permission to access this Seeker Profile"
+        )

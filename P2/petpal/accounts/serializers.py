@@ -16,7 +16,15 @@ class SeekerSerializer(ModelSerializer):
 class ShelterSerializer(ModelSerializer):
     class Meta:
         model = Shelter
-        fields = "__all__"
+        fields = [
+            "shelter_name",
+            "email",
+            "phone_number",
+            "description",
+            "address",
+            "website",
+            "profile_image",
+        ]
 
 
 class SeekerCreateSerializer(ModelSerializer):
