@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from rest_framework import permissions, pagination
 from pet.models import Application
-
+from rest_framework.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -40,6 +40,10 @@ class ShelterCommentCreate(ListCreateAPIView):
         serializer.save(shelter_id=shelter, commenter_id=commenter)
         # set the shelter_id of the comment to the shelter object
 
+class CantDoThisLmao(PermissionDenied):
+    def __init__(self, detail):
+        self.detail = detail 
+        
 
 class ApplicationCommentCreate(ListCreateAPIView):
     serializer_class = ApplicationCommentSerializer
@@ -50,11 +54,11 @@ class ApplicationCommentCreate(ListCreateAPIView):
         if hasattr(self.request.user, 'shelter'):
             shelter = self.request.user.shelter
             if application.pet.shelter != shelter:
-                raise PermissionDenied('You are not the shelter for this pet.')
+                raise CantDoThisLmao('You are not the shelter for this pet.')
         elif hasattr(self.request.user, 'seeker'):
             seeker = self.request.user.seeker
             if application.seeker != seeker:
-                raise PermissionDenied('You are not the applicant for this pet')
+                raise CantDoThisLmao('You are not the applicant for this pet')
         comments_set = ApplicationComment.objects.filter(application = self.kwargs['application_id']).order_by('-date')
         return comments_set
     #yes
@@ -62,6 +66,14 @@ class ApplicationCommentCreate(ListCreateAPIView):
     def perform_create(self, serializer):
         sender = get_object_or_404(User, pk=self.request.user.id)
         application = get_object_or_404(Application, pk=self.kwargs['application_id'])
+        if hasattr(self.request.user, 'shelter'):
+            shelter = self.request.user.shelter
+            if application.pet.shelter != shelter:
+                raise CantDoThisLmao('You are not the shelter for this pet.')
+        elif hasattr(self.request.user, 'seeker'):
+            seeker = self.request.user.seeker
+            if application.seeker != seeker:
+                raise CantDoThisLmao('You are not the applicant for this pet')
         serializer.save(sender=sender, application=application)
         # set the shelter_id of the comment to the shelter object
 
