@@ -1,20 +1,49 @@
 from django.shortcuts import render
-from rest_framework import generics, filters, pagination
+from rest_framework import generics, filters, pagination, status
+from rest_framework.response import Response
 from ..models import Pet, Application
 from .. serializers import ApplicationSerializer
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView,ListCreateAPIView, RetrieveUpdateAPIView
 from django.shortcuts import get_object_or_404
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 # Create your views here.
 
-# List / Create
-class ApplicationListCreate(ListCreateAPIView):
+# Create
+class ApplicationCreateView(CreateAPIView):
     serializer_class = ApplicationSerializer
 
+    def perform_create(self, serializer):
+        # check if seeker
+        if not hasattr(self.request.user, 'seeker'):
+            # TODO: raise different error??
+            raise PermissionDenied('Only seekers can submit applications.')
+        
+        # check if application already submtitted
+        seeker = self.request.user.seeker
+        pet = get_object_or_404(Pet, id=self.kwargs['pet_id'])
+        if Application.objects.filter(seeker=seeker, pet=pet).exists():
+            raise ValidationError({'error': 'Application for this pet already submitted.'}, code=status.HTTP_400_BAD_REQUEST)
+
+        # Can only create applications for a pet listing that is "available"
+        pet_status = pet.status
+        if pet_status == 'available':
+            serializer.save(pet=pet, seeker=seeker)
+        else:
+            raise ValidationError({'error': 'Pet is not available for adoption.'}, code=status.HTTP_400_BAD_REQUEST)
+        
+
+class ApplicationPagination(pagination.PageNumberPagination):
+    page_size = 2
+
+# List 
+class ApplicationListView(ListAPIView):
+    serializer_class = ApplicationSerializer
+    pagination_class = ApplicationPagination
+
     def get_queryset(self):
-        # TODO:
         # Filter applications by status (2 marks)
+        # STATUS_OPTIONS = [('A', 'accepted'), ('P', 'pending'), ('D', 'denied'), ('W', 'withdrawn')]
         # Sort application by creation time and last update time (4 marks)
         # When an application receives a new comment, its "last update time" should be changed.
         # Pagination support (1 mark)
@@ -22,47 +51,64 @@ class ApplicationListCreate(ListCreateAPIView):
         if hasattr(self.request.user, 'shelter'):
             shelter = self.request.user.shelter
             # pet__shelter to traverse from pet -> shelter
-            return Application.objects.filter(pet__shelter=shelter)
+            query = Application.objects.filter(pet__shelter=shelter)
+
+            # filter
+            application_status = self.request.GET.get('status')
+            if application_status:
+                query = query.filter(status=application_status)
+
+            # sort
+            sort_by = self.request.GET.get('sort')
+            print(sort_by)
+            # default to modified date (most recent)
+            if not sort_by:
+                sort_by = '-modified_date'
+            query = query.order_by(sort_by)
+
+            return query
         else:
             raise PermissionDenied("Only shelters can view list of applications.")
         
-    def perform_create(self, serializer):
-        if not hasattr(self.request.user, 'seeker'):
-            # TODO: raise different error??
-            raise PermissionDenied('Only seekers can submit applications.')
 
-        # Can only create applications for a pet listing that is "available"
-        # TODO: stop user for submitting application twice for same pet
-        print(serializer.validated_data, 'hello')
-        pet = serializer.validated_data.get('pet')
-        status = pet.status
-        if status == 'L':
-            seeker = self.request.user.seeker
-            # TODO: auto set status when applying...
-            application = Application.objects.create(**serializer.validated_data,
-                                                        seeker=seeker,
-                                                    )
-        else:
-            # TODO: shouldn't be permission denied, how to handle??
-            raise PermissionDenied('Pet is not available.')
-
-
-class ApplicationRetrieveUpdateDestory(RetrieveUpdateDestroyAPIView):
+class ApplicationRetrieveUpdateView(RetrieveUpdateAPIView):
     serializer_class = ApplicationSerializer
 
     def get_object(self):
         # TODO: permissions for who can view an application? -- only seeker / shelter involved?
+
+        application = get_object_or_404(Application, id=self.kwargs['pk'])
+        # check if seeker or shelter is authorized to view this application
         if hasattr(self.request.user, 'shelter'):
             shelter = self.request.user.shelter
-            return get_object_or_404(Application, id=self.kwargs['pk'], pet__shelter=shelter)
+            if application.pet.shelter != shelter:
+                raise PermissionDenied('Unauthorized to view or edit this application.')
         elif hasattr(self.request.user, 'seeker'):
             seeker = self.request.user.seeker
-            print(seeker)
-            return get_object_or_404(Application, id=self.kwargs['pk'], seeker=seeker)
-        else:
-            raise PermissionDenied("Unauthorized.")
+            if application.seeker != seeker:
+                raise PermissionDenied('Unauthorized to view or edit this application.')
+        return get_object_or_404(Application, id=self.kwargs['pk'])
         
-    # TODO: update
+
     # Details of an application cannot be updated once submitted/created, except for its status (see below).
-    # Shelter can only update the status of an application from pending to accepted or denied.
-    # Pet seeker can only update the status of an application from pending or accepted to withdrawn.
+    def perform_update(self, serializer):
+        application = serializer.instance
+
+        data = serializer.validated_data
+        new_status = data.get('status')
+        current_status = application.status
+
+        # Shelter can only update the status of an application from pending to accepted or denied.
+        if hasattr(self.request.user, 'shelter'):
+            # shelter = self.request.user.shelter
+            if current_status != 'P' or (new_status != 'A' and new_status != 'D'):
+                raise ValidationError({'error': 'Invalid status update.'}, code=status.HTTP_400_BAD_REQUEST)
+        # Pet seeker can only update the status of an application from pending or accepted to withdrawn.
+        elif hasattr(self.request.user, 'seeker'):
+            print(new_status)
+            if (current_status != 'P' and current_status != 'A') or new_status != 'W':
+                raise ValidationError({'error': 'Invalid status update.'}, code=status.HTTP_400_BAD_REQUEST)
+
+        # don't let users change description or contact method even if sent in request body
+        serializer.save(description=application.description, preferred_contact=application.preferred_contact)
+

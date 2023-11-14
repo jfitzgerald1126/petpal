@@ -1,6 +1,6 @@
 from django.urls import path
 from .views.pets import CreatePetView, UpdateDeleteRetrievePetView, SearchPetsView
-from .views import ApplicationListCreate, ApplicationRetrieveUpdateDestory
+from .views import ApplicationCreateView, ApplicationListView, ApplicationRetrieveUpdateView
 
 
 urlpatterns=[
@@ -9,6 +9,7 @@ urlpatterns=[
     path('pet/<int:pk>/', UpdateDeleteRetrievePetView.as_view(), name='update_delete_retrieve_pet'),
     path('pets/', SearchPetsView.as_view(), name='search_pets'),
     # applications
-    path('application/', ApplicationListCreate.as_view(), name='all-applications'),
-    path('application/<int:pk>/', ApplicationRetrieveUpdateDestory.as_view(), name='application-details'),
+    path('<int:pet_id>/applications/', ApplicationCreateView.as_view(), name='create-application'),
+    path('applications/', ApplicationListView.as_view(), name='all-applications'),
+    path('application/<int:pk>/', ApplicationRetrieveUpdateView.as_view(), name='application-details'),
 ]
