@@ -82,6 +82,7 @@ class SeekerUpdateSerializer(ModelSerializer):
             "description",
             "address",
             "age",
+            "profile_image",
         ]
 
 
@@ -94,6 +95,7 @@ class ShelterUpdateSerializer(ModelSerializer):
             "description",
             "address",
             "website",
+            "profile_image",
         ]
 
 

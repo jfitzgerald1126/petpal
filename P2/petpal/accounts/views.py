@@ -17,22 +17,19 @@ from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
-# Create your views here.
-
-
 class SeekerListCreateView(generics.ListCreateAPIView):
     serializer_class = SeekerCreateSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return []
+        raise PermissionDenied("You do not have permission to access a list of Seekers")
 
 
 class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SeekerUpdateSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get_object(self):
         cur_seeker = get_object_or_404(Seeker, id=self.kwargs["pk"])
         cur_user = get_object_or_404(User, id=self.request.user.id)
         if hasattr(cur_user, "shelter"):
@@ -40,7 +37,10 @@ class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
                 seeker_id=cur_seeker.id, pet__shelter_id=cur_user.id, status="active"
             )
             if applications:
-                return Seeker.objects.filter(id=cur_seeker.id)
+                return cur_seeker
+        elif hasattr(cur_user, "seeker"):
+            if cur_seeker.id == cur_user.seeker.id:
+                return cur_seeker
         raise PermissionDenied(
             "You do not have permission to access this Seeker Profile"
         )
