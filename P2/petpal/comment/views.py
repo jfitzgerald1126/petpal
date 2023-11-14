@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAdminUser
-from comment.models import Comment
+from comment.models import Comment, ApplicationComment 
 from comment.serializers import CommentSerializer, AdminCommentSerializer, ApplicationCommentSerializer
 from accounts.models import Shelter, Seeker
 from rest_framework.permissions import IsAuthenticated
@@ -47,8 +47,17 @@ class ApplicationCommentCreate(ListCreateAPIView):
     pagination_class = CommentPagination
     def get_queryset(self):
         application = get_object_or_404(Application, pk=self.kwargs['application_id'])
-        comments_set = Comment.objects.filter(application = application).order_by('-date')
+        if hasattr(self.request.user, 'shelter'):
+            shelter = self.request.user.shelter
+            if application.pet.shelter != shelter:
+                raise PermissionDenied('You are not the shelter for this pet.')
+        elif hasattr(self.request.user, 'seeker'):
+            seeker = self.request.user.seeker
+            if application.seeker != seeker:
+                raise PermissionDenied('You are not the applicant for this pet')
+        comments_set = ApplicationComment.objects.filter(application = self.kwargs['application_id']).order_by('-date')
         return comments_set
+    #yes
     
     def perform_create(self, serializer):
         sender = get_object_or_404(User, pk=self.request.user.id)
