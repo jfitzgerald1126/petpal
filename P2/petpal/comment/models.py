@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # from django.contrib.contenttypes.fields import GenericForeignKey
 # from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-
+from pet.models import Application
 
 # assuming that the shelter model is already created in the accounts app
 # Create your models here.
@@ -27,3 +27,16 @@ class Comment(models.Model):
 
     # def __str__(self):
     #     return f"{self.name}"
+
+class ApplicationComment(models.Model):
+    # techincally this is a message/chat
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    application = models.ForeignKey(Application, on_delete=models.CASCADE)
+    content = models.TextField(default="", blank=False, null=False)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # if self.sender == self.application.seeker.user:
+        #     raise PermissionDenied
+        self.application.save()
+        super().save(*args, **kwargs)

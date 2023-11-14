@@ -2,35 +2,77 @@ from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAdminUser
 from comment.models import Comment
-from comment.serializers import CommentSerializer, AdminCommentSerializer
+from comment.serializers import CommentSerializer, AdminCommentSerializer, ApplicationCommentSerializer
 from accounts.models import Shelter, Seeker
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
-from rest_framework import permissions
+from rest_framework import permissions, pagination
+from pet.models import Application
+
+
 # Create your views here.
+
+class CommentPagination(pagination.PageNumberPagination):
+    page_size = 5
 
 class IsNotShelter(permissions.BasePermission):
     message = "You do not have permission to comment on your own shelter"
-    def has_object_permission(self, request, view, shelter):
+    def has_object_permission(self, request, view, comment):
         # comment = obj
-        return shelter.user != request.user
+        print(comment.shelter_id.user, request.user)
+        
+        return comment.shelter_id.user != request.user
 
-class SeekerCommentCreate(ListCreateAPIView):
+class ShelterCommentCreate(ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsNotShelter]
-
+    pagination_class = CommentPagination
     def get_queryset(self):
-        return Comment.objects.filter(shelter_id=self.kwargs['shelter_id']).order_by('date')
+        return Comment.objects.filter(shelter_id=self.kwargs['shelter_id']).order_by('-date')
     # only get the comments for the specific shelter
 
     def perform_create(self, serializer):
         shelter = get_object_or_404(Shelter, pk=self.kwargs['shelter_id'])
-        commenter = get_object_or_404(User, pk=self.request.user.id)
-        print(self.request.user.id, shelter.user_id)
-        self.check_object_permissions(self.request, shelter)
+        commenter = self.request.user
+        # print(self.request.user.id, shelter.user_id)
+        # self.check_object_permissions(self.request, shelter)
+
+
         serializer.save(shelter_id=shelter, commenter_id=commenter)
         # set the shelter_id of the comment to the shelter object
+
+
+class ApplicationCommentCreate(ListCreateAPIView):
+    serializer_class = ApplicationCommentSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = CommentPagination
+    def get_queryset(self):
+        application = get_object_or_404(Application, pk=self.kwargs['application_id'])
+        comments_set = Comment.objects.filter(application = application).order_by('-date')
+        return comments_set
+    
+    def perform_create(self, serializer):
+        sender = get_object_or_404(User, pk=self.request.user.id)
+        application = get_object_or_404(Application, pk=self.kwargs['application_id'])
+        serializer.save(sender=sender, application=application)
+        # set the shelter_id of the comment to the shelter object
+
+
+class AdminCommentCreate(ListCreateAPIView):
+    serializer_class = AdminCommentSerializer
+    permission_classes = [IsAdminUser]
+    queryset = Comment.objects.all()
+    # see all the comments for all the shelters
+
+
+class AdminCommentRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    serializer_class = AdminCommentSerializer
+    permission_classes = [IsAdminUser]
+    def get_object(self):
+        return get_object_or_404(Comment, pk=self.kwargs['comment_id'])
+    
+
 
 # class IsCommenter(permissions.BasePermission):
 #     message = "You do not have permission to update or delete this comment"
@@ -48,16 +90,3 @@ class SeekerCommentCreate(ListCreateAPIView):
 #         self.check_object_permissions(self.request, comment)  
 #         # dunno why it wont work without this line but f it we ball
 #         return comment
-
-class AdminCommentCreate(ListCreateAPIView):
-    serializer_class = AdminCommentSerializer
-    permission_classes = [IsAdminUser]
-    queryset = Comment.objects.all()
-    # see all the comments for all the shelters
-
-
-class AdminCommentRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
-    serializer_class = AdminCommentSerializer
-    permission_classes = [IsAdminUser]
-    def get_object(self):
-        return get_object_or_404(Comment, pk=self.kwargs['comment_id'])
