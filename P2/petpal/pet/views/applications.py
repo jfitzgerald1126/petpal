@@ -101,12 +101,12 @@ class ApplicationRetrieveUpdateView(RetrieveUpdateAPIView):
         # Shelter can only update the status of an application from pending to accepted or denied.
         if hasattr(self.request.user, 'shelter'):
             # shelter = self.request.user.shelter
-            if current_status != 'P' or (new_status != 'A' and new_status != 'D'):
+            if current_status != 'pending' or (new_status != 'accepted' and new_status != 'denied'):
                 raise ValidationError({'error': 'Invalid status update.'}, code=status.HTTP_400_BAD_REQUEST)
         # Pet seeker can only update the status of an application from pending or accepted to withdrawn.
         elif hasattr(self.request.user, 'seeker'):
             print(new_status)
-            if (current_status != 'P' and current_status != 'A') or new_status != 'W':
+            if (current_status != 'pending' and current_status != 'accepted') or new_status != 'withdrawn':
                 raise ValidationError({'error': 'Invalid status update.'}, code=status.HTTP_400_BAD_REQUEST)
 
         # don't let users change description or contact method even if sent in request body
