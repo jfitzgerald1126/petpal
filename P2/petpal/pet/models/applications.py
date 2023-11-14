@@ -6,7 +6,7 @@ from pet.models import Pet
 class Application(models.Model):
 
     CONTACT_OPTIONS = [('email', 'Email'), ('phone', 'Phone')]
-    STATUS_OPTIONS = [('A', 'approved'), ('P', 'pending'), ('D', 'denied')]
+    STATUS_OPTIONS = [('A', 'accepted'), ('P', 'pending'), ('D', 'denied'), ('W', 'withdraw')]
 
     seeker = models.ForeignKey(Seeker, on_delete=models.CASCADE, null=False, blank=False)
     preferred_contact = models.CharField(max_length=50, null=False, blank=False, choices=CONTACT_OPTIONS)
