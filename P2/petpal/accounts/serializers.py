@@ -23,7 +23,7 @@ class ShelterSerializer(ModelSerializer):
             "description",
             "address",
             "website",
-            "profile_image",
+            "shelter_image",
         ]
 
 
@@ -103,7 +103,7 @@ class ShelterUpdateSerializer(ModelSerializer):
             "description",
             "address",
             "website",
-            "profile_image",
+            "shelter_image",
         ]
 
 

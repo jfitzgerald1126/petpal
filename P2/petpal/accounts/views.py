@@ -17,13 +17,17 @@ from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+class CustomError(PermissionDenied):
+    def __init__(self, detail):
+        self.detail = detail 
+
 
 class SeekerListCreateView(generics.ListCreateAPIView):
     serializer_class = SeekerCreateSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        raise PermissionDenied("You do not have permission to access a list of Seekers")
+        raise CustomError('You do not have permission to access a list of Seekers')
 
 
 class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -33,7 +37,6 @@ class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         cur_seeker = get_object_or_404(Seeker, id=self.kwargs["pk"])
         cur_user = get_object_or_404(User, id=self.request.user.id)
-        cur_app = get_object_or_404(Application, id=1)
         if hasattr(cur_user, "shelter"):
             applications = Application.objects.filter(
                 seeker_id=cur_seeker.id,
@@ -50,9 +53,18 @@ class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         elif hasattr(cur_user, "seeker"):
             if cur_seeker.id == cur_user.seeker.id:
                 return cur_seeker
-        raise PermissionDenied(
+        raise CustomError(
             "You do not have permission to access this Seeker Profile"
         )
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        instance.user.delete()
+
+        self.perform_destroy(instance)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ShelterListCreateView(generics.ListCreateAPIView):
@@ -76,6 +88,15 @@ class ShelterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         if hasattr(self.request.user, "shelter"):
             if cur_shelter.id == self.request.user.shelter.id:
                 return cur_shelter
-        raise PermissionDenied(
+        raise CustomError(
             "You do not have permission to access this Seeker Profile"
         )
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        instance.user.delete()
+
+        self.perform_destroy(instance)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

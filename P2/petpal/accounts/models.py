@@ -15,7 +15,6 @@ class Seeker(models.Model):
         upload_to="seeker_profile/", null=True, blank=True
     )
 
-
 class Shelter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     shelter_name = models.CharField(max_length=128, null=False, blank=False)
@@ -24,6 +23,6 @@ class Shelter(models.Model):
     description = models.CharField(max_length=600, null=False, blank=False)
     address = models.CharField(max_length=200, null=False, blank=False)
     website = models.URLField(max_length=128, blank=True)
-    profile_image = models.ImageField(
+    shelter_image = models.ImageField(
         upload_to="shelter_profile/", null=True, blank=True
     )
