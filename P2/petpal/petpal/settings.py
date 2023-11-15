@@ -49,10 +49,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'drf_yasg',
+    "drf_yasg",
     # our apps
     "accounts",
-    "chat",
     "comment",
     "notification",
     "pet",
