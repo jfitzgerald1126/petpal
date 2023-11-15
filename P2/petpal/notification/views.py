@@ -1,115 +1,161 @@
-from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAdminUser
-from notification.models import Notification, CommentNotification, ApplicationNotification
-from notification.serializers import NotificationSerializer, AdminNotificationSerializer, CommentNotificationSerializer, ApplicationNotificationSerializer
-from comment.models import Comment
-from comment.serializers import CommentSerializer
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView, CreateAPIView
+from notification.models import Notification, ApplicationNotification, CommentNotification, ApplicationCommentNotification
+from notification.serializers import ApplicationNotificationSerializer, CommentNotificationSerializer, NotificationSerializer, ApplicationCommentNotificationSerializer
 from pet.models import Application 
-from pet.serializers import ApplicationSerializer
-from rest_framework.permissions import IsAuthenticated
-from django.core.exceptions import PermissionDenied
+from comment.models import Comment, ApplicationComment
+from django.core.exceptions import PermissionDenied, BadRequest
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework import filters, pagination
+from accounts.models import Shelter, Seeker
+from django.urls import reverse
 
 # Create your views here.
 
+class CreateApplicationSubmittedNotificationView(APIView):
+    notif_types = ['submission', 'withdrawl', 'acceptance', 'rejection']
+    def post(self, request, *args, **kwargs):
+        if not 'notification_type' in request.data or request.data['notification_type'] not in self.notif_types:
+            raise BadRequest('`notification_type` field is either missing or invalid. Supported values: {}'.format(str(self.notif_types)))
+        
+        notif_type = request.data['notification_type']
+        application = get_object_or_404(Application, id=kwargs['application_id'])
+        if notif_type == 'submission':
+            if application.seeker.user != request.user:
+                raise PermissionDenied("Notifications can only be sent for valid submitted applications.")
+            user = application.pet.shelter.user
+            content = "{} submitted an application for your pet {}.".format(application.seeker.first_name + ' ' + application.seeker.last_name, application.pet.name)
+        elif notif_type == "withdrawl":
+            if application.seeker.user != request.user:
+                raise PermissionDenied("Notifications can only be sent for valid submitted applications.")
+            user = application.pet.shelter.user
+            content = "{} withdrew their application for your pet {}.".format(application.seeker.first_name + ' ' + application.seeker.last_name, application.pet.name)
+        elif notif_type == "acceptance":
+            if application.pet.shelter.user != request.user:
+                raise PermissionDenied("Notifications can only be sent for valid submitted applications.")
+            user = application.seeker.user
+            content = "{} accepted your application for their pet {}.".format(application.pet.shelter.shelter_name, application.pet.name)
+        elif notif_type == "rejection":
+            if application.pet.shelter.user != request.user:
+                raise PermissionDenied("Notifications can only be sent for valid submitted applications.")
+            user = application.seeker.user
+            content = "{} rejected your application for their pet {}.".format(application.pet.shelter.shelter_name, application.pet.name)
 
-# class NotificationCreate(ListCreateAPIView):
+        notification_data = {
+            'application': application.id, 
+            'user': user.id, 
+            'content': content,
+            'type': 'application',
+        }
 
-#     serializer_class = NotificationSerializer
-#     permission_classes = [IsAuthenticated]
-#     def get_queryset(self):
-#         return Notification.objects.filter(user_id=self.kwargs['user_id']).order_by('date')
+        serializer = ApplicationNotificationSerializer(data=notification_data)
+        
+        if serializer.is_valid():
+            serializer.save(application=application, user=user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            raise BadRequest(serializer.errors)
+
+class CreateCommentNotificationView(APIView):
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, id=kwargs['comment_id'])
+        if comment.commenter_id != request.user:
+            raise PermissionDenied("Notifications can only be sent for your own comments.")
+        user = comment.shelter_id.user
+        if hasattr(comment.commenter_id, 'shelter'):
+            user_object = Shelter.objects.get(user=comment.commenter_id)
+            username = user_object.shelter_name
+        else:
+            user_object = Seeker.objects.get(user=comment.commenter_id)
+            username = user_object.first_name + ' ' + user_object.last_name 
+        content = "{} left a comment on your shelter.".format(username)
+
+        notification_data = {
+            'comment': comment.id, 
+            'user': user.id, 
+            'content': content,
+            'type': 'comment',
+        }
+
+        serializer = CommentNotificationSerializer(data=notification_data)
+        
+        if serializer.is_valid():
+            serializer.save(comment=comment, user=user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            raise BadRequest(serializer.errors)
+
+class CreateApplicationCommentNotificationView(APIView):
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(ApplicationComment, id=kwargs['comment_id'])
+        if comment.sender != request.user:
+            raise PermissionDenied("Notifications can only be sent for your own comments.")
+        if comment.sender == comment.application.seeker.user:
+            user = comment.application.pet.shelter.user
+        else:
+            user = comment.application.seeker.user
+        content = "{} left a comment on an application for {}.".format(request.user, comment.application.pet.name)
+
+        notification_data = {
+            'application_comment': comment.id, 
+            'user': user.id, 
+            'content': content,
+            'type': 'application_comment',
+        }
+
+        serializer = ApplicationCommentNotificationSerializer(data=notification_data)
+        
+        if serializer.is_valid():
+            serializer.save(application_comment=comment, user=user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            raise BadRequest(serializer.errors)
+
+class UpdateDeleteRetrieveNotificationView(APIView):
+    def get(self, request, *args, **kwargs):
+        notification = get_object_or_404(Notification, id=kwargs['pk'])
+        if notification.user != request.user:
+            raise PermissionDenied("You do not have access to this notification.")
+        if notification.type == 'application':
+            notification = get_object_or_404(ApplicationNotification, id=kwargs['pk'])
+            url = request.build_absolute_uri(reverse('application-details', kwargs={'pk': notification.pk}))
+        elif notification.type == 'comment':
+            notification = get_object_or_404(CommentNotification, id=kwargs['pk'])
+            url = 'asdasd'
+        else:
+            notification = get_object_or_404(ApplicationCommentNotification, id=kwargs['pk'])
+            url = 'asdasd'
+
+        notification.read_status = True
+        notification.save()
+        return Response({"url": url}, status=status.HTTP_200_OK)
     
-#     def perform_create(self, serializer):
-#         user = self.request.user
-#         # if not isinstance(user, Seeker):
-#         #     raise PermissionDenied("Only Seekers can create notifications.")
-#         serializer.save(user_id=user)
+    def delete(self, request, *args, **kwargs):
+        notification = get_object_or_404(Notification, id=kwargs['pk'])
+        if notification.user != request.user:
+            raise PermissionDenied("You do not have access to update this notification.")
+        notification.delete()
+        return Response({"detail", "notification deleted successfully"}, status=status.HTTP_200_OK)
 
-# class NotificationRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
-#     serializer_class = NotificationSerializer
-#     permission_classes = [IsAuthenticated]
-#     def get_object(self):
-#         notification = get_object_or_404(Notification, pk=self.kwargs['notification_id']).filter(user_id=self.kwargs['user_id'])
-#         notification.read_status = True
-#         # make notification read upon retrieval 
-#         return notification
 
-def get_status(is_read):
-    if is_read == 'read' or  is_read == 'unread':
-        return is_read 
-    else:
-        raise PermissionDenied("Invalid status.")
-# LIST AND CREATE
-class BaseNotificationListCreateView(ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+class NotificationPagination(pagination.PageNumberPagination):
+    page_size = 1
+
+class NotificationFilter(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        if 'read_status' in request.query_params:
+            queryset = queryset.filter(read_status=request.query_params['read_status'])
+        return queryset
+class ListNotificationView(ListAPIView):
+    serializer_class = NotificationSerializer
+    ordering_fields = ['timestamp']
+    filterset_fields = ['read_status']
+    ordering = ['-timestamp']
+    filter_backends = [NotificationFilter, filters.OrderingFilter]
+    pagination_class = NotificationPagination
+
     def get_queryset(self):
-        status = get_status(self.kwargs['is_read'])
-        return self.model.objects.filter(user=self.kwargs['user_id'], read_status = status).order_by('date')
-
-class CommentNotificationCreate(BaseNotificationListCreateView):
-    serializer_class = CommentNotificationSerializer
-    def perform_create(self, serializer):
-        user = self.request.user
-        comment = get_object_or_404(Comment, pk=self.kwargs['comment_id'])
-        serializer.save(user_id=user, comment=comment)
-
-class ApplicationNotificationCreate(BaseNotificationListCreateView):
-    serializer_class = ApplicationNotificationSerializer
-    def perform_create(self, serializer):
-        user = self.request.user
-        application = get_object_or_404(Application, pk=self.kwargs['application_id'])
-        serializer.save(user_id=user, application=application)
-
-
-# UPDATE AND DELETE 
-class CommentNotificationRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
-    serializer_class = CommentNotificationSerializer
-    permission_classes = [IsAuthenticated]
-    def get_object(self):
-        notification = get_object_or_404(CommentNotification, pk=self.kwargs['comment_id'])
-        if notification.user != self.request.user:
-            raise PermissionDenied("You do not have permission to access this notification.")
-        notification.read_status = True
-        # make notification read upon retrieval 
-        return notification
-
-class ApplicationNotificationRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
-    serializer_class = ApplicationNotificationSerializer
-    permission_classes = [IsAuthenticated]
-    def get_object(self):
-        notification = get_object_or_404(ApplicationNotification, pk=self.kwargs['notification_id'])
-        if notification.user != self.request.user:
-            raise PermissionDenied("You do not have permission to access this notification.")
-        notification.read_status = True
-        # make notification read upon retrieval 
-        return notification
-    
-# GET
-class CommentNotificationRetreive(RetrieveAPIView):
-    serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated]
-    def get_object(self):
-        comment = get_object_or_404(Comment, pk=self.kwargs['comment_id'])
-        return comment
-    
-class ApplicationNotificationRetreive(RetrieveAPIView):
-    serializer_class = ApplicationSerializer
-    permission_classes = [IsAuthenticated]
-    def get_object(self):
-        application = get_object_or_404(Application, pk=self.kwargs['application_id'])
-        return application
-    
-
-
-class AdminNotificationCreate(ListCreateAPIView):
-    serializer_class = AdminNotificationSerializer
-    permission_classes = [IsAdminUser]
-    queryset = Notification.objects.all()
-
-class AdminNotificationRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
-    serializer_class = AdminNotificationSerializer
-    permission_classes = [IsAdminUser]
-    def get_object(self):
-        return get_object_or_404(Notification, pk=self.kwargs['notification_id'])
+        queryset = Notification.objects.filter(user=self.request.user)
+        return queryset 

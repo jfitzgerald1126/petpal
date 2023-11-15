@@ -5,9 +5,9 @@ from .views import ApplicationCreateView, ApplicationListView, ApplicationRetrie
 
 urlpatterns=[
     # pets
-    path('pet/', CreatePetView.as_view(), name='create_pet'),
-    path('pet/<int:pk>/', UpdateDeleteRetrievePetView.as_view(), name='update_delete_retrieve_pet'),
-    path('pets/', SearchPetsView.as_view(), name='search_pets'),
+    path('pet/', CreatePetView.as_view(), name='create-pet'),
+    path('pet/<int:pk>/', UpdateDeleteRetrievePetView.as_view(), name='pet-details'),
+    path('pets/', SearchPetsView.as_view(), name='search-pets'),
     # applications
     path('<int:pet_id>/applications/', ApplicationCreateView.as_view(), name='create-application'),
     path('applications/', ApplicationListView.as_view(), name='all-applications'),

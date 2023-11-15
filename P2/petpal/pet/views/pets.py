@@ -41,6 +41,8 @@ class SizeOrderingFilter(filters.OrderingFilter):
         '-name': '-name',
         'birthday': 'birthday',
         '-birthday': '-birthday',
+        'listed': 'listed',
+        '-listed': '-listed',
     }
     
     def filter_queryset(self, request, queryset, view):
@@ -72,9 +74,9 @@ class PetFilter(filters.BaseFilterBackend):
 class SearchPetsView(generics.ListAPIView):
     serializer_class = PetSerializer
     search_fields = ['name', 'animal']
-    ordering_fields = ['name', 'birthday', 'size']
+    ordering_fields = ['name', 'birthday', 'size', 'listed']
     filterset_fields = ['shelter', 'status', 'breed', 'size', 'color', 'gender']
-    ordering = ['available']
+    ordering = ['-listed']
     filter_backends = [PetFilter, filters.SearchFilter, SizeOrderingFilter]
     pagination_class = SearchPetsPagination
 
