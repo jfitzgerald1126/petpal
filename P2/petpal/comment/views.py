@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAdminUser
-from comment.models import Comment
+from comment.models import Comment, ApplicationComment 
 from comment.serializers import CommentSerializer, AdminCommentSerializer, ApplicationCommentSerializer
 from accounts.models import Shelter, Seeker
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from rest_framework import permissions, pagination
 from pet.models import Application
-
+from rest_framework.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -40,6 +40,10 @@ class ShelterCommentCreate(ListCreateAPIView):
         serializer.save(shelter_id=shelter, commenter_id=commenter)
         # set the shelter_id of the comment to the shelter object
 
+class CantDoThisLmao(PermissionDenied):
+    def __init__(self, detail):
+        self.detail = detail 
+        
 
 class ApplicationCommentCreate(ListCreateAPIView):
     serializer_class = ApplicationCommentSerializer
@@ -47,14 +51,58 @@ class ApplicationCommentCreate(ListCreateAPIView):
     pagination_class = CommentPagination
     def get_queryset(self):
         application = get_object_or_404(Application, pk=self.kwargs['application_id'])
-        comments_set = Comment.objects.filter(application = application).order_by('-date')
+        if hasattr(self.request.user, 'shelter'):
+            shelter = self.request.user.shelter
+            if application.pet.shelter != shelter:
+                raise CantDoThisLmao('You are not the shelter for this pet.')
+        elif hasattr(self.request.user, 'seeker'):
+            seeker = self.request.user.seeker
+            if application.seeker != seeker:
+                raise CantDoThisLmao('You are not the applicant for this pet')
+        comments_set = ApplicationComment.objects.filter(application = self.kwargs['application_id']).order_by('-date')
         return comments_set
+    #yes
     
     def perform_create(self, serializer):
         sender = get_object_or_404(User, pk=self.request.user.id)
         application = get_object_or_404(Application, pk=self.kwargs['application_id'])
+        if hasattr(self.request.user, 'shelter'):
+            shelter = self.request.user.shelter
+            if application.pet.shelter != shelter:
+                raise CantDoThisLmao('You are not the shelter for this pet.')
+        elif hasattr(self.request.user, 'seeker'):
+            seeker = self.request.user.seeker
+            if application.seeker != seeker:
+                raise CantDoThisLmao('You are not the applicant for this pet')
         serializer.save(sender=sender, application=application)
         # set the shelter_id of the comment to the shelter object
+
+# review id 
+
+class ReviewRetreive(RetrieveAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        return get_object_or_404(Comment, pk=self.kwargs['comment_id'])
+    
+
+class ApplicationCommentRetreive(RetrieveAPIView):
+    serializer_class = ApplicationCommentSerializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        application_comment = get_object_or_404(ApplicationComment, pk=self.kwargs['comment_id'])
+        application = get_object_or_404(Application, pk=application_comment.application.id)
+        if hasattr(self.request.user, 'shelter'):
+            shelter = self.request.user.shelter
+            if application.pet.shelter != shelter:
+                raise CantDoThisLmao('You are not the shelter for this pet.')
+        elif hasattr(self.request.user, 'seeker'):
+            seeker = self.request.user.seeker
+            if application.seeker != seeker:
+                raise CantDoThisLmao('You are not the applicant for this pet')
+        return application_comment
+
+# id's of the comments themselve   
 
 
 class AdminCommentCreate(ListCreateAPIView):
