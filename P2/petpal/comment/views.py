@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAdminUser
 from comment.models import Comment, ApplicationComment 
 from comment.serializers import CommentSerializer, AdminCommentSerializer, ApplicationCommentSerializer
@@ -76,6 +76,33 @@ class ApplicationCommentCreate(ListCreateAPIView):
                 raise CantDoThisLmao('You are not the applicant for this pet')
         serializer.save(sender=sender, application=application)
         # set the shelter_id of the comment to the shelter object
+
+# review id 
+
+class ReviewRetreive(RetrieveAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        return get_object_or_404(Comment, pk=self.kwargs['comment_id'])
+    
+
+class ApplicationCommentRetreive(RetrieveAPIView):
+    serializer_class = ApplicationCommentSerializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        application_comment = get_object_or_404(ApplicationComment, pk=self.kwargs['comment_id'])
+        application = get_object_or_404(Application, pk=application_comment.application.id)
+        if hasattr(self.request.user, 'shelter'):
+            shelter = self.request.user.shelter
+            if application.pet.shelter != shelter:
+                raise CantDoThisLmao('You are not the shelter for this pet.')
+        elif hasattr(self.request.user, 'seeker'):
+            seeker = self.request.user.seeker
+            if application.seeker != seeker:
+                raise CantDoThisLmao('You are not the applicant for this pet')
+        return application_comment
+
+# id's of the comments themselve   
 
 
 class AdminCommentCreate(ListCreateAPIView):
