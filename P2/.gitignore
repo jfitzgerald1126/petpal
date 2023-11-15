@@ -1,7 +1,0 @@
-P2/petpal/Makefile
-pycache/
-env/
-migrations/
-P2/petpal/db.sqlite3
-P2/petpal/pet/models/__pycache__/__init__.cpython-311.pyc
-P2/petpal/pet/models/__pycache__/applications.cpython-311.pyc
