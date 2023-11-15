@@ -7,7 +7,4 @@ urlpatterns=[
 
     path('specific_review/<int:comment_id>/', views.ReviewRetreive.as_view(), name='specific-comment'),
     path('specific_application/<int:comment_id>/', views.ApplicationCommentRetreive.as_view(), name='specific-application-comment'),
-
-    path('super/', views.AdminCommentCreate.as_view(), name='admin_comment_create'),
-    path('super/<int:comment_id>/', views.AdminCommentRetrieveUpdateDestroy.as_view(), name='admin_comment_retrieve_update_destroy'),
 ]
