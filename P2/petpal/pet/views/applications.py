@@ -11,6 +11,10 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 
 # Create
 class ApplicationCreateView(CreateAPIView):
+    """Creates an application for a given pet (pet_id) (must be a seeker)
+    
+    Send perferred_contact (email or phone) and description fields
+    """
     serializer_class = ApplicationSerializer
 
     def perform_create(self, serializer):
@@ -34,10 +38,19 @@ class ApplicationCreateView(CreateAPIView):
         
 
 class ApplicationPagination(pagination.PageNumberPagination):
-    page_size = 2
+    page_size = 5
 
 # List 
 class ApplicationListView(ListAPIView):
+    """
+    List all applications for current user (shelter)
+
+    Sort can be done on "created_date", "modified_date" e.g. ordering=created_date
+
+    Filter can be done on status e.g. status=accepted 
+        
+    Pagination of 5 pets per page, can be paged using page=1, page=2 ...
+    """
     serializer_class = ApplicationSerializer
     pagination_class = ApplicationPagination
 
@@ -72,6 +85,12 @@ class ApplicationListView(ListAPIView):
         
 
 class ApplicationRetrieveUpdateView(RetrieveUpdateAPIView):
+    """Retrieves and updates an application
+
+    retrieve (GET) gets the application (pk) for a specific pet for this user (usable by seeker or shelter involved in this application)
+
+    update (PUT/PATCH) can only update the status of an application.
+    """
     serializer_class = ApplicationSerializer
 
     def get_object(self):

@@ -6,6 +6,9 @@ from django.db.models import Case, Value, When
 from rest_framework.exceptions import PermissionDenied
 
 class CreatePetView(generics.CreateAPIView):
+    """Takes information on a new pet to be listed as "available" under the current user who must be a shelter. 
+    Creates and returns the listing that was creted for this pet. 
+    """
     serializer_class = PetSerializer
     
     def perform_create(self, serializer):
@@ -15,6 +18,14 @@ class CreatePetView(generics.CreateAPIView):
         serializer.save(status="available", shelter=user.shelter)
     
 class UpdateDeleteRetrievePetView(generics.RetrieveUpdateDestroyAPIView):
+    """Updates (PUT/PATCH), deletes (DELETE), and retrieves (GET) a pet listing. 
+
+    Update takes in a new pet to overwrite the corresponding fields of pet that the current user (a shelter) owns.
+
+    Delete removes the pet listing, must be the owner of this pet (a shelter). 
+
+    Get retrieves the listing and returns the pet's information.
+    """
     serializer_class = PetSerializer
 
     def get_object(self):
@@ -72,9 +83,21 @@ class PetFilter(filters.BaseFilterBackend):
         return queryset
 
 class SearchPetsView(generics.ListAPIView):
+    """Search for all pets.
+
+    By default shows only "available" pets if a "status" filter is not provided. 
+    
+    Search parameter searches "name" and "animal" fields. e.g. search=charlie
+
+    Ordering can be done on "size", "listed", or "name" e.g. ordering=size
+
+    Filtering can be done on "shelter", "seeker", "breed", "size", "color", or "gender". e.g. color=red
+
+    Pagination of 10 pets per page, can be paged using page=1, page=2 ...
+    """
     serializer_class = PetSerializer
     search_fields = ['name', 'animal']
-    ordering_fields = ['name', 'birthday', 'size', 'listed']
+    ordering_fields = ['name', 'size', 'listed']
     filterset_fields = ['shelter', 'status', 'breed', 'size', 'color', 'gender']
     ordering = ['-listed']
     filter_backends = [PetFilter, filters.SearchFilter, SizeOrderingFilter]

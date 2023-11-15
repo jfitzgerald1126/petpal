@@ -16,6 +16,7 @@ class Pet(models.Model):
     animal = models.CharField(max_length=200, blank=False, null=False)
     breed = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
+    vaccine_status = models.CharField(max_length=200, null=True, blank=True)
     caretaker = models.CharField(max_length=200, null=True, blank=True)
     description = models.CharField(max_length=600, null=False, blank=False)
     allow_notifs = models.BooleanField(default=True)
