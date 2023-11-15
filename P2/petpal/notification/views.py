@@ -106,7 +106,7 @@ class CreateApplicationCommentNotificationView(APIView):
         }
 
         serializer = ApplicationCommentNotificationSerializer(data=notification_data)
-        
+
         if serializer.is_valid():
             serializer.save(application_comment=comment, user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -120,13 +120,13 @@ class UpdateDeleteRetrieveNotificationView(APIView):
             raise PermissionDenied("You do not have access to this notification.")
         if notification.type == 'application':
             notification = get_object_or_404(ApplicationNotification, id=kwargs['pk'])
-            url = request.build_absolute_uri(reverse('application-details', kwargs={'pk': notification.pk}))
+            url = request.build_absolute_uri(reverse('application-details', kwargs={'pk': notification.application.pk}))
         elif notification.type == 'comment':
             notification = get_object_or_404(CommentNotification, id=kwargs['pk'])
-            url = 'asdasd'
+            url = request.build_absolute_uri(reverse('specific-comment', kwargs={'comment_id': notification.comment.pk}))
         else:
             notification = get_object_or_404(ApplicationCommentNotification, id=kwargs['pk'])
-            url = 'asdasd'
+            url = request.build_absolute_uri(reverse('specific-application-comment', kwargs={'comment_id': notification.application_comment.pk}))
 
         notification.read_status = True
         notification.save()
@@ -141,7 +141,7 @@ class UpdateDeleteRetrieveNotificationView(APIView):
 
 
 class NotificationPagination(pagination.PageNumberPagination):
-    page_size = 1
+    page_size = 5
 
 class NotificationFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
