@@ -1,6 +1,6 @@
 sudo apt install python3.8 python3-pip
 
-python -m venv env
+python3 -m venv env
 
 source ./env/bin/activate
 
