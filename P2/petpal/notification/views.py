@@ -15,6 +15,7 @@ from django.urls import reverse
 # Create your views here.
 
 class CreateApplicationSubmittedNotificationView(APIView):
+    """This endpoint creates a notifcation for a submitted application when a POST request is sent"""
     notif_types = ['submission', 'withdrawl', 'acceptance', 'rejection']
     def post(self, request, *args, **kwargs):
         if not 'notification_type' in request.data or request.data['notification_type'] not in self.notif_types:
@@ -59,6 +60,7 @@ class CreateApplicationSubmittedNotificationView(APIView):
             raise BadRequest(serializer.errors)
 
 class CreateCommentNotificationView(APIView):
+    """This endpoint creates a notifcation when a POST Request is sent, given a comment_id"""
     def post(self, request, *args, **kwargs):
         comment = get_object_or_404(Comment, id=kwargs['comment_id'])
         if comment.commenter_id != request.user:
@@ -88,6 +90,7 @@ class CreateCommentNotificationView(APIView):
             raise BadRequest(serializer.errors)
 
 class CreateApplicationCommentNotificationView(APIView):
+    """This Endpoint creates a notification when a POST Request is sent given comment_id signifying that a new application comment was created"""
     def post(self, request, *args, **kwargs):
         comment = get_object_or_404(ApplicationComment, id=kwargs['comment_id'])
         if comment.sender != request.user:
@@ -114,6 +117,7 @@ class CreateApplicationCommentNotificationView(APIView):
             raise BadRequest(serializer.errors)
 
 class UpdateDeleteRetrieveNotificationView(APIView):
+    """This endpoint shows a notification on GET Request and when you make a request with GET, it marks the notifcation as read. It also deletes a notification on Delete Request"""
     def get(self, request, *args, **kwargs):
         notification = get_object_or_404(Notification, id=kwargs['pk'])
         if notification.user != request.user:
@@ -149,6 +153,7 @@ class NotificationFilter(filters.BaseFilterBackend):
             queryset = queryset.filter(read_status=request.query_params['read_status'])
         return queryset
 class ListNotificationView(ListAPIView):
+    """This endpoint lists all notifcations on GET Request"""
     serializer_class = NotificationSerializer
     ordering_fields = ['timestamp']
     filterset_fields = ['read_status']

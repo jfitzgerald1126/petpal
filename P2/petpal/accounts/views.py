@@ -23,6 +23,7 @@ class CustomError(PermissionDenied):
 
 
 class SeekerListCreateView(generics.ListCreateAPIView):
+    """Creates a seeker on POST Request, does not show a list of seekers (for any user type right now)"""
     serializer_class = SeekerCreateSerializer
     permission_classes = [AllowAny]
 
@@ -31,6 +32,9 @@ class SeekerListCreateView(generics.ListCreateAPIView):
 
 
 class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    """Endpoint to Update a seeker object on PATCH Request, delete a seeker object on DELETE Request, and retrieve a seeker object on GET Request.
+
+"""
     serializer_class = SeekerUpdateSerializer
     permission_classes = [IsAuthenticated]
 
@@ -68,6 +72,9 @@ class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ShelterListCreateView(generics.ListCreateAPIView):
+    """Creates a shelter on POST Request, lists all shelters on GET Request
+
+"""
     queryset = Shelter.objects.all()
     serializer_class = ShelterCreateSerializer
     permission_classes = [AllowAny]
@@ -80,6 +87,9 @@ class ShelterListCreateView(generics.ListCreateAPIView):
 
 
 class ShelterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    """Updates a shelter's profile on PATCH Request, deletes a shelter on DELETE Request, shows a shelter profile on GET Request
+
+"""
     serializer_class = ShelterUpdateSerializer
     permission_classes = [IsAuthenticated]
 
