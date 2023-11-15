@@ -18,6 +18,7 @@ class Pet(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     caretaker = models.CharField(max_length=200, null=True, blank=True)
     description = models.CharField(max_length=600, null=False, blank=False)
+    allow_notifs = models.BooleanField(default=True)
     birthday = models.DateField(null=True, blank=True)
     listed = models.DateTimeField(auto_now_add=True)
     size = models.CharField(
