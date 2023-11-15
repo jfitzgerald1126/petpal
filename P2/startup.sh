@@ -6,5 +6,5 @@ source ./env/bin/activate
 
 pip install -r ./requirements.txt
 
-python ./petpal/manage.py makemigrations
-python ./petpal/manage.py migrate
+python3 ./petpal/manage.py makemigrations
+python3 ./petpal/manage.py migrate
