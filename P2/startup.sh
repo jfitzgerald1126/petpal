@@ -1,4 +1,4 @@
-sudo apt install python3.8 python3-pip
+sudo apt install python3.8 python3-pip python3.8-venv
 
 python3 -m venv env
 
