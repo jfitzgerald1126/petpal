@@ -2,15 +2,18 @@ import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-import TestPage from './pages/LoginAndRegister/test';
-
+// import TestPage from './pages/LoginAndRegister/test';
+import LoginPage from './pages/LoginAndRegister/login_page';
+import LandingPage from './pages/LoginAndRegister/landing_page';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function WebpageRouter(){
   return(
     <BrowserRouter>
       <Routes>
         <Route path="/" >
-            <Route index element={<TestPage/>}/>
+            <Route index  element={<LandingPage/>}/>
+            <Route path="login" element={<LoginPage/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
