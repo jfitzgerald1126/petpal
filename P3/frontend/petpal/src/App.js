@@ -5,6 +5,8 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 // import TestPage from './pages/LoginAndRegister/test';
 import LoginPage from './pages/LoginAndRegister/login_page';
 import LandingPage from './pages/LoginAndRegister/landing_page';
+import RegisterPageShelter from './pages/LoginAndRegister/register_page_shelter';
+import RegisterPageSeeker from './pages/LoginAndRegister/register_page_seeker';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function WebpageRouter(){
@@ -13,7 +15,12 @@ function WebpageRouter(){
       <Routes>
         <Route path="/" >
             <Route index  element={<LandingPage/>}/>
-            <Route path="login" element={<LoginPage/>}/>
+            <Route path="login/" element={<LoginPage/>}/>
+
+            <Route path="register/">
+              <Route path="seeker/" element={<RegisterPageSeeker/>}/>
+              <Route path="shelter/" element={<RegisterPageShelter/>}/>
+            </Route>
         </Route>
       </Routes>
     </BrowserRouter>
