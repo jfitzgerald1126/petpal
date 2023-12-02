@@ -1,9 +1,17 @@
 
 
+// import StarRatingPicker from "../../common/StarRating/star_rating";
+
+
+import ShelterComments from "../../common/Comments/shelter_comments";
+import ApplicationComments from "../../common/Comments/application_comments";
 function TestPage(){
     
     return <>
-        <h1> this is just a test to see if the routes are set up correctly </h1>
+        <ShelterComments />
+        
+        <ApplicationComments />
+        
     </>;
 }
 
