@@ -14,7 +14,8 @@
     margin-top: 0.3em;
     font-weight: bold;
     font-size: 1em;
-    background-color: var(--zinc-500);
+   
+    background-color: var(--emerald-600);
     color:white;
     margin-bottom: 0.3em;
     width: 70%
@@ -26,25 +27,34 @@
     font-weight: bold;
     font-size: 1em;
     color: white;
-    background-color: var(--emerald-600);
+    background-color: var(--zinc-500);
     margin-bottom: 0.3em;
     width: 70%
 }
 
 .text-right{
     display: flex;
-    border:2px solid black;
+    /* border:2px solid black; */
     justify-content: flex-end;
 }
 
 .text-left{
     display: flex;
     justify-content: flex-start;
-    border:2px solid black;
+    /* border:2px solid black; */
 }
 
 .chatbox-wrapper{
-    border: 1px solid var(--emerald-700);
+    /* border: 1px solid var(--emerald-700); */
     border-radius: 5px;
     background-color: var(--zinc-200);
+    max-height:300px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+
+.chat-wrapper{
+    width: 300px;
+    /* border: 2px solid var(--emerald-700); */
 }
