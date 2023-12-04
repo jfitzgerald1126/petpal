@@ -1,5 +1,5 @@
 import '../../common/styles.css'
-import { Link } from 'react-router-dom'
+import { Link , useNavigate} from 'react-router-dom'
 import { useState } from 'react'
 import  axios  from 'axios';
 
@@ -51,7 +51,8 @@ function RegisterPageSeeker() {
 
 
     let base_url ='http://127.0.0.1:8000/'
-    let create_seeker_append='seekers/'
+    let create_seeker_append='accounts/seekers/'
+    let navigate = useNavigate();
     const handleSeekerRegister = async(event) => {
         event.preventDefault();
 
@@ -59,12 +60,15 @@ function RegisterPageSeeker() {
             await axios({
                 method: 'post',
                 url: base_url+create_seeker_append,
-                data: packaged_data,
-                // headers: {'Content-Type': 'application/json' }
+                // data: packaged_data,
+                data: JSON.stringify(packaged_data),
+                headers: {'Content-Type': 'application/json' }
             });
+            console.log("seeker registration successful!");
+            navigate('/login/');
         }
          catch (error) {
-            console.log("error in seeker registration");
+            console.log("error in seeker registration", error);
         }
     }
 
