@@ -9,6 +9,12 @@
     background-color: var(--zinc-200);
 }
 
+#all-comments{
+    overflow-y: scroll;
+    max-height: 600px;  
+    /* border: 2px solid black; */
+}
+
 
 .user-styling{
     margin-top: 0.3em;

@@ -1,6 +1,7 @@
 import '../../common/styles.css'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import  axios  from 'axios';
 
 function RegisterPageSeeker() {
 
@@ -48,6 +49,25 @@ function RegisterPageSeeker() {
         confirm_password: confirm_password
     }
 
+
+    let base_url ='http://127.0.0.1:8000/'
+    let create_seeker_append='seekers/'
+    const handleSeekerRegister = async(event) => {
+        event.preventDefault();
+
+        try{
+            await axios({
+                method: 'post',
+                url: base_url+create_seeker_append,
+                data: packaged_data,
+                // headers: {'Content-Type': 'application/json' }
+            });
+        }
+         catch (error) {
+            console.log("error in seeker registration");
+        }
+    }
+
     console.log(packaged_data);
 
     return <>
@@ -63,7 +83,7 @@ function RegisterPageSeeker() {
 
 
             <div className="w-100">
-                <form method="post">
+                <form method="post" onSubmit={handleSeekerRegister}> 
                 {/* <!--used form-control configurations from boostrap to align input boxes
                 https://getbootstrap.com/docs/5.3/forms/overview/#overview, https://getbootstrap.com/docs/5.3/forms/form-control/
                 -->
@@ -71,7 +91,7 @@ function RegisterPageSeeker() {
                 <div className="w-50">
 
                     <div className="mb-3 mt-5">
-                        <input type="email" className="form-control" id="username" name="username" placeholder="Username..." onChange={handleUsernameChange}/>
+                        <input type="text" className="form-control" id="username" name="username" placeholder="Username..." onChange={handleUsernameChange}/>
                     </div>
                     <div className="mb-3">
                     <input type="email" className="form-control" id="email" name="email" placeholder="Email..." onChange={handleEmailChange}/>
@@ -100,7 +120,7 @@ function RegisterPageSeeker() {
                 </div>
                 
                 <div className="mb-3 d-flex justify-content-start">
-                    <button type="submit" className="login-button"><a href="signup_page_seeker_fail.html" className="link">Register</a></button>
+                    <button type="submit" className="login-button">Register</button>
                 </div>
                 
                 </form>
