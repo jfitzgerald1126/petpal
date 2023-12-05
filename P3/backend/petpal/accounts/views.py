@@ -16,6 +16,7 @@ from pet.models import Application
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .permissions import IsShelterOrReadOnly 
 
 class CustomError(PermissionDenied):
     def __init__(self, detail):
@@ -87,26 +88,14 @@ class ShelterListCreateView(generics.ListCreateAPIView):
 
 
 class ShelterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """Updates a shelter's profile on PATCH Request, deletes a shelter on DELETE Request, shows a shelter profile on GET Request
-
-"""
     serializer_class = ShelterUpdateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsShelterOrReadOnly]  # Use the custom permission
 
     def get_object(self):
-        cur_shelter = get_object_or_404(Shelter, id=self.kwargs["pk"])
-        if hasattr(self.request.user, "shelter"):
-            if cur_shelter.id == self.request.user.shelter.id:
-                return cur_shelter
-        raise CustomError(
-            "You do not have permission to access this Seeker Profile"
-        )
+        return get_object_or_404(Shelter, id=self.kwargs["pk"])
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-
         instance.user.delete()
-
         self.perform_destroy(instance)
-
         return Response(status=status.HTTP_204_NO_CONTENT)

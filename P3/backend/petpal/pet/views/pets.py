@@ -4,6 +4,7 @@ from ..serializers.pets import PetSerializer
 from django.shortcuts import get_object_or_404
 from django.db.models import Case, Value, When
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny
 
 class CreatePetView(generics.CreateAPIView):
     """Takes information on a new pet to be listed as "available" under the current user who must be a shelter. 
@@ -27,10 +28,11 @@ class UpdateDeleteRetrievePetView(generics.RetrieveUpdateDestroyAPIView):
     Get retrieves the listing and returns the pet's information.
     """
     serializer_class = PetSerializer
+    permission_classes = [AllowAny]
 
     def get_object(self):
         pet = get_object_or_404(Pet, id=self.kwargs['pk'])
-        if self.request.method != "GET" and (not hasattr(self.request.user, 'shelter') or pet.shelter != self.request.user.shelter): 
+        if self.request.method != "GET" and ((not hasattr(self.request.user, 'shelter') or pet.shelter != self.request.user.shelter)): 
             raise PermissionDenied('Unauthorized access to pet.')
         else:
             return pet
