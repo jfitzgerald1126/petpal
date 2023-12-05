@@ -67,8 +67,8 @@ function RegisterPageSeeker() {
             console.log("seeker registration successful!");
             navigate('/login/');
         }
-         catch (error) {
-            console.log("error in seeker registration", error);
+        catch (error) {
+            console.log("error in seeker registration", error.response.data.non_field_errors[0]);
         }
     }
 
@@ -87,6 +87,7 @@ function RegisterPageSeeker() {
 
 
             <div className="w-100">
+            <h4 className="fw-light"><Link to="/" className="landinglink">Go Back</Link></h4>
                 <form method="post" onSubmit={handleSeekerRegister}> 
                 {/* <!--used form-control configurations from boostrap to align input boxes
                 https://getbootstrap.com/docs/5.3/forms/overview/#overview, https://getbootstrap.com/docs/5.3/forms/form-control/

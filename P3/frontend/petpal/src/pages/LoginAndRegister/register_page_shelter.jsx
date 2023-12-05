@@ -1,9 +1,9 @@
 import '../../common/styles.css'
 
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-
+import axios from 'axios'
 
 function RegisterPageShelter() { 
     const[username, setUsername] = useState("");
@@ -13,6 +13,7 @@ function RegisterPageShelter() {
     const[address, setAddress] = useState("");
     const[password, setPassword] = useState("");
     const[confirm_password, setConfirmPassword] = useState("");
+    const[description, setDescription] = useState("")
 
     const handleUsernameChange = (event) => {
         event.preventDefault();
@@ -36,17 +37,46 @@ function RegisterPageShelter() {
     const handleConfirmPasswordChange = (event) => {
         setConfirmPassword(event.target.value);
     }
+
+    const handleDescriptionChange = (event) => { 
+
+        setDescription(event.target.value);
+    }
     const packaged_data ={
         username: username,
         email: email,
         shelter_name: shelter_name,
         phone_number: phone_number,
+        description: description,
         address: address,
         password: password,
         confirm_password: confirm_password
     }
 
     console.log(packaged_data);
+
+    let base_url ='http://127.0.0.1:8000/'
+    let create_seeker_append='accounts/shelters/'
+    let navigate = useNavigate();
+
+
+    const handleShelterRegister = async(event) => {
+        event.preventDefault();
+
+        try{
+            await axios({
+                method: 'post',
+                url: base_url+create_seeker_append,
+                data: JSON.stringify(packaged_data),
+                headers: {'Content-Type': 'application/json' }
+            });
+            navigate('/login/')
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
+
 
 
     return <>
@@ -63,14 +93,15 @@ function RegisterPageShelter() {
 
 
                 <div className="w-100">
-                    <form method="post">
+                <h4 className="fw-light"><Link to="/" className="landinglink">Go Back</Link></h4>
+                    <form method="post" onSubmit={handleShelterRegister}>
                     {/* <!--used form-control configurations from boostrap to align input boxes
                     https://getbootstrap.com/docs/5.3/forms/overview/#overview , https://getbootstrap.com/docs/5.3/forms/form-control/
                     --> */}
                     
                     <div className="w-50">
                         <div className="mb-3 mt-5">
-                            <input type="email" className="form-control" id="username" name="username" placeholder="Username..." onChange={handleUsernameChange}/>
+                            <input type="text" className="form-control" id="username" name="username" placeholder="Username..." onChange={handleUsernameChange}/>
                         </div>
 
                         <div className="mb-3">
@@ -79,6 +110,10 @@ function RegisterPageShelter() {
 
                         <div className="mb-3">
                         <input type="text" className="form-control" id="shelter_name" name="shelter_name" placeholder="Shelter name..." onChange={handleShelterNameChange}/>
+                        </div>
+
+                        <div className="mb-3">
+                        <textarea className="form-control" id="description" name="description" placeholder="Description..." rows="3" onChange={handleDescriptionChange}></textarea>
                         </div>
 
                         <div className="mb-3">
@@ -105,7 +140,7 @@ function RegisterPageShelter() {
                     
             
                     <div className="mb-3 d-flex justify-content-start">
-                        <button type="submit" className="login-button"><a href="signup_page_shelter_fail.html" className="link">Register</a></button>
+                        <button type="submit" className="login-button">Register</button>
                     </div>
 
                     

@@ -7,6 +7,8 @@ import LoginPage from './pages/LoginAndRegister/login_page';
 import LandingPage from './pages/LoginAndRegister/landing_page';
 import RegisterPageShelter from './pages/LoginAndRegister/register_page_shelter';
 import RegisterPageSeeker from './pages/LoginAndRegister/register_page_seeker';
+
+import TestHomePage from './pages/LoginAndRegister/test_home_page';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function WebpageRouter(){
@@ -17,6 +19,7 @@ function WebpageRouter(){
             <Route index  element={<LandingPage/>}/>
             <Route path="login/" element={<LoginPage/>}/>
             <Route path="test/" element={<TestPage/>}/>
+            <Route path="testhome/" element={<TestHomePage/>}/>
 
             <Route path="register/">
               <Route path="seeker/" element={<RegisterPageSeeker/>}/>
