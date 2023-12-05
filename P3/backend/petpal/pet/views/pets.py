@@ -69,17 +69,17 @@ class SizeOrderingFilter(filters.OrderingFilter):
 class PetFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         if 'shelter' in request.query_params:
-            queryset = queryset.filter(shelter=request.query_params['shelter'])
+            queryset = queryset.filter(shelter__in=request.query_params['shelter'].split(','))
         if 'status' in request.query_params:
-            queryset = queryset.filter(status=request.query_params['status'])
-        if 'breed' in request.query_params:
-            queryset = queryset.filter(breed=request.query_params['breed'])
+            queryset = queryset.filter(status__in=request.query_params['status'].split(','))
+        if 'animal' in request.query_params:
+            queryset = queryset.filter(animal__in=request.query_params['animal'].split(','))
         if 'size' in request.query_params:
-            queryset = queryset.filter(size=request.query_params['size'])
+            queryset = queryset.filter(size__in=request.query_params['size'].split(','))
         if 'color' in request.query_params:
-            queryset = queryset.filter(color=request.query_params['color'])
+            queryset = queryset.filter(color__in=request.query_params['color'].split(','))
         if 'gender' in request.query_params:
-            queryset = queryset.filter(gender=request.query_params['gender'])
+            queryset = queryset.filter(gender__in=request.query_params['gender'].split(','))
         return queryset
 
 class SearchPetsView(generics.ListAPIView):
