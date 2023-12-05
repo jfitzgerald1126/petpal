@@ -13,9 +13,11 @@ import TestHomePage from './pages/LoginAndRegister/test_home_page';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import PetDetail from './pages/pet/petDetail';
+import { UserProvider } from './contexts/UserContext';
 
 function App() {
   return (
+    <UserProvider>
       <Router>
         <Routes>
           <Route path="/" >
@@ -31,7 +33,8 @@ function App() {
               <Route path="search/" element={<Search/>}/>
           </Route>
         </Routes>
-    </Router>
+      </Router>
+    </UserProvider>
   );
 }
 

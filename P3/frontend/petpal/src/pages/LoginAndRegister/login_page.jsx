@@ -3,14 +3,14 @@ import '../../common/styles.css'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useUserContext } from '../../contexts/UserContext';
 
 import  axios  from 'axios';
 function LoginPage(){
 
-
-
+    const { loginUser, logoutUser } = useUserContext();
     let base_url ='http://127.0.0.1:8000/'
-    let login_append='api/token/'
+    let login_append='accounts/api/token/'
 
     console.log(base_url+login_append)
     const[username, setUsername] = useState("");
@@ -47,12 +47,14 @@ function LoginPage(){
             localStorage.clear();
             localStorage.setItem('access_token', data.access);
             localStorage.setItem('refresh_token', data.refresh);
+            loginUser(data.user)
 
             axios.defaults.headers['Authorization'] = `Bearer ${data['access']}`;
 
             navigate('/testhome/')
         }
         catch(error){
+            logoutUser();
             console.log(error)
         }
         // const {data} = await 
