@@ -95,12 +95,7 @@ class ShelterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         cur_shelter = get_object_or_404(Shelter, id=self.kwargs["pk"])
-        if hasattr(self.request.user, "shelter"):
-            if cur_shelter.id == self.request.user.shelter.id:
-                return cur_shelter
-        raise CustomError(
-            "You do not have permission to access this Seeker Profile"
-        )
+        return cur_shelter
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

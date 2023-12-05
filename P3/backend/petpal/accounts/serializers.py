@@ -123,9 +123,7 @@ class ShelterCreateSerializer(ModelSerializer):
             "shelter_name",
             "email",
             "phone_number",
-            "description",
             "address",
-            "website",
         ]
 
     def validate(self, data):
