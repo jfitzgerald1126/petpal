@@ -1,14 +1,83 @@
 
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
+import { Link , useNavigate,  useParams} from 'react-router-dom'
 import './comments.css'
-import { all } from 'axios'
+import axios from 'axios'
 function ShelterComments(){
 
+
+    let {shelter_id} = useParams()
+
+    console.log("shelter_id",shelter_id)
+    let base_url ='http://127.0.0.1:8000/'
+    let shelter_comments_append=`comments/review/${shelter_id}/`
+    console.log("shelter_commends_append",shelter_comments_append)
+
+    
+    let seeker_retrieve_append='accounts/seekers/1/'
+    let shelter_retrieve_append='accounts/shelters/'
+
+    
     const test_comment_name = "Jeff"
     const test_shelter_name = "big dawg shelter"
     // TODO: change these to actual data that we pass around using useState and useEffect
 
+    const navigate = useNavigate();
+
+    const [comment_data, setCommentData] = useState([]); // this will be an array of objects, each object will have the following fields: commenter_name, shelter_name, comment, rating
+    const [seekers, setSeekers] = useState([]); // this will be an array of objects, each object will have the following fields: seeker_name, seeker_id
+    const [shelters, setShelters] = useState([]); // this will be an array of objects, each object will have the following fields: shelter_name, shelter_id
+    useEffect(() => {
+
+        let is_mounted = true;
+        if(localStorage.getItem('access_token') === null){
+            navigate('/login/')
+        }
+        const fetch_comments = async () => {
+
+            console.log("fetching data")
+            try{
+                const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+                if(is_mounted){
+                    const comments_list = response.data.results
+                    setCommentData(comments_list)
+                    console.log(response.results)
+                }
+            } catch(error){
+                console.log("error retrieving comments",error)
+            }
+            console.log("finished fetching data")
+        };
+        fetch_comments();
+
+        // const fetch_seekers = async () => {
+        //     console.log("fetching seeker data")
+
+        //     try{
+        //         const response = await axios.get(base_url+seeker_retrieve_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+        //         if(is_mounted){
+        //             const seekers_list = response.data
+        //             setSeekers(seekers_list)
+        //             console.log("test:",response.results)
+        //         }
+        //     } catch(error){
+        //         console.log("error retrieving seekers",error)
+        //     }
+
+        // }
+        // fetch_seekers();
+
+        return () => {is_mounted = false}
+        // cleanup function 
+    },[])
+    console.log("comment data: ",comment_data)
+    console.log("seekers: ",seekers)
+
+
+
+
+
+    
 
     const test_shelter_comment_data= [
         {
@@ -57,7 +126,7 @@ function ShelterComments(){
         comment: comment_content,
         rating: comment_rating,
     }
-    console.log(packaged_data)
+    // console.log(packaged_data)
     
     const update_comments = (event) => {
         //this is test data for now, when this is implemented, this will be an actual call to the backend

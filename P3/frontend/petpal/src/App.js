@@ -18,7 +18,7 @@ function WebpageRouter(){
         <Route path="/" >
             <Route index  element={<LandingPage/>}/>
             <Route path="login/" element={<LoginPage/>}/>
-            <Route path="test/" element={<TestPage/>}/>
+            <Route path="test/:shelter_id/" element={<TestPage/>}/>
             <Route path="testhome/" element={<TestHomePage/>}/>
 
             <Route path="register/">
