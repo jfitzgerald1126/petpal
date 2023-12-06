@@ -1,6 +1,6 @@
 
 import { useEffect, useInsertionEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useFetcher } from 'react-router-dom'
 import cloneDeep from 'lodash/cloneDeep';
 import PetCard from '../../components/PetCard';
 import axios from 'axios';
@@ -11,10 +11,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ShelterPage = () => {
 
     const { id } = useParams();
+    const { user } = useUserContext();
     const [shelter, setShelter] = useState(null)
     const [pets, setPets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
+    const [isOwner, setIsOwner] = useState(false)
+
 
 
     const fetchData = async () => {
@@ -64,6 +67,15 @@ const ShelterPage = () => {
     useEffect(() => {
         console.log(shelter)
     }, [shelter])
+
+    useEffect(() => {
+        if (user?.type == "shelter") {
+            setIsOwner(user.shelter.id == id)
+        }
+        else {
+            setIsOwner(false)
+        }
+    }, [user])
 
 
     return (
