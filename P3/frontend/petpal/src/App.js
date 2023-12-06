@@ -10,10 +10,15 @@ import RegisterPageSeeker from './pages/LoginAndRegister/register_page_seeker';
 import Search from './pages/Search/Search';
 
 import TestHomePage from './pages/LoginAndRegister/test_home_page';
+import ListPet from './pages/application/list_pet';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import PetDetail from './pages/pet/petDetail';
+import CreateApplication from './pages/application/create_application';
+
+
 import { UserProvider } from './contexts/UserContext';
+
 
 function App() {
   return (
@@ -31,6 +36,8 @@ function App() {
                 <Route path="shelter/" element={<RegisterPageShelter/>}/>
               </Route>
               <Route path="search/" element={<Search/>}/>
+              <Route path='shelter/pet/' element={<ListPet />}/>
+            <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
           </Route>
         </Routes>
       </Router>
