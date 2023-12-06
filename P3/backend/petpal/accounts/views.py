@@ -145,7 +145,7 @@ class GetUserView(View):
             seeker = Seeker.objects.get(user=user)
             seeker_data = SeekerSerializer(seeker).data
             user_info = {
-                'name': seeker_data['first_name'] + seeker_data['last_name'],
+                'name': seeker_data['first_name'] + ' ' + seeker_data['last_name'],
                 'description': seeker_data['description'],
                 'profile_image': seeker_data['profile_image'],
                 'user': seeker_data['user'],
