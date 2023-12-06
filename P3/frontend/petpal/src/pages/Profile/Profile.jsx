@@ -149,6 +149,13 @@ const ShelterProfilePage = () => {
         }
     }, [user])
 
+    const app_mapping = {
+        'pending': pendingApps,
+        'accepted': acceptedApps,
+        'denied': deniedApps,
+        'withdrawn': withdrawnApps
+    }
+
 
     return (
         <>
@@ -196,7 +203,7 @@ const ShelterProfilePage = () => {
                     </div>
                 </div>
             <div className="pending-applications">
-              <table className="table application-table w-100 mt-2">
+              {app_mapping[appType].length > 0 ? <table className="table application-table w-100 mt-2">
                 <thead>
                   <tr>
                     <th scope="col">Applicant</th>
@@ -207,7 +214,7 @@ const ShelterProfilePage = () => {
                     <th scope="col">Application</th>
                   </tr>
                 </thead>
-                {appType == 'pending' && pendingApps.map((app) => {
+                {app_mapping[appType].map((app) => {
                      const inputDate = new Date(app.created_date);
                      const month = String(inputDate.getMonth() + 1).padStart(2, '0');
                     const day = String(inputDate.getDate()).padStart(2, '0');
@@ -225,61 +232,9 @@ const ShelterProfilePage = () => {
                         </tr>
                     )
                 })}
-                {appType == 'accepted' && acceptedApps.map((app) => {
-                     const inputDate = new Date(app.created_date);
-                     const month = String(inputDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(inputDate.getDate()).padStart(2, '0');
-                    const year = inputDate.getFullYear();
-                    const formattedDate = `${month}/${day}/${year}`;
-
-                    return (
-                        <tr>
-                            <td>{app.seeker_name}</td>
-                            <td>{app.pet_name}</td>
-                            <td>{formattedDate}</td>
-                            <td>{app.seeker_email}</td>
-                            <td>{app.status}</td>
-                            <td><Link to="application/view">View application</Link></td>
-                        </tr>
-                    )
-                })}
-                {appType == 'denied' && deniedApps.map((app) => {
-                     const inputDate = new Date(app.created_date);
-                     const month = String(inputDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(inputDate.getDate()).padStart(2, '0');
-                    const year = inputDate.getFullYear();
-                    const formattedDate = `${month}/${day}/${year}`;
-
-                    return (
-                        <tr>
-                            <td>{app.seeker_name}</td>
-                            <td>{app.pet_name}</td>
-                            <td>{formattedDate}</td>
-                            <td>{app.seeker_email}</td>
-                            <td>{app.status}</td>
-                            <td><Link to="application/view">View application</Link></td>
-                        </tr>
-                    )
-                })}
-                {appType == 'withdrawn' && withdrawnApps.map((app) => {
-                     const inputDate = new Date(app.created_date);
-                     const month = String(inputDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(inputDate.getDate()).padStart(2, '0');
-                    const year = inputDate.getFullYear();
-                    const formattedDate = `${month}/${day}/${year}`;
-
-                    return (
-                        <tr>
-                            <td>{app.seeker_name}</td>
-                            <td>{app.pet_name}</td>
-                            <td>{formattedDate}</td>
-                            <td>{app.seeker_email}</td>
-                            <td>{app.status}</td>
-                            <td><Link to="application/view">View application</Link></td>
-                        </tr>
-                    )
-                })}
-              </table>
+              </table>: 
+                <span>No applications found</span>
+              }
             </div>
           </div>
 

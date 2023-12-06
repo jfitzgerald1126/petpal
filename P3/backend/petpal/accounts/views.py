@@ -16,6 +16,14 @@ from pet.models import Application
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from accounts.models import Shelter, Seeker
+from accounts.serializers import SeekerSerializer, ShelterSerializer
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from django.views import View
+from django.http import JsonResponse
 
 
 class CustomError(PermissionDenied):
@@ -26,7 +34,7 @@ class CustomError(PermissionDenied):
 class SeekerListCreateView(generics.ListCreateAPIView):
     """Creates a seeker on POST Request, does not show a list of seekers (for any user type right now)"""
     serializer_class = SeekerCreateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         raise CustomError('You do not have permission to access a list of Seekers')
