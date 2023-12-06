@@ -25,6 +25,7 @@ class ShelterSerializer(ModelSerializer):
             "website",
             "shelter_image",
             "id",
+            "user",
         ]
 
 
