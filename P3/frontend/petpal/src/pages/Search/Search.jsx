@@ -5,9 +5,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import PetCard from '../../components/PetCard';
 import axios from 'axios';
 import debounce from 'lodash/debounce';
+import { useUserContext } from '../../contexts/UserContext';
 
 const SearchPage = () => {
 
+    const {user} = useUserContext();
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false)
     const [sortOption, setSortOption] = useState('Newer')
@@ -21,6 +23,8 @@ const SearchPage = () => {
         'animal': [],
         'color': [],
     })
+
+    console.log(user)
 
     // DATA
     const [data, setData] = useState(null);
