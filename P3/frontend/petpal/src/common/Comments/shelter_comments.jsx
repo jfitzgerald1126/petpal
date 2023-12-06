@@ -18,6 +18,10 @@ function ShelterComments(){
 
     const [comment_data, setCommentData] = useState([]); // this will be an array of objects, each object will have the following fields: commenter_name, shelter_name, comment, rating
     const [formattedCommentData, setFormattedCommentData] = useState([])
+    const[nextPageUrl, setNextPageUrl] = useState(null)
+    const[previousPageUrl, setPreviousPageUrl] = useState(null)
+    console.log("next page url", nextPageUrl)
+    console.log("previous page url", previousPageUrl)
 
     useEffect(() => {
         let is_mounted = true;
@@ -25,9 +29,16 @@ function ShelterComments(){
             navigate('/login/')
         }
         const fetch_comments = async () => {
-            console.log("fetching data")
+            console.log("fetching comment data")
             try{
                 const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+                if(response.data.next !== null){
+                    setNextPageUrl(response.data.next)
+                }
+                if(response.data.previous !== null){
+                    setPreviousPageUrl(response.data.previous)
+                }
+                // console.log("response",response.data)
                 if(is_mounted){
                     const comments_list = response.data.results
                     setCommentData(comments_list)
@@ -112,7 +123,33 @@ function ShelterComments(){
         }
     }
         
-    
+    const next_page = () => {
+        if (nextPageUrl !== null){
+            axios.get(nextPageUrl, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+            .then((response) => {
+                setCommentData(response.data.results)
+                setNextPageUrl(response.data.next)
+                setPreviousPageUrl(response.data.previous)
+            })
+            .catch((error) => {
+                console.log("error retrieving next page", error)
+            })
+        }
+    }
+
+    const previous_page = () => {
+        if (previousPageUrl !== null){
+            axios.get(previousPageUrl, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+            .then((response) => {
+                setCommentData(response.data.results)
+                setNextPageUrl(response.data.next)
+                setPreviousPageUrl(response.data.previous)
+            })
+            .catch((error) => {
+                console.log("error retrieving previous page", error)
+            })
+        }
+    }
     
 
     
@@ -149,7 +186,7 @@ function ShelterComments(){
         
         <div className="super-wrapper w-100 h-100 d-flex flex-column">
             
-            <div id="all-comments">
+            <div id="all-comments h-100">
                 {
                     formattedCommentData.map((comment, index) => {
                         return <>
@@ -165,6 +202,15 @@ function ShelterComments(){
                     })
                 }
             </div>
+            <div className='pagination-button-container'>
+                    {
+                        previousPageUrl && <button onClick={previous_page}>{'<'} Previous</button>
+                    }
+                    {
+                        nextPageUrl && <button onClick={next_page}>Next {'>'}</button>
+                    }
+
+                </div>
             <div className="comment-wrapper" >
                 <form className="rounded pt-3 d-flex flex-row " method="post" onSubmit={update_comments}>
                     <input type="text" class="message-field rounded" placeholder="Type something..." onChange={handle_content}/>
