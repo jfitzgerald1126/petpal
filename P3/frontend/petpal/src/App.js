@@ -19,8 +19,6 @@ import CreateApplication from './pages/application/create_application';
 
 import { UserProvider } from './contexts/UserContext';
 
-f
-import { UserProvider } from './contexts/UserContext';
 
 function App() {
   return (
