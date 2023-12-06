@@ -17,6 +17,15 @@ from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .permissions import IsShelterOrReadOnly 
+from accounts.models import Shelter, Seeker
+from accounts.serializers import SeekerSerializer, ShelterSerializer
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from django.views import View
+from django.http import JsonResponse
+
 
 class CustomError(PermissionDenied):
     def __init__(self, detail):
@@ -99,3 +108,66 @@ class ShelterRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         instance.user.delete()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        if 'access' in response.data:
+            user = User.objects.get(username=request.data['username'])
+            try: 
+                seeker = Seeker.objects.get(user=user)
+                user_data = {
+                    'type': 'seeker',
+                    'seeker': SeekerSerializer(seeker).data,
+                }
+            except Seeker.DoesNotExist:
+                pass
+            try:
+                shelter = Shelter.objects.get(user=user)
+                user_data = {
+                    'type': 'shelter',
+                    'shelter': ShelterSerializer(shelter).data,
+                }
+            except Shelter.DoesNotExist:
+                pass
+
+            response.data['user'] = user_data
+
+        return response
+
+class GetUserView(View):
+    def get(self, request, *args, **kwargs):
+        user_info = {}
+        user = get_object_or_404(User, id=self.kwargs["id"])
+        try: 
+            seeker = Seeker.objects.get(user=user)
+            seeker_data = SeekerSerializer(seeker).data
+            user_info = {
+                'name': seeker_data['first_name'] + seeker_data['last_name'],
+                'description': seeker_data['description'],
+                'profile_image': seeker_data['profile_image'],
+                'user': seeker_data['user'],
+                'email': seeker_data['email'],
+                'phone_number': seeker_data['phone_number'],
+                'address': seeker_data['address'],
+            }
+        except Seeker.DoesNotExist:
+            pass
+        try:
+            shelter = Shelter.objects.get(user=user)
+            shelter_data = ShelterSerializer(shelter).data
+            user_info = {
+                'name': shelter_data['shelter_name'],
+                'description': shelter_data['description'],
+                'profile_image': shelter_data['shelter_image'],
+                'user': shelter_data['user'],
+                'email': shelter_data['email'],
+                'phone_number': shelter_data['phone_number'],
+                'address': shelter_data['address'],
+            }
+        except Shelter.DoesNotExist:
+            pass
+
+        return JsonResponse(user_info)
