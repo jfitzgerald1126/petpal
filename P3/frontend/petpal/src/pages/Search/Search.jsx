@@ -9,7 +9,7 @@ import { useUserContext } from '../../contexts/UserContext';
 
 const SearchPage = () => {
 
-    const {user} = useUserContext();
+    const {shelters} = useUserContext();
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false)
     const [sortOption, setSortOption] = useState('Newer')
@@ -24,7 +24,7 @@ const SearchPage = () => {
         'color': [],
     })
 
-    console.log(user)
+    // console.log(user)
 
     // DATA
     const [data, setData] = useState(null);
@@ -53,7 +53,19 @@ const SearchPage = () => {
 
         Object.keys(filters).map((category)=>{
             if (filters[category].length > 0) {
-                params[category] = filters[category].join(",")
+                if (category == "shelter") {
+                    const shelter_ids = filters[category].map((shelter_name) => {
+                        for (const key in shelters) {
+                            if (shelters[key].shelter_name === shelter_name) {
+                              return key;
+                            }
+                        }
+                    })
+                    params[category] = shelter_ids.join(",")
+                }
+                else {
+                    params[category] = filters[category].join(",")
+                }
             }
         })
 
@@ -69,7 +81,7 @@ const SearchPage = () => {
           });
           setData(response.data);
           setResultsCount(response.data.count)
-          console.log(response.data)
+        //   console.log(response.data)
         } catch (error) {
           setError(error);
         } finally {
@@ -84,7 +96,7 @@ const SearchPage = () => {
     }, []);
 
     const all_filters = {
-        'shelter': ['Shelter', 'Shelter 1', 'Shelter 2'],
+        'shelter': Object.values(shelters).map((shelter)=>shelter['shelter_name']),
         'status': ['available', 'withdrawn', 'adopted'],
         'gender': ['male', 'female', 'other'],
         'size': ['small', 'medium', 'large'],
@@ -262,7 +274,7 @@ const SearchPage = () => {
                                     status={pet.status}
                                     listed={pet.listed}
                                     name={pet.name}
-                                    shelter="Annex Dog Rescue"
+                                    shelter={pet.shelter}
                                     animal={pet.animal}
                                     birthday={pet.birthday}
                                     description={pet.description}
