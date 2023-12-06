@@ -7,6 +7,8 @@ import LoginPage from './pages/LoginAndRegister/login_page';
 import LandingPage from './pages/LoginAndRegister/landing_page';
 import RegisterPageShelter from './pages/LoginAndRegister/register_page_shelter';
 import RegisterPageSeeker from './pages/LoginAndRegister/register_page_seeker';
+import Search from './pages/Search/Search';
+
 import TestHomePage from './pages/LoginAndRegister/test_home_page';
 import ListPet from './pages/application/list_pet';
 
@@ -15,49 +17,33 @@ import PetDetail from './pages/pet/petDetail';
 import CreateApplication from './pages/application/create_application';
 
 
+import { UserProvider } from './contexts/UserContext';
 
-function WebpageRouter(){
-  return(
-    <Router>
-      <Routes>
-        <Route path="/" >
-            <Route index  element={<LandingPage/>}/>
-            <Route path="login/" element={<LoginPage/>}/>
-            <Route path="test/:shelter_id/" element={<TestPage/>}/>
-            <Route path="testhome/" element={<TestHomePage/>}/>
-            <Route path="/pet/:id" element={<PetDetail />} />
-            <Route path="register/">
-              <Route path="seeker/" element={<RegisterPageSeeker/>}/>
-              <Route path="shelter/" element={<RegisterPageShelter/>}/>
-            </Route>
-            <Route path='shelter/pet/' element={<ListPet />}/>
-            <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
-
-        </Route>
-      </Routes>
-    </Router>
-  );
-}
+f
+import { UserProvider } from './contexts/UserContext';
 
 function App() {
   return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-    <WebpageRouter/>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" >
+              <Route index  element={<LandingPage/>}/>
+              <Route path="login/" element={<LoginPage/>}/>
+              <Route path="test/:shelter_id/" element={<TestPage/>}/>
+              <Route path="testhome/" element={<TestHomePage/>}/>
+              <Route path="/pet/:id" element={<PetDetail />} />
+              <Route path="register/">
+                <Route path="seeker/" element={<RegisterPageSeeker/>}/>
+                <Route path="shelter/" element={<RegisterPageShelter/>}/>
+              </Route>
+              <Route path="search/" element={<Search/>}/>
+              <Route path='shelter/pet/' element={<ListPet />}/>
+            <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
+          </Route>
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

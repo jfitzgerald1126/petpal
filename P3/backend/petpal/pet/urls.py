@@ -2,7 +2,6 @@ from django.urls import path
 from .views.pets import CreatePetView, UpdateDeleteRetrievePetView, SearchPetsView
 from .views import ApplicationCreateView, ApplicationListView, ApplicationRetrieveUpdateView
 
-
 urlpatterns=[
     # pets
     path('pet/', CreatePetView.as_view(), name='create-pet'),
