@@ -29,7 +29,7 @@ function ShelterComments(){
             navigate('/login/')
         }
         const fetch_comments = async () => {
-            console.log("fetching data")
+            console.log("fetching comment data")
             try{
                 const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
                 if(response.data.next !== null){
@@ -38,7 +38,7 @@ function ShelterComments(){
                 if(response.data.previous !== null){
                     setPreviousPageUrl(response.data.previous)
                 }
-                console.log("response",response.data)
+                // console.log("response",response.data)
                 if(is_mounted){
                     const comments_list = response.data.results
                     setCommentData(comments_list)

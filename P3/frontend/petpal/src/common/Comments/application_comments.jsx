@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link , useParams, useNavigate} from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import './comments.css'
-
-
+import axios from 'axios'
+import { useUserContext } from '../../contexts/UserContext.jsx';
 
 function ApplicationComments(){
 
@@ -10,7 +10,72 @@ function ApplicationComments(){
     // if the user is the shelter, then while parsing the data, set is_user to true if the sender is the shelter,
     // and set is_user to false if the sender is the applicant
 
-    const is_user = true;   
+
+    let {shelter_id} = useParams()
+    const navigate = useNavigate();
+    let base_url ='http://127.0.0.1:8000/'
+    let application_comments_append=`comments/application/${shelter_id}/`
+    const[application_comments, setApplicationComments] = useState([]) 
+    const[nextPageUrl, setNextPageUrl] = useState(null)
+    const[previousPageUrl, setPreviousPageUrl] = useState(null)
+
+    useEffect(() => {
+        let is_mounted = true;
+        if(localStorage.getItem('access_token') === null){
+            navigate('/login/')
+        }
+        const fetch_messages = async () => {
+            console.log("fetching message data")
+            try{
+                const response = await axios.get(base_url+application_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+                if(response.data.next !== null){
+                    setNextPageUrl(response.data.next)
+                }
+                if(response.data.previous !== null){
+                    setPreviousPageUrl(response.data.previous)
+                }
+                setApplicationComments(response.data.results)
+            } catch(error){
+                console.log("error retrieving messages",error)
+            }
+
+        }
+
+        fetch_messages()
+        return () => {is_mounted = false}
+
+    },[])
+
+    console.log("application comments", application_comments.reverse())
+
+    const {user} = useUserContext()
+    let user_id = 0
+    if(user !== null){
+        if (user.type === "seeker"){
+            user_id = user.seeker.user
+            console.log("user_id (messages)",user_id)
+        }
+        if (user.type === "shelter"){
+            user_id = user.shelter.user
+            console.log("user_id (messages)",user_id)
+        }
+    }
+    let formatted_messages= []
+
+    application_comments.reverse().forEach((message) => {
+        let is_user = false
+        if (message.sender === user_id){
+            is_user = true
+        }
+        let message_content = message.content
+        message={
+            content:message_content,
+            is_user:is_user,
+        }
+        formatted_messages.push(message)
+    })
+    
+
     const test_message_data= [
         {
             content:"hello shelter where is my dog",
@@ -54,6 +119,66 @@ function ApplicationComments(){
             chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight
         }
     }, [open])
+
+
+    const[message, setMessage] = useState("")
+    const handle_user_input = (event) => {
+        event.preventDefault()
+        setMessage(event.target.value)
+    }
+
+    const packaged_data = {
+        content:message,
+        sender:user_id,
+        application:shelter_id,
+    }
+    console.log("user message:", packaged_data)
+
+    const handle_user_message = async(event) => {
+        event.preventDefault()
+
+        try{
+            await axios({
+                method: 'post',
+                url: base_url+application_comments_append,
+                data: packaged_data,
+                headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
+                
+            })
+            console.log("message sent, success")
+        }catch(error){
+            console.log("error posting message", error)
+        }
+    }
+    const next_page = () => {
+        if (nextPageUrl !== null){
+            axios.get(nextPageUrl, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+            .then((response) => {
+                setApplicationComments(response.data.results)
+                setNextPageUrl(response.data.next)
+                setPreviousPageUrl(response.data.previous)
+            })
+            .catch((error) => {
+                console.log("error retrieving next page", error)
+            })
+        }
+    }
+
+    const previous_page = () => {
+        if (previousPageUrl !== null){
+            axios.get(previousPageUrl, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+            .then((response) => {
+                setApplicationComments(response.data.results)
+                setNextPageUrl(response.data.next)
+                setPreviousPageUrl(response.data.previous)
+            })
+            .catch((error) => {
+                console.log("error retrieving previous page", error)
+            })
+        }
+    }
+
+
     return <>
         <div className="chat-wrapper d-flex flex-column">
             <a className="btn btn-success mt-3 text-white" onClick={toggle}>
@@ -62,7 +187,7 @@ function ApplicationComments(){
                 open && (
                     <div className="chatbox-wrapper d-flex flex-column card card-body" ref={chatboxRef}>
                     {
-                        test_message_data.map((message, index) => {
+                        formatted_messages.reverse().map((message, index) => {
                             let styling ="user-styling rounded-2"
                             let alignment = "text-right"
                             if(!message.is_user){
@@ -82,10 +207,19 @@ function ApplicationComments(){
                     </div>
                 )
             }
+            <div className='pagination-button-container'>
+                    {
+                        open && previousPageUrl && <button onClick={previous_page}>recent messages{'>'}</button>
+                    }
+                    {
+                        open && nextPageUrl && <button onClick={next_page}>previous messages {'<'}</button>
+                    }
+
+                </div>
             {open && 
-                <form className="card-footer rounded pt-3 d-flex flex-row ">
-                    <input type="text" class="message-field rounded" placeholder="Type something..."/>
-                    <button className="btn btn-success rounded-circle" >
+                <form className="card-footer rounded pt-3 d-flex flex-row " method="post" onSubmit={handle_user_message}>
+                    <input type="text" class="message-field rounded" placeholder="Type something..." onInput={handle_user_input}/>
+                    <button className="btn btn-success rounded-circle" type="submit">
                         {'>'}
                     </button>
                 </form>
