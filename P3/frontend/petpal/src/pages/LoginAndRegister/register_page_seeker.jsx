@@ -53,11 +53,14 @@ function RegisterPageSeeker() {
     let base_url ='http://127.0.0.1:8000/'
     let create_seeker_append='accounts/seekers/'
     let navigate = useNavigate();
+
+
+    const[error, setError] = useState("")  
     const handleSeekerRegister = async(event) => {
         event.preventDefault();
 
         try{
-            await axios({
+            const data = await axios({
                 method: 'post',
                 url: base_url+create_seeker_append,
                 // data: packaged_data,
@@ -69,16 +72,19 @@ function RegisterPageSeeker() {
         }
         catch (error) {
             console.log("error in seeker registration", error.response.data.non_field_errors[0]);
+            setError(error.response.data.non_field_errors[0]);
         }
     }
 
+    let all_filled = (username && email && phone_number && address && password && confirm_password);
     console.log(packaged_data);
 
     return <>
+    <div className="page-container">
         <div className="super-wrapper w-100 h-100 d-flex align-items-center justify-content-center">
 
             <div className="login-wrapper d-flex flex-column align-items-left w-75 mb-5 h-100">
-            <div className="login-header text-left ">
+            <div className="login-header text-left d-flex flex-column">
                 <h4 className="fw-light">Get started as a Seeker</h4>
                 <p className="display-4 fw-medium">Create a Seeker Account</p>
                 {/* <h4 className="fw-light">Already have an account ? <a href="login_page.html" className="landinglink">Log in</a></h4> */}
@@ -123,16 +129,40 @@ function RegisterPageSeeker() {
                     </div>
 
                 </div>
+                {/* <div className="mb-3 d-flex justify-content-start">
+                    <button type="submit" className="login-button">Register</button>    
+                    </div> */}
                 
-                <div className="mb-3 d-flex justify-content-start">
+                {
+                    error && <div className="alert alert-danger" role="alert">
+                    {error}
+                    </div>
+                }
+
+                {
+                    all_filled && <div className="mb-3 d-flex justify-content-start">
                     <button type="submit" className="login-button">Register</button>
-                </div>
+                    </div>
+                }
+
+                {
+                    !(all_filled) && <div className="alert alert-danger" role="alert">
+                    Notice, all fields must be filled out
+                    </div>
+                }
+                {
+                    !(all_filled) && <div className="mb-3 d-flex justify-content-start">
+                    <button type="submit" className="login-button" disabled>Register</button>    
+                    </div>
+                }
+
                 
                 </form>
             </div>
 
             </div>
         </div>  
+        </div>
     </>;
 }
 

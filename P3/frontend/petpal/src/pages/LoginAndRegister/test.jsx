@@ -8,7 +8,10 @@ import ApplicationComments from "../../common/Comments/application_comments";
 function TestPage(){
     
     return <>
+       
         <ShelterComments />
+
+       
         <ApplicationComments />
         
     </>;

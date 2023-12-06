@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import  axios  from 'axios';
@@ -92,7 +91,8 @@ export default function ListPet() {
 
     return (
     <>
-    <main className="container" style={{ marginTop: '100px' }}>
+    <div className="page-container">
+    <main className="container" style={{paddingBottom:30}}>
       <div className="row mt-5 mx-auto">
         {/* form */}
         <h3 className="mb-5 fw-bold">List a new pet for adoption</h3>
@@ -258,6 +258,7 @@ export default function ListPet() {
         </form>
       </div>
     </main>
+    </div>
     </>
     )
 }

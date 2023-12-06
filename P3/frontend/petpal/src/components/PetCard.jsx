@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom'
+import { useUserContext } from '../contexts/UserContext';
 
 const PetCard = ({image, status, listed, name, shelter, animal, birthday, description}) => {
+    
+    const {shelters} = useUserContext();
 
     const listedDateObj = new Date(listed);
     const formattedListedDate = `${listedDateObj.getMonth() + 1}/${listedDateObj.getDate()}/${listedDateObj.getFullYear()}`;
@@ -37,7 +40,7 @@ const PetCard = ({image, status, listed, name, shelter, animal, birthday, descri
                 <div className="pet-details">
                     <div className="pet-listed-date">Listed {formattedListedDate}</div>
                     <h4 className="pet-name text-capitalize">{name}</h4>
-                    <span className="pet-info text-capitalize">{shelter}</span>
+                    <span className="pet-info text-capitalize">{shelters[shelter]?.shelter_name}</span>
                     <span className="pet-info text-capitalize">{animal}</span>
                     {birthday && <span className="pet-info">{age}</span>}
                     <span className="pet-description">{description}</span>

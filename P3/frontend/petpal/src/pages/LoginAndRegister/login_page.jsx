@@ -26,7 +26,7 @@ function LoginPage(){
     }
 
     const navigate = useNavigate();
-
+    const [error, setError] = useState("")
     console.log("username: "+username, "password: "+password)
     const handleLogin = async (event) => { 
         event.preventDefault();
@@ -56,38 +56,17 @@ function LoginPage(){
         catch(error){
             logoutUser();
             console.log(error)
+            setError(error.response.data.detail)
         }
-        // const {data} = await 
-        //                 axios.post(base_url+login_append,
-        //                 user, 
-        //                 {headers:
-        //                     {'Content-Type': 'application/json'}},
-        //                 {withCredentials: true});
-        
-        // const {data} = await 
-        //                 axios({
-        //                 method:'post',
-        //                 url:base_url+login_append,
-        //                 data:JSON.stringify(user),
-        //                 headers: {'Content-Type': 'application/json'},
-        //                 withCredentials: true
-        //                 });
-        
-        // localStorage.clear();
-        // localStorage.setItem('access_token', data.access);
-        // localStorage.setItem('refresh_token', data.refresh);
 
-        // axios.defaults.headers['Authorization'] = `Bearer ${data['access']}`;
-
-        // navigate('/testhome/')
         
     }
 
     return <>
-        {/* <div className="content-container d-flex align-items-center flex-row"> */}
+        <div className="page-container">
         <div className="super-wrapper w-100 h-100 d-flex align-items-center justify-content-center">
             <div className="login-wrapper d-flex flex-column align-items-left mb-5  h-100">
-                <div className="login-header text-left ">
+                <div className="login-header text-left d-flex flex-column">
                     <h4 className="fw-light">Welcome Back User</h4>
                     <p className="display-4 fw-medium">Login to your account</p>
                     {/* <h4 className="fw-light">Dont't have an account ? <a href="index.html" className="landinglink">Register</a></h4> */}
@@ -109,6 +88,10 @@ function LoginPage(){
                         <input type="password" className="form-control" id="password" name="password" placeholder="Password..." onChange={handlePasswordChange}/>
                     </div>
                     {/* <!--note, form control classNamees are default configs provided by bootstrap--> */}
+
+                    {
+                        error && <div className="alert alert-danger" role="alert"> {error}. Perhaps you've entered a wrong username or password.</div>
+                    }
                     <div className="mb-3 d-flex justify-content-start">
                         <button type="submit" className="login-button">Login</button>
                     </div>
@@ -121,7 +104,7 @@ function LoginPage(){
 
             </div>
         </div>
-        {/* </div> */}
+        </div>
     </>;
 
 

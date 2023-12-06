@@ -24,6 +24,8 @@ class ShelterSerializer(ModelSerializer):
             "address",
             "website",
             "shelter_image",
+            "id",
+            "user",
         ]
 
 
@@ -98,6 +100,7 @@ class ShelterUpdateSerializer(ModelSerializer):
     class Meta:
         model = Shelter
         fields = [
+            "shelter_name",
             "email",
             "phone_number",
             "description",
