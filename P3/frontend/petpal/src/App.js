@@ -9,7 +9,7 @@ import RegisterPageShelter from './pages/LoginAndRegister/register_page_shelter'
 import RegisterPageSeeker from './pages/LoginAndRegister/register_page_seeker';
 import Search from './pages/Search/Search';
 import ShelterPage from './pages/Shelter/Shelter'
-
+import ShelterProfile from './pages/Profile/Profile'
 import Navbar from './components/navbar';
 
 import TestHomePage from './pages/LoginAndRegister/test_home_page';
@@ -44,6 +44,7 @@ function App() {
               </Route>
               <Route path="search/" element={<Search/>}/>
               <Route path='pets/applicationx/:id/' element={<ShelterApplication />} />
+              <Route path='profile/shelter' element={<ShelterProfile />}/>
               <Route path='shelter/:id/' element={<ShelterPage />}/>
             <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
             <Route path='/pets/application/:id/' element={<SeekerApplication />}/>

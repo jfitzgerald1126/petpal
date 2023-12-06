@@ -551,10 +551,25 @@ login-wrapper{
     border-color: white;
 }
 
-.application-table{
-    overflow-y: scroll;
-    height:200px;
+html body .application-table{
+    overflow-y: scroll !important;
+    max-height: 100px !important;
+    width: fit-content !important;
 }
+
+.application-table tr {
+    height: 30px;
+    border-bottom: 1px solid var(--zinc-300);
+}
+
+.application-table td {
+    padding: 0 15px;
+}
+
+.application-table a {
+    background: none !important;
+}
+
 
 
 /* SEARCH PAGE */
@@ -811,24 +826,24 @@ body .mobile-search-filtering-container {
 
 
 .our-friends-container {
-    max-width: 100%;
-    max-width: fit-content;
+    max-width: 80vw !important;
     align-self: center;
 }
 
 .shelter-pets-container {
     display: flex;
     flex-direction: row;
-    max-width: 100%;
     width: fit-content;
     overflow-x: auto;
     padding: 20px 0;
     overflow-y: hidden;
     gap: 2rem;
+    align-self: center;
 }
 
 table {
     font-size: 12px;
+    min-width: 600px;
 }
 
 table a {
@@ -839,8 +854,11 @@ table a {
 }
 
 .pending-applications {
-    width: 100%;
-    overflow-x: auto;
+    max-width: 80vw !important;
+    overflow-x: auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 @media screen and (max-width: 800px) {
@@ -871,6 +889,9 @@ table a {
         flex-direction: column-reverse;
         gap: 30px;
         padding: 0.5rem;
+    }
+    .pending-applications {
+        align-items: flex-start;
     }
 }
 

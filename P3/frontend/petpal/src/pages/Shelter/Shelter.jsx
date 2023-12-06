@@ -81,30 +81,30 @@ const ShelterPage = () => {
     return (
         <>
         {!loading && 
-                <div class="page-container d-flex flex-column align-items-center">
-            <div class="shelter-container d-flex">
-                <div class="shelter-images-container d-flex flex-column align-items-end">
-                <div class="shelter-cover-image"><img src={shelter.shelter_image}/></div>
+                <div className="page-container d-flex flex-column align-items-center">
+            <div className="shelter-container d-flex">
+                <div className="shelter-images-container d-flex flex-column align-items-end">
+                <div className="shelter-cover-image"><img src={shelter.shelter_image}/></div>
                 </div>
-                <div class="shelter-details-container d-flex flex-column align-items-start">
-                <h1 class="text-zinc-700 fs-3 fw-bold">{shelter.shelter_name}</h1>
-                <span class="mb-2">⭐⭐⭐⭐ <span class="fs-7 text-zinc-500"><u>26 reviews</u></span></span>
-                <div class="shelter-info-container d-flex flex-row">
-                    <div class="d-flex flex-column pe-5">
-                    <span class="text-zinc-400 fs-8">{shelter.website}</span>
-                    <span class="text-zinc-400 fs-8">{ `(${shelter.phone_number.slice(0, 3)})-${shelter.phone_number.slice(3, 6)}-${shelter.phone_number.slice(6)}`}</span>
+                <div className="shelter-details-container d-flex flex-column align-items-start">
+                <h1 className="text-zinc-700 fs-3 fw-bold">{shelter.shelter_name}</h1>
+                <span className="mb-2">⭐⭐⭐⭐ <span className="fs-7 text-zinc-500"><u>26 reviews</u></span></span>
+                <div className="shelter-info-container d-flex flex-row">
+                    <div className="d-flex flex-column pe-5">
+                    <span className="text-zinc-400 fs-8">{shelter.website}</span>
+                    <span className="text-zinc-400 fs-8">{ `(${shelter.phone_number.slice(0, 3)})-${shelter.phone_number.slice(3, 6)}-${shelter.phone_number.slice(6)}`}</span>
                     </div>
-                    <div class="d-flex flex-column">
-                    <span class="text-zinc-400 fs-8">{shelter.email}</span>
-                    <span class="text-zinc-400 fs-8">{shelter.address}</span>
+                    <div className="d-flex flex-column">
+                    <span className="text-zinc-400 fs-8">{shelter.email}</span>
+                    <span className="text-zinc-400 fs-8">{shelter.address}</span>
                     </div>
                 </div>
-                <p class="text-zinc-600 fs-8 mt-4">{shelter.description}</p>
+                <p className="text-zinc-600 fs-8 mt-4">{shelter.description}</p>
                 </div>
             </div>
-            <div class="our-friends-container w-100 px-5 mt-3 d-flex flex-column align-items-start">
-                <h1 class="text-zinc-700 fs-3 fw-bold">Our Friends</h1>
-                <div class="shelter-pets-container">
+            <div className="our-friends-container w-100 px-5 mt-3 d-flex flex-column align-items-start">
+                <h1 className="text-zinc-700 fs-3 fw-bold">Our Friends</h1>
+                <div className="shelter-pets-container">
                     {pets?.map((pet) => {
                             return (
                                 <PetCard 
