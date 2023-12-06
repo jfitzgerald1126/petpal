@@ -82,6 +82,7 @@ function RegisterPageShelter() {
 
     let all_filled = (username && email && shelter_name && phone_number && description && address && password && confirm_password);
     return <>
+    <div className="page-container">
         <div className="super-wrapper w-100 h-100 d-flex align-items-center justify-content-center">
         
             <div className="login-wrapper d-flex flex-column align-items-left w-75 mb-5 h-100">
@@ -172,7 +173,7 @@ function RegisterPageShelter() {
                 </div>
             </div>
         </div>
-    
+    </div>
     
     </>
 }

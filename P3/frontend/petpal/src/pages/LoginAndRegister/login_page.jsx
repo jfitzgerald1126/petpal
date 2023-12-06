@@ -63,7 +63,7 @@ function LoginPage(){
     }
 
     return <>
-        {/* <div className="content-container d-flex align-items-center flex-row"> */}
+        <div className="page-container">
         <div className="super-wrapper w-100 h-100 d-flex align-items-center justify-content-center">
             <div className="login-wrapper d-flex flex-column align-items-left mb-5  h-100">
                 <div className="login-header text-left d-flex flex-column">
@@ -104,7 +104,7 @@ function LoginPage(){
 
             </div>
         </div>
-        {/* </div> */}
+        </div>
     </>;
 
 
