@@ -14,9 +14,9 @@ export default function SeekerApplication() {
     const { id } = useParams();
 
     const navigate = useNavigate();
+    const bearerToken = localStorage.getItem('access_token');
 
     const getApplication = async (app_id) => {
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTEyMzA2LCJpYXQiOjE3MDE4MjU5MDYsImp0aSI6IjFjYzZlZDA3NTc2YzQzNjI5YzZhNDI1ZDhiOGZkMzk2IiwidXNlcl9pZCI6Mn0.TXPQ8OHHsteJIRzkfvt2-DjtblC5GSYhGu3GhoTXNDw';
         const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
@@ -28,12 +28,15 @@ export default function SeekerApplication() {
             console.log(res);
             setApplication(res.data);
         } catch (err) {
+            if (err.response.status === 403) {
+                // TODO: naviagte somewhere else
+                navigate('/testHome/');
+            }
             console.log(err);
         }
     }
 
     const getPet = async (pet_id) => {
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTA5NzQ2LCJpYXQiOjE3MDE4MjMzNDYsImp0aSI6ImE3NDIyZGI0OTYyNTRhMzE5YWJiYTViNmE1Nzg3OWEwIiwidXNlcl9pZCI6Mn0.w3Re23_Ka7tAFX_yzVNoVMkwzWwJ3MGV71SY0_bfzvw';
         const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
@@ -66,7 +69,6 @@ export default function SeekerApplication() {
         e.preventDefault();
 
         const base_url ='http://127.0.0.1:8000/'
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTEyMzA2LCJpYXQiOjE3MDE4MjU5MDYsImp0aSI6IjFjYzZlZDA3NTc2YzQzNjI5YzZhNDI1ZDhiOGZkMzk2IiwidXNlcl9pZCI6Mn0.TXPQ8OHHsteJIRzkfvt2-DjtblC5GSYhGu3GhoTXNDw'
         const formData = new FormData();
         formData.append('status', 'withdrawn');
 
