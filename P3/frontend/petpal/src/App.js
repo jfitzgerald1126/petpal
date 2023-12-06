@@ -18,6 +18,8 @@ import CreateApplication from './pages/application/create_application';
 
 
 import { UserProvider } from './contexts/UserContext';
+import SeekerApplication from './pages/application/SeekerApplication';
+import ShelterApplication from './pages/application/ShelterApplication';
 
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
               <Route path="search/" element={<Search/>}/>
               <Route path='shelter/pet/' element={<ListPet />}/>
             <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
+            <Route path='/pets/application/:id/' element={<SeekerApplication />}/>
+            <Route path='/pets/applicationx/:id/' element={<ShelterApplication />} />
           </Route>
         </Routes>
       </Router>
