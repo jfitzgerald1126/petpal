@@ -9,6 +9,8 @@ import RegisterPageShelter from './pages/LoginAndRegister/register_page_shelter'
 import RegisterPageSeeker from './pages/LoginAndRegister/register_page_seeker';
 import Search from './pages/Search/Search';
 
+import Navbar from './components/navbar';
+
 import TestHomePage from './pages/LoginAndRegister/test_home_page';
 import ListPet from './pages/application/list_pet';
 
@@ -24,6 +26,8 @@ function App() {
   return (
     <UserProvider>
       <Router>
+        <div>
+          <Navbar/>
         <Routes>
           <Route path="/" >
               <Route index  element={<LandingPage/>}/>
@@ -40,6 +44,7 @@ function App() {
             <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
           </Route>
         </Routes>
+        </div>
       </Router>
     </UserProvider>
   );
