@@ -80,6 +80,25 @@ class ApplicationListView(ListAPIView):
             query = query.order_by(sort_by)
 
             return query
+        elif hasattr(self.request.user, 'seeker'):
+            curSeeker = self.request.user.seeker
+
+            query = Application.objects.filter(seeker=curSeeker)
+            
+            # filter
+            application_status = self.request.GET.get('status')
+            if application_status:
+                query = query.filter(status=application_status)
+
+            # sort
+            sort_by = self.request.GET.get('sort')
+            print(sort_by)
+            # default to modified date (most recent)
+            if not sort_by:
+                sort_by = '-modified_date'
+            query = query.order_by(sort_by)
+
+            return query
         else:
             raise PermissionDenied("Only shelters can view list of applications.")
         
