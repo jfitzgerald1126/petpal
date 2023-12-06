@@ -8,9 +8,9 @@ import dog from '../../assets/dog.png'
 import sealofapproval from '../../assets/sealofapproval.jpg'
 
 function LandingPage() {
-    return <>
+    return (
+    <div className="page-container">
         <div className="landing-container w-100 d-flex">
-
             <div className="landing-page-info  h-25 d-flex flex-column align-items-center ">
                     <div className="text-center">
                         <h1 className="display-3 fw-medium">Every adoption changes a life</h1>
@@ -33,6 +33,6 @@ function LandingPage() {
                 </div>  
                 
         </div>
-    </>
+    </div>)
 }
 export default LandingPage

@@ -134,6 +134,15 @@ body{
     overflow-y: auto;
 }
 
+.page-container {
+    width: 100vw !important;
+    height: calc(100vh - 90px) !important;
+    margin-top: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .content-container{
     width: 100vw !important;
     height: 100vh !important;
@@ -425,7 +434,6 @@ login-wrapper{
 }
 
 .our-friends-container {
-    max-width: 100%;
     max-width: fit-content;
     align-self: center;
 }

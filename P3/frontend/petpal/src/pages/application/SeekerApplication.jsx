@@ -94,7 +94,8 @@ export default function SeekerApplication() {
     }
 
     return (
-        <main className="container" style={{ marginTop: '150px' }}>
+        <div className="page-container">
+        <main className="container">
         <h3 className="mt-5 fw-bold">View Your Application</h3>
         <div className="row mt-5">
             {/* form */}
@@ -156,5 +157,6 @@ export default function SeekerApplication() {
             </div>
         </div>
         </main>
+        </div>
     )
 }

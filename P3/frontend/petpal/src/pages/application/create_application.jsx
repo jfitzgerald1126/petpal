@@ -79,7 +79,8 @@ export default function CreateApplication() {
     }
 
     return (
-    <main className="container" style={{ marginTop: '100px' }}>
+        <div className="page-container">
+    <main className="container">
         <h3 className="mt-5 fw-bold">Submit An Adoption Application</h3>
             <div className="row mt-5 ">
             {/* <!-- form --> */}
@@ -179,5 +180,6 @@ export default function CreateApplication() {
             </div>
         </div>
     </main>
+    </div>
   )
 }

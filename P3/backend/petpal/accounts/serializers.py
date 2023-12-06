@@ -100,6 +100,7 @@ class ShelterUpdateSerializer(ModelSerializer):
     class Meta:
         model = Shelter
         fields = [
+            "shelter_name",
             "email",
             "phone_number",
             "description",

@@ -80,6 +80,7 @@ function RegisterPageSeeker() {
     console.log(packaged_data);
 
     return <>
+    <div className="page-container">
         <div className="super-wrapper w-100 h-100 d-flex align-items-center justify-content-center">
 
             <div className="login-wrapper d-flex flex-column align-items-left w-75 mb-5 h-100">
@@ -161,6 +162,7 @@ function RegisterPageSeeker() {
 
             </div>
         </div>  
+        </div>
     </>;
 }
 
