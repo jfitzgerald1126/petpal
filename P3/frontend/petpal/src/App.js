@@ -8,9 +8,11 @@ import LandingPage from './pages/LoginAndRegister/landing_page';
 import RegisterPageShelter from './pages/LoginAndRegister/register_page_shelter';
 import RegisterPageSeeker from './pages/LoginAndRegister/register_page_seeker';
 import TestHomePage from './pages/LoginAndRegister/test_home_page';
+import ListPet from './pages/application/list_pet';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import PetDetail from './pages/pet/petDetail';
+import CreateApplication from './pages/application/create_application';
 
 
 
@@ -28,6 +30,8 @@ function WebpageRouter(){
               <Route path="seeker/" element={<RegisterPageSeeker/>}/>
               <Route path="shelter/" element={<RegisterPageShelter/>}/>
             </Route>
+            <Route path='shelter/pet/' element={<ListPet />}/>
+            <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
 
         </Route>
       </Routes>
