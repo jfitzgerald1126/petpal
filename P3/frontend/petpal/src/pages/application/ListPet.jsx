@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import  axios  from 'axios';
 import uploadImage from '../../assets/upload-image.png';
 import '../../common/styles.css';
+import { BASE_URL } from '../../api/constants';
 
 export default function ListPet() {
     const [name, setName] = useState('');
@@ -30,6 +31,8 @@ export default function ListPet() {
     const [descriptionError, setDescriptionError] = useState('');
     const [imageError, setImageError] = useState('');
 
+    const bearerToken = localStorage.getItem('access_token');
+
 
     const navigate = useNavigate();
 
@@ -37,8 +40,6 @@ export default function ListPet() {
         // for custom form logic
         // https://stackoverflow.com/questions/39809943/react-preventing-form-submission
         e.preventDefault();
-        // TODO: get bearer token from state
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTAxMjUwLCJpYXQiOjE3MDE4MTQ4NTAsImp0aSI6ImE1ZGQ0MjExNDUwMzQ2N2M4MzAyOTEyYzNjYmY4MWZiIiwidXNlcl9pZCI6NH0.8Jv4JU_LIO5tT5bw8ziNakDTcG2DSE09cRamqs-b5K8'
 
         const formData = new FormData();
         formData.append('name', name);
@@ -53,10 +54,9 @@ export default function ListPet() {
         formData.append('description', description);
         formData.append('profile_image', image);
 
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.post(
-                `${base_url}pets/pet/`,
+                `${BASE_URL}pets/pet/`,
                 formData,
                 {
                     headers: {
