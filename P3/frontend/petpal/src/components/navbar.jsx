@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { useUserContext } from '../contexts/UserContext';
+import bell from '../assets/bell.png'
 
 const Navbar = () => {
     const {user, logoutUser} = useUserContext();
@@ -47,7 +48,7 @@ const Navbar = () => {
                     <div class="d-flex flex-row">
                     <div class="notificationDropdown dropdown">
                         <div class="notificationBell" style={{cursor:'pointer'}} onClick={() => setNotifOpen(!notifOpen)}>
-                            <img src="bell.png"/>
+                            <img src={bell}/>
                         </div>
                         {notifOpen && <div class="dropdown-menu" id="notifications">
                             <a class="dropdown-item" href="#">You recieved a new message from Annex Dog Rescue <span>| Oct 12, 2023</span></a>
@@ -90,7 +91,7 @@ const Navbar = () => {
                     <div class="d-flex flex-row">
                     <div class="notificationDropdown dropdown">
                         <div class="notificationBell" style={{cursor:'pointer'}} onClick={() => setNotifOpen(!notifOpen)}>
-                            <img src="bell.png"/>
+                            <img src={bell}/>
                         </div>
                         {notifOpen && <div class="dropdown-menu" id="notifications">
                             <a class="dropdown-item" href="#">You recieved a new message from Annex Dog Rescue <span>| Oct 12, 2023</span></a>
