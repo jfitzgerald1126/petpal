@@ -4,6 +4,8 @@ import './comments.css'
 import axios from 'axios'
 import { useUserContext } from '../../contexts/UserContext.jsx';
 
+import { BASE_URL } from '../../api/constants.js';
+
 function ApplicationComments(){
 
     //TODO: when making the axios call, do a check to see if the user is the shelter or the applicant
@@ -13,7 +15,7 @@ function ApplicationComments(){
 
     let {shelter_id} = useParams()
     const navigate = useNavigate();
-    let base_url ='http://127.0.0.1:8000/'
+    let base_url =  BASE_URL
     let application_comments_append=`comments/application/${shelter_id}/`
     const[application_comments, setApplicationComments] = useState([]) 
     const[nextPageUrl, setNextPageUrl] = useState(null)
