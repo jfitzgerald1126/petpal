@@ -13,16 +13,14 @@ import ShelterProfile from './pages/Profile/Profile'
 import Navbar from './components/navbar';
 
 import TestHomePage from './pages/LoginAndRegister/test_home_page';
-import ListPet from './pages/application/list_pet';
+import ListPet from './pages/application/ListPet';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import PetDetail from './pages/pet/petDetail';
-import CreateApplication from './pages/application/create_application';
+import CreateApplication from './pages/application/CreateApplication';
 import SeekerProfileSeekerView from './pages/accounts/seeker_profile_seekerview';
 
 import { UserProvider } from './contexts/UserContext';
-import SeekerApplication from './components/SeekerApplication';
-import ShelterApplication from './components/ShelterApplication';
 import ViewApplication from './pages/application/ViewApplication';
 
 
