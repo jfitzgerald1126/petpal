@@ -5,6 +5,7 @@ import  axios  from 'axios';
 import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
 import '../common/styles.css';    
+import { BASE_URL } from '../api/constants';
 
 export default function ShelterApplication() {
     const [pet, setPet] = useState(null);
@@ -18,10 +19,9 @@ export default function ShelterApplication() {
     const navigate = useNavigate();
 
     const getApplication = async (app_id) => {
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}pets/application/${app_id}/`,
+                `${BASE_URL}pets/application/${app_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -38,10 +38,9 @@ export default function ShelterApplication() {
     }
 
     const getPet = async (pet_id) => {
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}pets/pet/${pet_id}/`,
+                `${BASE_URL}pets/pet/${pet_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -55,10 +54,9 @@ export default function ShelterApplication() {
     }
 
     const getSeeker = async (seeker_id) => {
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}accounts/seekers/${seeker_id}/`,
+                `${BASE_URL}accounts/seekers/${seeker_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -92,13 +90,12 @@ export default function ShelterApplication() {
     }, [application])
 
     const handleButton = async (status) => {
-        const base_url ='http://127.0.0.1:8000/'
         const formData = new FormData();
         formData.append('status', status);
 
         try {
             const res = await axios.patch(
-                `${base_url}pets/application/${id}/`,
+                `${BASE_URL}pets/application/${id}/`,
                 formData,
                 {
                     headers: {
@@ -122,7 +119,8 @@ export default function ShelterApplication() {
     }
 
     return (
-        <main className="container" style={{ marginTop: '150px' }}>
+        <div className='page-container'>
+            <main className="container" style={{ marginTop: '150px' }}>
         <h3 className="mt-5 fw-bold">View {seeker ? seeker.first_name + "'s" : 'This'} Application</h3>
         <div className="row mt-5">
             {/* form */}
@@ -172,6 +170,7 @@ export default function ShelterApplication() {
             {/* Card */}
             <div className="col-md-6 col-12 mt-md-0 mt-3 mb-3 d-flex justify-content-center align-items-start">
             { pet && <PetCard 
+                id={pet.id}
                 image={pet.profile_image}
                 status={pet.status}
                 listed={pet.listed}
@@ -187,5 +186,6 @@ export default function ShelterApplication() {
             </div>
         </div>
         </main>
+        </div>
     )
 }

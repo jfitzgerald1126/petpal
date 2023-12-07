@@ -5,6 +5,7 @@ import  axios  from 'axios';
 import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
 import '../common/styles.css';
+import { BASE_URL } from '../api/constants';
 
 export default function SeekerApplication() {
     const [pet, setPet] = useState(null);
@@ -17,10 +18,9 @@ export default function SeekerApplication() {
     const bearerToken = localStorage.getItem('access_token');
 
     const getApplication = async (app_id) => {
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}pets/application/${app_id}/`,
+                `${BASE_URL}pets/application/${app_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -37,10 +37,9 @@ export default function SeekerApplication() {
     }
 
     const getPet = async (pet_id) => {
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}pets/pet/${pet_id}/`,
+                `${BASE_URL}pets/pet/${pet_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -68,13 +67,12 @@ export default function SeekerApplication() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const base_url ='http://127.0.0.1:8000/'
         const formData = new FormData();
         formData.append('status', 'withdrawn');
 
         try {
             const res = await axios.patch(
-                `${base_url}pets/application/${id}/`,
+                `${BASE_URL}pets/application/${id}/`,
                 formData,
                 {
                     headers: {
@@ -142,6 +140,7 @@ export default function SeekerApplication() {
             {/* Card */}
             <div className="col-md-6 col-12 mt-md-0 mt-3 mb-3 d-flex justify-content-center align-items-start">
             { pet && <PetCard 
+                id={pet.id}
                 image={pet.profile_image}
                 status={pet.status}
                 listed={pet.listed}

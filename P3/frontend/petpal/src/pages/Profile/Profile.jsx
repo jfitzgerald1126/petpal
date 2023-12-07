@@ -249,6 +249,7 @@ const ShelterProfilePage = () => {
                     {activePets?.map((pet) => {
                             return (
                                 <PetCard 
+                                    id={pet.id}
                                     image={pet.profile_image}
                                     status={pet.status}
                                     listed={pet.listed}
@@ -271,6 +272,7 @@ const ShelterProfilePage = () => {
                     {withdrawnPets?.map((pet) => {
                             return (
                                 <PetCard 
+                                    id={pet.id}
                                     image={pet.profile_image}
                                     status={pet.status}
                                     listed={pet.listed}
@@ -295,6 +297,7 @@ const ShelterProfilePage = () => {
                     {adoptedPets?.map((pet) => {
                             return (
                                 <PetCard 
+                                    id={pet.id}
                                     image={pet.profile_image}
                                     status={pet.status}
                                     listed={pet.listed}
