@@ -18,6 +18,7 @@ function PetDetail(){
         const { id } = useParams();
         const { user } = useUserContext();
         const authToken = localStorage.getItem('access_token');
+        const redirectEdit = id + '/edit';
 
         useEffect(() => {
             setLoading(true);
@@ -205,7 +206,7 @@ function PetDetail(){
       </div>
     </div>
     <div className="pet-info-container d-flex flex-row">
-    <a href="edit_pet_listing_page.html"><button class="edit-listing-button">Edit Listing</button></a>
+    <a href={redirectEdit}><button class="edit-listing-button">Edit Listing</button></a>
     <button className="delete-listing-button" onClick={handleDeletePet}>Delete Listing</button>
   </div>
   </div>
