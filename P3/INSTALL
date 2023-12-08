@@ -3,4 +3,10 @@
 # You should write detailed description on:
 
 # 1. All the packages you need to install
+# on ec2 instance run
+sudo apt-get install python3-pip apache2 apache2-dev apache2-utils libapache2-mod-wsgi-py3
+sudo pip3 install django djangorestframework pillow djangorestframework-simplejwt gunicorn mod-wsgi drf_yasg
+# TODO: just say install requirements .txt ?? make venv and such
+
+
 # 2. How to configure various servers (e.g., Nginx, Apache, etc)
