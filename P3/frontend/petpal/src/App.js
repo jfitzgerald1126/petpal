@@ -22,7 +22,7 @@ import SeekerProfile from './pages/accounts/seeker_profile';
 
 import { UserProvider } from './contexts/UserContext';
 import ViewApplication from './pages/application/ViewApplication';
-
+import EditSeekerProfile from './pages/accounts/edit_seeker_profile';
 
 function App() {
   return (
@@ -37,7 +37,8 @@ function App() {
               <Route path="test/:shelter_id/" element={<TestPage/>}/>
               <Route path="testhome/" element={<TestHomePage/>}/>
               <Route path="pets/pet/:id" element={<PetDetail />} />
-              <Route path="accounts/seekers/:id" element={<SeekerProfile />} />
+              <Route path="seekers/:id" element={<SeekerProfile />} />
+              <Route path="seekers/:id/edit" element={<EditSeekerProfile />} />
               <Route path="register/">
                 <Route path="seeker/" element={<RegisterPageSeeker/>}/>
                 <Route path="shelter/" element={<RegisterPageShelter/>}/>
