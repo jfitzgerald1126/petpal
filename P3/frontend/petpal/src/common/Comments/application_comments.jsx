@@ -4,6 +4,8 @@ import './comments.css'
 import axios from 'axios'
 import { useUserContext } from '../../contexts/UserContext.jsx';
 
+import { BASE_URL } from '../../api/constants.js';
+
 function ApplicationComments(){
 
     //TODO: when making the axios call, do a check to see if the user is the shelter or the applicant
@@ -11,10 +13,10 @@ function ApplicationComments(){
     // and set is_user to false if the sender is the applicant
 
 
-    let {shelter_id} = useParams()
+    let { id } = useParams()
     const navigate = useNavigate();
-    let base_url ='http://127.0.0.1:8000/'
-    let application_comments_append=`comments/application/${shelter_id}/`
+    let base_url =  BASE_URL
+    let application_comments_append=`comments/application/${ id }/`
     const[application_comments, setApplicationComments] = useState([]) 
     const[nextPageUrl, setNextPageUrl] = useState(null)
     const[previousPageUrl, setPreviousPageUrl] = useState(null)
@@ -130,7 +132,7 @@ function ApplicationComments(){
     const packaged_data = {
         content:message,
         sender:user_id,
-        application:shelter_id,
+        application:id,
     }
     console.log("user message:", packaged_data)
 
@@ -182,7 +184,7 @@ function ApplicationComments(){
     return <>
         <div className="chat-wrapper d-flex flex-column">
             <a className="btn btn-success mt-3 text-white" onClick={toggle}>
-                Chat with the Applicant
+                {`Chat with the ${user.type === 'shelter' ? 'applicant' : 'shelter'}`}
             </a> {
                 open && (
                     <div className="chatbox-wrapper d-flex flex-column card card-body" ref={chatboxRef}>

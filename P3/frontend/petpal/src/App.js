@@ -13,16 +13,15 @@ import ShelterProfile from './pages/Profile/Profile'
 import Navbar from './components/navbar';
 
 import TestHomePage from './pages/LoginAndRegister/test_home_page';
-import ListPet from './pages/application/list_pet';
+import ListPet from './pages/application/ListPet';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import PetDetail from './pages/pet/petDetail';
-import CreateApplication from './pages/application/create_application';
+import CreateApplication from './pages/application/CreateApplication';
 import SeekerProfile from './pages/accounts/seeker_profile';
 
 import { UserProvider } from './contexts/UserContext';
-import SeekerApplication from './pages/application/SeekerApplication';
-import ShelterApplication from './pages/application/ShelterApplication';
+import ViewApplication from './pages/application/ViewApplication';
 
 
 function App() {
@@ -44,12 +43,12 @@ function App() {
                 <Route path="shelter/" element={<RegisterPageShelter/>}/>
               </Route>
               <Route path="search/" element={<Search/>}/>
-              <Route path='pets/applicationx/:id/' element={<ShelterApplication />} />
               <Route path='profile/shelter' element={<ShelterProfile />}/>
               <Route path='shelter/:id/' element={<ShelterPage />}/>
-            <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
-            <Route path='/pets/application/:id/' element={<SeekerApplication />}/>
-            <Route path='/pets/applicationx/:id/' element={<ShelterApplication />} />
+              <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
+              <Route path='/pets/application/:id/' element={<ViewApplication />}/>
+              {/* <Route path='/pets/application/:id/' element={<SeekerApplication />}/>
+              <Route path='/pets/applicationx/:id/' element={<ShelterApplication />} /> */}
           </Route>
         </Routes>
         </div>

@@ -6,12 +6,14 @@ import axios from 'axios'
 
 
 import { useUserContext } from '../../contexts/UserContext.jsx';
+
+import { BASE_URL } from '../../api/constants.js';
 function ShelterComments(){
 
 
     let {shelter_id} = useParams()
     console.log("shelter_id",shelter_id)
-    let base_url ='http://127.0.0.1:8000/'
+    let base_url = BASE_URL
     let shelter_comments_append=`comments/review/${shelter_id}/`
 
     const navigate = useNavigate();

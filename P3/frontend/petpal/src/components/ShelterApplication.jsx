@@ -2,26 +2,26 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import  axios  from 'axios';
-import PetCard from '../../components/PetCard';
-import ApplicationComments from '../../common/Comments/application_comments'
-import '../../common/styles.css';    
+import PetCard from './PetCard';
+import ApplicationComments from '../common/Comments/application_comments'
+import '../common/styles.css';    
+import { BASE_URL } from '../api/constants';
 
 export default function ShelterApplication() {
     const [pet, setPet] = useState(null);
     const [application, setApplication] = useState(null);
     const [seeker, setSeeker] = useState(null);
     const [statusError, setStatusError] = useState('');
+    const bearerToken = localStorage.getItem('access_token');
 
     const { id } = useParams();
 
     const navigate = useNavigate();
 
     const getApplication = async (app_id) => {
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTEyMzA2LCJpYXQiOjE3MDE4MjU5MDYsImp0aSI6IjFjYzZlZDA3NTc2YzQzNjI5YzZhNDI1ZDhiOGZkMzk2IiwidXNlcl9pZCI6Mn0.TXPQ8OHHsteJIRzkfvt2-DjtblC5GSYhGu3GhoTXNDw';
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}pets/application/${app_id}/`,
+                `${BASE_URL}pets/application/${app_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -38,11 +38,9 @@ export default function ShelterApplication() {
     }
 
     const getPet = async (pet_id) => {
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTA5NzQ2LCJpYXQiOjE3MDE4MjMzNDYsImp0aSI6ImE3NDIyZGI0OTYyNTRhMzE5YWJiYTViNmE1Nzg3OWEwIiwidXNlcl9pZCI6Mn0.w3Re23_Ka7tAFX_yzVNoVMkwzWwJ3MGV71SY0_bfzvw';
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}pets/pet/${pet_id}/`,
+                `${BASE_URL}pets/pet/${pet_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -56,11 +54,9 @@ export default function ShelterApplication() {
     }
 
     const getSeeker = async (seeker_id) => {
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTA5NzQ2LCJpYXQiOjE3MDE4MjMzNDYsImp0aSI6ImE3NDIyZGI0OTYyNTRhMzE5YWJiYTViNmE1Nzg3OWEwIiwidXNlcl9pZCI6Mn0.w3Re23_Ka7tAFX_yzVNoVMkwzWwJ3MGV71SY0_bfzvw';
-        const base_url ='http://127.0.0.1:8000/'
         try {
             const res = await axios.get(
-                `${base_url}accounts/seekers/${seeker_id}/`,
+                `${BASE_URL}accounts/seekers/${seeker_id}/`,
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
@@ -94,14 +90,12 @@ export default function ShelterApplication() {
     }, [application])
 
     const handleButton = async (status) => {
-        const base_url ='http://127.0.0.1:8000/'
-        const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxOTEyMzA2LCJpYXQiOjE3MDE4MjU5MDYsImp0aSI6IjFjYzZlZDA3NTc2YzQzNjI5YzZhNDI1ZDhiOGZkMzk2IiwidXNlcl9pZCI6Mn0.TXPQ8OHHsteJIRzkfvt2-DjtblC5GSYhGu3GhoTXNDw'
         const formData = new FormData();
         formData.append('status', status);
 
         try {
             const res = await axios.patch(
-                `${base_url}pets/application/${id}/`,
+                `${BASE_URL}pets/application/${id}/`,
                 formData,
                 {
                     headers: {
@@ -125,7 +119,8 @@ export default function ShelterApplication() {
     }
 
     return (
-        <main className="container" style={{ marginTop: '150px' }}>
+        <div className='page-container'>
+            <main className="container" style={{ marginTop: '150px' }}>
         <h3 className="mt-5 fw-bold">View {seeker ? seeker.first_name + "'s" : 'This'} Application</h3>
         <div className="row mt-5">
             {/* form */}
@@ -175,6 +170,7 @@ export default function ShelterApplication() {
             {/* Card */}
             <div className="col-md-6 col-12 mt-md-0 mt-3 mb-3 d-flex justify-content-center align-items-start">
             { pet && <PetCard 
+                id={pet.id}
                 image={pet.profile_image}
                 status={pet.status}
                 listed={pet.listed}
@@ -190,5 +186,6 @@ export default function ShelterApplication() {
             </div>
         </div>
         </main>
+        </div>
     )
 }

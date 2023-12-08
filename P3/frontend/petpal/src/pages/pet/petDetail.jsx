@@ -148,6 +148,7 @@ function PetDetail(){
                             {petListData.results?.map((pet) => {
                                     return (
                                         <PetCard 
+                                        id={pet.id}
                                             image={pet.profile_image}
                                             status={pet.status}
                                             listed={pet.listed}

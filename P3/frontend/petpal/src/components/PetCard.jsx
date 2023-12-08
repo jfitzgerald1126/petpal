@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { useUserContext } from '../contexts/UserContext';
 
-const PetCard = ({image, status, listed, name, shelter, animal, birthday, description}) => {
+const PetCard = ({id, image, status, listed, name, shelter, animal, birthday, description}) => {
     
     const {shelters} = useUserContext();
 
@@ -31,7 +31,7 @@ const PetCard = ({image, status, listed, name, shelter, animal, birthday, descri
     }
 
     return (
-        <Link to='/' className='pet-card-link-wrapper'>
+        <Link to={`/pets/pet/${id}/`} className='pet-card-link-wrapper'>
             <div className="pet-card">
                 <div className="pet-img">
                     <img src={image}/>
