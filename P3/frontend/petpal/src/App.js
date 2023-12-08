@@ -24,6 +24,7 @@ import { UserProvider } from './contexts/UserContext';
 import ViewApplication from './pages/application/ViewApplication';
 import EditSeekerProfile from './pages/accounts/edit_seeker_profile';
 import EditPetDetail from './pages/pet/edit_pet_profile';
+import EditShelterProfile from './pages/Shelter/edit_shelter';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
               </Route>
               <Route path="search/" element={<Search/>}/>
               <Route path='profile/shelter' element={<ShelterProfile />}/>
+              <Route path='profile/shelter/edit' element={<EditShelterProfile />}/>
               <Route path='shelter/:id/' element={<ShelterPage />}/>
               <Route path='/pets/:petId/applications/' element={<CreateApplication />}/>
               <Route path='/pets/application/:id/' element={<ViewApplication />}/>
