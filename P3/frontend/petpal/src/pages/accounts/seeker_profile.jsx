@@ -11,7 +11,7 @@ const SeekerProfile = () => {
     const [error, setError] = useState(null);
     const authToken = localStorage.getItem('access_token');
     const { id } = useParams();
-
+    const redirectEdit = id + '/edit';
     useEffect(() => {
         setLoading(true);
         setError(null);
@@ -79,7 +79,7 @@ const SeekerProfile = () => {
         <p className="text-zinc-600 fs-8 mt-4">
         {data.description}
         </p>
-        <a href="edit_seeker_profile.html">
+        <a href={redirectEdit}>
           <button className="edit-button">
             Edit Profile
           </button>

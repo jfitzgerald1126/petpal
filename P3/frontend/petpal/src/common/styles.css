@@ -363,6 +363,20 @@ login-wrapper{
     margin-left: 20px;
 }
 
+.pet-adopt-button.available {
+    background-color: green;
+}
+
+.pet-adopt-button.adopted,
+.pet-adopt-button.withdrawn {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+.pet-adopt-button.withdrawn {
+    background-color: red;
+}
+
 .view-app-button{
     width: 150px;
     height: 40px;
@@ -380,6 +394,16 @@ login-wrapper{
     color: white;
     font-size: 20px;
     background-color: var(--emerald-600);
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
+.delete-listing-button{
+    width: 150px;
+    height: 40px;
+    color: white;
+    font-size: 20px;
+    background-color: red;
     border-radius: 5px;
     margin-left: 20px;
 }
