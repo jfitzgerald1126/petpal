@@ -18,7 +18,7 @@ import ListPet from './pages/application/list_pet';
 import "bootstrap/dist/css/bootstrap.min.css";
 import PetDetail from './pages/pet/petDetail';
 import CreateApplication from './pages/application/create_application';
-import SeekerProfileSeekerView from './pages/accounts/seeker_profile_seekerview';
+import SeekerProfile from './pages/accounts/seeker_profile';
 
 import { UserProvider } from './contexts/UserContext';
 import SeekerApplication from './pages/application/SeekerApplication';
@@ -38,7 +38,7 @@ function App() {
               <Route path="test/:shelter_id/" element={<TestPage/>}/>
               <Route path="testhome/" element={<TestHomePage/>}/>
               <Route path="pets/pet/:id" element={<PetDetail />} />
-              <Route path="accounts/seekers/:id" element={<SeekerProfileSeekerView />} />
+              <Route path="accounts/seekers/:id" element={<SeekerProfile />} />
               <Route path="register/">
                 <Route path="seeker/" element={<RegisterPageSeeker/>}/>
                 <Route path="shelter/" element={<RegisterPageShelter/>}/>
