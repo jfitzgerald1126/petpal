@@ -59,6 +59,7 @@ const SeekerProfile = () => {
         return <div>{errorCode} error: an error occurred</div>;
     }
     return (
+    <div className="page-container">
         <div className="super-wrapper w-100 h-100 d-flex flex-column align-items-center">
       <div className="profile-wrapper w-75 d-flex flex-column align-items-left">
         <h1>Your Profile</h1>
@@ -126,6 +127,7 @@ const SeekerProfile = () => {
 
 
 
+    </div>
     </div>
     );
     
