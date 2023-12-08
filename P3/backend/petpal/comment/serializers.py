@@ -1,12 +1,13 @@
 from rest_framework.serializers import ModelSerializer, DateTimeField, ListField, \
     PrimaryKeyRelatedField, HyperlinkedRelatedField
 
-from comment.models import Comment, ApplicationComment
+from comment.models import Comment, ApplicationComment, ReportComment
 
 class CommentSerializer(ModelSerializer):
     date = DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
     shelter_id = PrimaryKeyRelatedField(read_only=True)
     commenter_id = PrimaryKeyRelatedField(read_only=True)
+    reported = ListField(read_only=True)
     # format checking for date
     class Meta:
         model = Comment
@@ -24,3 +25,13 @@ class ApplicationCommentSerializer(ModelSerializer):
 class AdminCommentSerializer(CommentSerializer):
     pass
 
+
+
+
+class ReportCommentSerializer(ModelSerializer):
+    reported_user = PrimaryKeyRelatedField(read_only=True)
+    reporter = PrimaryKeyRelatedField(read_only=True)
+    comment = PrimaryKeyRelatedField(read_only=True)
+    class Meta: 
+        model = ReportComment
+        fields = '__all__'
