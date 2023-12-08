@@ -61,10 +61,10 @@ const Navbar = () => {
                             <img src={user.seeker.profile_image}/>
                         </div>
                         {dropdownOpen && <div className="dropdown-menu" id="profileDropdown">
-                            <Link to="/profile" style={{textDecoration:'none'}}>
+                            <Link to={`/seekers/${user.seeker.id}/`} style={{textDecoration:'none'}}>
                                 <a className="dropdown-item">My profile</a>
                             </Link>
-                            <Link to="/profile/edit" style={{textDecoration:'none'}}>
+                            <Link to={`/seekers/${user.seeker.id}/edit/`} style={{textDecoration:'none'}}>
                                 <a className="dropdown-item">Edit profile</a>
                             </Link>
                             <a className="dropdown-item" style={{cursor:'pointer'}} onClick={signOut}>Log out</a>
@@ -80,10 +80,10 @@ const Navbar = () => {
                         <a className="petpalLogo fs-3 text-white fw-medium text-decoration-none">Petpal</a>
                     </Link>
                     <div className="navLinksContainer">
-                        <Link to="/profile#active_pets" style={{textDecoration:'none'}}>
+                        <Link to="/profile/shelter/#active_pets" style={{textDecoration:'none'}}>
                             <a className="text-white fw-medium text-decoration-none">Pets</a>
                         </Link>
-                        <Link to="/profile#applications" style={{textDecoration:'none'}}>
+                        <Link to="/profile/shelter/#applications" style={{textDecoration:'none'}}>
                             <a className="text-white fw-medium text-decoration-none">Applications</a>
                         </Link>
                     </div>

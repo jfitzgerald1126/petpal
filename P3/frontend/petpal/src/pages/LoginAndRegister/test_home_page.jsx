@@ -19,7 +19,9 @@ function TestHomePage(){
     },[])
 
     return<>
-        <h1>We should only see this if authentication and login was successful </h1>
+        <div className="page-container">
+            <h1>We should only see this if authentication and login was successful </h1>
+        </div>
     </>
 
 }
