@@ -143,14 +143,16 @@ function EditSeekerProfile() {
                                     value={profile.age} />
                                     {errorMessages.age && <div className="text-danger">{errorMessages.age}</div>}
                             </div>
-                            <button type="submit" className="btn btn-success ps-5 pe-5 mb-md-0 mb-3">Update Profile</button>
-                            {successMessage && <div className="text-success">{successMessage}</div>}
+                            
                         </div>
                         <div className="col-md-6 d-flex justify-content-center">
                             <div className="flex-container">
                                 <img src={profile.profile_image} className="img-fluid mt-2" alt="upload-image placeholder" />
+                                <h6>Profile Photo</h6>
                                 <input type="file" name="profile_image" onChange={handleFileChange} className="form-control bg-zinc-100 text-zinc-500 mt-md-0 mt-3" />
                                 {errorMessages.profile_image && <div className="text-danger">{errorMessages.profile_image}</div>}
+                                <button type="submit" className="btn btn-success ps-5 pe-5 mb-md-0 mb-3" style={{marginTop:'10px'}}>Update Profile</button>
+                            {successMessage && <div className="text-success">{successMessage}</div>}
                             </div>
                         </div>
                     </div>
