@@ -31,10 +31,10 @@ const PetCard = ({id, image, status, listed, name, shelter, animal, birthday, de
     }
 
     return (
-        <Link to={`/pets/pet/${id}/`} className='pet-card-link-wrapper'>
+        <Link to={`/pet/${id}/`} className='pet-card-link-wrapper'>
             <div className="pet-card">
                 <div className="pet-img">
-                    <img src={image}/>
+                    <img src={image ? image : 'https://i.ibb.co/cbb4bJg/dog.png'}/>
                     <div className="pet-status">{status}</div>
                 </div>
                 <div className="pet-details">

@@ -117,17 +117,24 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             user = User.objects.get(username=request.data['username'])
             try: 
                 seeker = Seeker.objects.get(user=user)
+                data = SeekerSerializer(seeker).data
+                if (data['profile_image'] is not None):
+                    data['profile_image'] = request.build_absolute_uri(data['profile_image'])
                 user_data = {
                     'type': 'seeker',
-                    'seeker': SeekerSerializer(seeker).data,
+                    'seeker': data,
                 }
             except Seeker.DoesNotExist:
                 pass
             try:
                 shelter = Shelter.objects.get(user=user)
+                data = ShelterSerializer(shelter).data
+                if (data['shelter_image'] is not None):
+                    data['shelter_image'] = request.build_absolute_uri(data['shelter_image'])
+
                 user_data = {
                     'type': 'shelter',
-                    'shelter': ShelterSerializer(shelter).data,
+                    'shelter': data,
                 }
             except Shelter.DoesNotExist:
                 pass

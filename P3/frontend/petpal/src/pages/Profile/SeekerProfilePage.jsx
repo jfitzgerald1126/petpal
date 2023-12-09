@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
+import { Link } from 'react-router-dom';
 
-const SeekerProfileSeekerView = () => {
+const SeekerProfilePage = () => {
     const { user } = useUserContext();
     const [data, setData] = useState(null);
     const [applications, setApplicationsData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const authToken = localStorage.getItem('access_token');
-    const { id } = useParams();
 
     useEffect(() => {
         setLoading(true);
         setError(null);
     
-        const fetchSeekerProfile = axios.get(`http://localhost:8000/accounts/seekers/${id}/`, {
+        const fetchSeekerProfile = axios.get(`http://localhost:8000/accounts/seekers/${user.seeker.id}/`, {
             headers: { Authorization: `Bearer ${authToken}` }
         });
         const fetchApplications = axios.get(`http://localhost:8000/pets/applications/`, {
@@ -49,7 +49,7 @@ const SeekerProfileSeekerView = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, [id, authToken]);
+    }, [user, authToken]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -64,33 +64,36 @@ const SeekerProfileSeekerView = () => {
         <div className="super-wrapper w-100 h-100 d-flex flex-column align-items-center">
       <div className="profile-wrapper w-75 d-flex flex-column align-items-left">
         <h1>Your Profile</h1>
-        <div className="picture-and-contact w-75 d-flex">
+        <div className="picture-and-contact w-75 d-flex mt-3">
 
           <div className="headshot-wrapper">
-            <img src={data.profile_image} alt="headshot" className="headshot w-100, h-100"/>
+            <img src={data.profile_image ? data.profile_image : 'https://i.ibb.co/4jkCqdm/user.png'} alt="headshot" className="headshot w-100, h-100"/>
           </div>
           <div>
             <h3 className="fw-medium">{data.first_name} {data.last_name}</h3>
-            <h4 className="fw-light">{data.email}</h4>
-            <h4 className="fw-light">{data.address}</h4>
-            <h4 className="fw-light">{data.phone_number}</h4>
+            <h4 className="fw-light" style={{fontSize:16}}>{data.email}</h4>
+            <h4 className="fw-light" style={{fontSize:16}}>{data.address}</h4>
+            <h4 className="fw-light" style={{fontSize:16}}>{ `(${data.phone_number.slice(0, 3)})-${data.phone_number.slice(3, 6)}-${data.phone_number.slice(6)}`}</h4>
           </div>
 
         </div>
 
-        <p className="text-zinc-600 fs-8 mt-4">
-        {data.description}
+        <p className="text-zinc-600 fs-10 mt-4">
+        Bio: {data.description}
         </p>
-        <a href="edit_seeker_profile.html">
-          <button className="edit-button">
+        <a style={{width:'fit-content'}}>
+            
+        <Link to="edit">
+          <button className="primary-button">
             Edit Profile
           </button>
+        </Link>
         </a>
 
       </div>
 
       <h1 className="d-flex w-75">Your Applications</h1>
-      <div className="application-wrapper h-40 w-75 overflow-y-scroll">
+      <div className="application-wrapper w-75">
 
       <table className="table application-table w-100">
                     <thead>
@@ -116,7 +119,7 @@ const SeekerProfileSeekerView = () => {
                                 <td className={application.status === 'Accepted' ? 'text-success' : application.status === 'Rejected' ? 'text-danger' : ''}>
                                     {application.status}
                                 </td>
-                                <td><a href="pet_application_page_seeker_view.html">View application</a></td>
+                                <td><Link to={`/application/${application.id}`}>View application</Link></td>
                             </tr>
                         ))}
                     </tbody>
@@ -135,5 +138,5 @@ const SeekerProfileSeekerView = () => {
 
 
 }
-export default SeekerProfileSeekerView;
+export default SeekerProfilePage;
 

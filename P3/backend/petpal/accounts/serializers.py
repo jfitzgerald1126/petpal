@@ -107,6 +107,7 @@ class ShelterUpdateSerializer(ModelSerializer):
             "address",
             "website",
             "shelter_image",
+            "id",
         ]
 
 

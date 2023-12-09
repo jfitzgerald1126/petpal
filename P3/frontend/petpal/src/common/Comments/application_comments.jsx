@@ -21,26 +21,27 @@ function ApplicationComments(){
     const[nextPageUrl, setNextPageUrl] = useState(null)
     const[previousPageUrl, setPreviousPageUrl] = useState(null)
 
+    const fetch_messages = async () => {
+        console.log("fetching message data")
+        try{
+            const response = await axios.get(base_url+application_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+            if(response.data.next !== null){
+                setNextPageUrl(response.data.next)
+            }
+            if(response.data.previous !== null){
+                setPreviousPageUrl(response.data.previous)
+            }
+            setApplicationComments(response.data.results)
+        } catch(error){
+            console.log("error retrieving messages",error)
+        }
+
+    }
+
     useEffect(() => {
         let is_mounted = true;
         if(localStorage.getItem('access_token') === null){
             navigate('/login/')
-        }
-        const fetch_messages = async () => {
-            console.log("fetching message data")
-            try{
-                const response = await axios.get(base_url+application_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
-                if(response.data.next !== null){
-                    setNextPageUrl(response.data.next)
-                }
-                if(response.data.previous !== null){
-                    setPreviousPageUrl(response.data.previous)
-                }
-                setApplicationComments(response.data.results)
-            } catch(error){
-                console.log("error retrieving messages",error)
-            }
-
         }
 
         fetch_messages()
@@ -76,34 +77,6 @@ function ApplicationComments(){
         }
         formatted_messages.push(message)
     })
-    
-
-    const test_message_data= [
-        {
-            content:"hello shelter where is my dog",
-            is_user:true,
-        },
-        {
-            content:"hello user your dog is in the shelter",
-            is_user:false,
-        },
-        {
-            content:"that is good to hear, when can i pick him up",
-            is_user:true,
-        },
-        {
-            content:"you can pick him up tomorrow",
-            is_user:false,
-        },
-        {
-            content:"you can pick him up tomorrow",
-            is_user:false,
-        },
-        {
-            content:"you can pick him up tomorrow",
-            is_user:false,
-        }
-    ]
 
 
     // TODO: when the user types something in the chat
@@ -147,6 +120,8 @@ function ApplicationComments(){
                 headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
                 
             })
+            fetch_messages()
+            document.getElementById('message_input').value = ""
             console.log("message sent, success")
         }catch(error){
             console.log("error posting message", error)
@@ -220,7 +195,7 @@ function ApplicationComments(){
                 </div>
             {open && 
                 <form className="card-footer rounded pt-3 d-flex flex-row " method="post" onSubmit={handle_user_message}>
-                    <input type="text" class="message-field rounded" placeholder="Type something..." onInput={handle_user_input}/>
+                    <input type="text" id='message_input' class="message-field rounded" placeholder="Type something..." onInput={handle_user_input}/>
                     <button className="btn btn-success rounded-circle" type="submit">
                         {'>'}
                     </button>

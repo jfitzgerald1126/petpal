@@ -5,6 +5,7 @@ import  axios  from 'axios';
 import uploadImage from '../../assets/upload-image.png';
 import '../../common/styles.css';
 import { BASE_URL } from '../../api/constants';
+import { useUserContext } from '../../contexts/UserContext';
 
 export default function ListPet() {
     const [name, setName] = useState('');
@@ -30,6 +31,8 @@ export default function ListPet() {
     const [vaccineError, setVaccineError] = useState('');
     const [descriptionError, setDescriptionError] = useState('');
     const [imageError, setImageError] = useState('');
+    
+    const {user} = useUserContext()
 
     const bearerToken = localStorage.getItem('access_token');
 
@@ -52,7 +55,9 @@ export default function ListPet() {
         formData.append('caretaker', caretaker);
         formData.append('vaccine', vaccine);
         formData.append('description', description);
-        formData.append('profile_image', image);
+        if (image) {
+          formData.append('profile_image', image);
+        }
 
         try {
             const res = await axios.post(
@@ -71,7 +76,7 @@ export default function ListPet() {
             //     navigate('/testHome/')
             // }
             console.log(res.data);
-            navigate('/testHome/');
+            navigate('/profile/');
         } catch (err) {
             console.log(err.response);
             const { data } = err.response;

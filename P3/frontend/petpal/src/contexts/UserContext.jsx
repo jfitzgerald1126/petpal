@@ -10,23 +10,27 @@ export const useUserContext = () => {
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [shelters, setShelters] = useState({})
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
+      setIsLoaded(true)
     }
   }, []);
 
   const loginUser = (userData) => {
     console.log('logged in', userData)
     setUser(userData);
+    setIsLoaded(true);
   };
 
   const logoutUser = () => {
-    console.log('loged out')
+    console.log('logged out')
     setUser(null);
+    setIsLoaded(true);
   };
 
   useEffect(() => {
@@ -51,7 +55,6 @@ export const UserProvider = ({ children }) => {
         obj[shelter['id']] = shelter
       })
       setShelters(obj);
-      console.log(obj)
     }
     catch {
       setShelters({})
@@ -60,7 +63,7 @@ export const UserProvider = ({ children }) => {
   
 
   return (
-    <UserContext.Provider value={{ user, loginUser, logoutUser, shelters }}>
+    <UserContext.Provider value={{ user, loginUser, logoutUser, shelters, isLoaded }}>
       {children}
     </UserContext.Provider>
   );

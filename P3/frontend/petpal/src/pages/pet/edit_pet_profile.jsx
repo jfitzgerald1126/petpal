@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
 
@@ -24,6 +24,8 @@ function EditPetProfile() {
     });
     const { id } = useParams();
     const authToken = localStorage.getItem('access_token');
+    const navigate = useNavigate()
+    const [displayImage, setDisplayImage] = useState(null)
 
     // Function to handle form input changes
     const handleChange = (e) => {
@@ -33,6 +35,12 @@ function EditPetProfile() {
 
     const handleFileChange = (e) => {
         setProfile({ ...profile, profile_image: e.target.files[0] });
+        try {
+            setDisplayImage(URL.createObjectURL(e.target.files[0]))
+        }
+        catch {
+            setDisplayImage(null)
+        }
     };
 
     // Function to handle form submission
@@ -44,7 +52,7 @@ function EditPetProfile() {
 
         // Append text fields to formData
         Object.keys(profile).forEach(key => {
-            if (key !== 'profile_image') {
+            if (profile[key] != null && key != 'profile_image') {
                 formData.append(key, profile[key]);
             }
         });
@@ -58,6 +66,7 @@ function EditPetProfile() {
             const response = await axios.put(`http://localhost:8000/pets/pet/${id}/`, formData, {
                 headers: { Authorization: `Bearer ${authToken}` }
             });
+            navigate(`/pet/${id}`)
             setSuccessMessage('Pet updated successfully.');
         } catch (error) {
             console.error("Error updating pet profile:", error);
@@ -77,6 +86,7 @@ function EditPetProfile() {
                 });
                 setLoading(false)
                 setProfile(response.data);
+                setDisplayImage(response.data.profile_image)
             } catch (error) {
                 console.error("Error fetching pet data:", error);
             }
@@ -100,12 +110,23 @@ function EditPetProfile() {
         return <div>Error 403: You are not authorized to edit this pet</div>
     }
     return (
+        <div className="page-container">
         <main className="container pt-5">
             <div className="row mt-5 mx-auto">
-                <h3 className="mb-5 fw-bold">Edit Profile</h3>
+                <h3 className="mb-5 fw-bold">Edit Pet</h3>
                 <form onSubmit={handleSubmit} className="col-12">
                     <div className="row">
                         <div className="col-md-6">
+                        <div className="mb-3">
+                                    <h6>Pet Status</h6>
+                                    <select name="status" onChange={handleChange} className="form-select bg-zinc-100 text-zinc-500" id="status" value={profile.status} required>
+                                        <option value="available">Available</option>
+                                        <option value="withdrawn">Withdrawn</option>
+                                        <option value="adopted">Adopted</option>
+                                    </select>
+                                    {errorMessages.status && <div className="text-danger">{errorMessages.status}</div>}
+                                </div>
+
                             <div className="mb-3">
                                 <h6>Pet Name</h6>
                                 <input type="text" name="name" onChange={handleChange} className="form-control bg-zinc-100 text-zinc-500" id="name" placeholder="Name" value={profile.name} required/>
@@ -123,25 +144,25 @@ function EditPetProfile() {
                             </div>
 
                             <div className="mb-3">
-                                <h6>Breed</h6>
-                                <input type="text" onChange={handleChange} className="form-control bg-zinc-100 text-zinc-500" id="breed" name="breed" placeholder="Breed (optional)" value={profile.breed} />
+                                <h6>Breed (optional)</h6>
+                                <input type="text" onChange={handleChange} className="form-control bg-zinc-100 text-zinc-500" id="breed" name="breed" placeholder="Breed" value={profile.breed} />
                                 {errorMessages.breed && <div className="text-danger">{errorMessages.breed}</div>}
                             </div>
 
                             <div className="mb-3">
-                                <h6>Birthday</h6>
+                                <h6>Birthday (optional)</h6>
                                 <input type="date" onChange={handleChange} className="form-control bg-zinc-100 text-zinc-500" id="birthday" value={profile.birthday} name="birthday" placeholder="Birthday (optional)" />
                                 {errorMessages.birthday && <div className="text-danger">{errorMessages.birthday}</div>}
                             </div>
 
                             <div className="mb-3">
-                                <h6>Caretaker</h6>
-                                <input type="text" onChange={handleChange} className="form-control bg-zinc-100 text-zinc-500" id="caretaker" name="caretaker" value={profile.caretaker} placeholder="Caretaker (optional)" />
+                                <h6>Caretaker (optional)</h6>
+                                <input type="text" onChange={handleChange} className="form-control bg-zinc-100 text-zinc-500" id="caretaker" name="caretaker" value={profile.caretaker} placeholder="Caretaker" />
                                 {errorMessages.caretaker && <div className="text-danger">{errorMessages.caretaker}</div>}
                             </div>
 
                             <div className="mb-3">
-                                <h6>Vaccination Status</h6>
+                                <h6>Vaccination Status (optional)</h6>
                                 <textarea name="vaccine_status" onChange={handleChange} id="vaccine" className="form-control bg-zinc-100 text-zinc-500" value={profile.vacine_status} placeholder="Vaccine and Medical Information" style={{ height: '122px' }}></textarea>
                                 {errorMessages.vacine_status && <div className="text-danger">{errorMessages.vacine_status}</div>}
                             </div>
@@ -154,21 +175,11 @@ function EditPetProfile() {
                         </div>
                         <div className="col-md-6 d-flex justify-content-center">
                             <div className="flex-container">
-                                <img src={profile.profile_image} className="img-fluid mt-2" alt="upload-image placeholder" />
-                                <h6>Profile Photo</h6>
-                                <input type="file" name="profile_image" onChange={handleFileChange} className="form-control bg-zinc-100 text-zinc-500 mt-md-0 mt-3" />
+                                <img src={displayImage} className="img-preview img-fluid mt-2" alt="upload-image placeholder" />
+                                <h6>Pet Photo</h6>
+                                <input type="file" name="profile_image" accept="image/*" onChange={handleFileChange} className="form-control bg-zinc-100 text-zinc-500 mt-md-0 mt-3 mb-3" />
                                 {errorMessages.profile_image && <div className="text-danger">{errorMessages.profile_image}</div>}
-
-                                <div className="mb-3">
-                                    <h6>Pet Status</h6>
-                                    <select name="status" onChange={handleChange} className="form-select bg-zinc-100 text-zinc-500" id="status" value={profile.status} required>
-                                        <option value="available">Available</option>
-                                        <option value="withdrawn">Withdrawn</option>
-                                        <option value="adopted">Adopted</option>
-                                    </select>
-                                    {errorMessages.status && <div className="text-danger">{errorMessages.status}</div>}
-                                </div>
-                                <button type="submit" className="btn btn-success ps-5 pe-5 mb-md-0 mb-3">Update Profile</button>
+                                <button type="submit" className="btn btn-success ps-5 pe-5 mb-md-0 mb-3">Save Changes</button>
                             {successMessage && <div className="text-success">{successMessage}</div>}
 
                             </div>
@@ -177,6 +188,7 @@ function EditPetProfile() {
                 </form>
             </div>
         </main>
+        </div>
     );
 }
 

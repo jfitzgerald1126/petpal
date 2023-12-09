@@ -86,6 +86,7 @@ const ShelterProfilePage = () => {
 
         const params = {
             'status': status,
+            'shelter': user.shelter.id,
         }
 
         try {
@@ -164,22 +165,22 @@ const ShelterProfilePage = () => {
             <div className='h-100 d-flex flex-column align-items-center'>
             <div className="shelter-container d-flex">
                 <div className="shelter-images-container d-flex flex-column align-items-end">
-                <div className="shelter-cover-image"><img src={shelter.shelter_image}/></div>
+                <div className="shelter-cover-image"><img src={shelter.shelter_image ? shelter.shelter_image : 'https://i.ibb.co/4JLwVSq/shelter.png'}/></div>
                 </div>
                 <div className="shelter-details-container d-flex flex-column align-items-start">
                 <h1 className="text-zinc-700 fs-3 fw-bold">{shelter.shelter_name}</h1>
                 <div className="shelter-info-container d-flex flex-row">
                     <div className="d-flex flex-column pe-5">
                     <span className="text-zinc-400 fs-8">{shelter.website}</span>
-                    <span className="text-zinc-400 fs-8">{ `(${shelter.phone_number.slice(0, 3)})-${shelter.phone_number.slice(3, 6)}-${shelter.phone_number.slice(6)}`}</span>
+                    {shelter.phone_number && <span className="text-zinc-400 fs-8">{ `(${shelter.phone_number.slice(0, 3)})-${shelter.phone_number.slice(3, 6)}-${shelter.phone_number.slice(6)}`}</span>}
                     </div>
                     <div className="d-flex flex-column">
                     <span className="text-zinc-400 fs-8">{shelter.email}</span>
                     <span className="text-zinc-400 fs-8">{shelter.address}</span>
                     </div>
                 </div>
-                <p className="text-zinc-600 fs-8 mt-4">{shelter.description}</p>
-                    <Link to="profile/edit" style={{textDecoration:'none'}}>
+                <p className="text-zinc-600 fs-8 mt-4">Description: {shelter.description}</p>
+                    <Link to="edit" style={{textDecoration:'none'}}>
                         <button className="primary-button">Edit profile</button>
                     </Link>
                 </div>
@@ -228,7 +229,7 @@ const ShelterProfilePage = () => {
                             <td>{formattedDate}</td>
                             <td>{app.seeker_email}</td>
                             <td>{app.status}</td>
-                            <td><Link to="application/view">View application</Link></td>
+                            <td><Link to={`/application/${app.id}`}>View application</Link></td>
                         </tr>
                     )
                 })}
@@ -241,7 +242,7 @@ const ShelterProfilePage = () => {
             <div id="active_pets" class="our-friends-container w-100 px-5 mt-3 d-flex flex-column align-items-start">
                 <div className="d-flex flex-row">
                 <h1 className="text-zinc-700 fs-3 fw-bold">Active Listings</h1>
-                <Link to="pets/list" style={{textDecoration:'none'}}>
+                <Link to="/pet/create" style={{textDecoration:'none'}}>
                     <button className="primary-button mx-3">List new pet</button>
                 </Link>
                 </div>

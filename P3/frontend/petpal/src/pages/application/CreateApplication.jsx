@@ -21,7 +21,7 @@ export default function CreateApplication() {
 
     const [pet, setPet] = useState(null);
 
-    const { petId } = useParams();
+    const { id: petId } = useParams();
 
     const navigate = useNavigate();
 
@@ -75,7 +75,7 @@ export default function CreateApplication() {
                 }
             )
             console.log(res.data);
-            navigate('/testHome/');
+            navigate('/profile/');
         } catch (err) {
             console.log(err)
             const { data } = err.response;

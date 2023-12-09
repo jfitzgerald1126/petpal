@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../common/styles.css';
 import PetCard from '../../components/PetCard';
 import { useUserContext } from '../../contexts/UserContext';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { Link } from 'react-router-dom'
+import { HashLink } from 'react-router-hash-link';
 
 
 function PetDetail(){
@@ -18,7 +20,7 @@ function PetDetail(){
         const { id } = useParams();
         const { user } = useUserContext();
         const authToken = localStorage.getItem('access_token');
-        const redirectEdit = id + '/edit';
+        const navigate = useNavigate();
 
         useEffect(() => {
             setLoading(true);
@@ -46,18 +48,20 @@ function PetDetail(){
         }, [id, authToken]);
     
         useEffect(() => {
-            axios.get('http://127.0.0.1:8000/pets/pets/', 
-            {
-                headers: { Authorization: `Bearer ${authToken}` }
-            })
-            .then(response => {
-                setPetListData(response.data);
-            })
-            .catch(error => {
-                setError(true);
-                console.error('There was an error!', error);
-            });
-        }, [authToken]); 
+            if (pet?.shelter) {
+                axios.get('http://127.0.0.1:8000/pets/pets/?shelter=' + pet.shelter, 
+                {
+                    headers: { Authorization: `Bearer ${authToken}` }
+                })
+                .then(response => {
+                    setPetListData(response.data);
+                })
+                .catch(error => {
+                    setError(true);
+                    console.error('There was an error!', error);
+                });
+            }
+        }, [authToken, pet]); 
         
         useEffect(() => {
             if (!loading && user?.type === "shelter" && pet) {
@@ -73,8 +77,7 @@ function PetDetail(){
                     headers: { Authorization: `Bearer ${authToken}` }
                 })
                 .then(() => {
-                    // Redirect after successful deletion
-                    window.location.href = `http://localhost:8000/shelter/${id}/`; 
+                    navigate('/profile/');
                 })
                 .catch(error => {
                     console.error('Error deleting pet', error);
@@ -90,6 +93,7 @@ function PetDetail(){
         }
         if (!isOwner){
             return (
+            <div className="page-container">
                 <div className="content-container d-flex flex-column align-items-center">
                 <div className="pet-container d-flex">
         
@@ -101,33 +105,51 @@ function PetDetail(){
                 <div className="pet-details-container d-flex flex-column align-items-start">
                 <div className="pet-info-container d-flex flex-row">
                   <h1 className="text-zinc-700 fs-3 fw-bold">{pet.name}</h1>
-                  <a href={pet.status === 'available' ? "pet_adoption_page.html" : '#'}>
-    <button 
-        className={`pet-adopt-button ${pet.status}`}
-        disabled={pet.status !== 'available'}
-    >
-        {pet.status.charAt(0).toUpperCase() + pet.status.slice(1)}
-    </button>
-</a>
-                </div>
+                  {pet.status == 'available' && user.type == "seeker" && 
+                    
+                    <Link to={`apply`}>
+                        <button 
+                        className={`primary-button ${pet.status}`}
+                        style={{marginLeft:20}}
+                        disabled={pet.status !== 'available'}
+                    >
+                        Apply
+                    </button>
+                    </Link>
+                  }
+                  {pet.status != 'available' && 
+                        <button 
+                        className={`primary-button ${pet.status}`}
+                        style={{marginLeft:20}}
+                        disabled={pet.status !== 'available'}
+                        >
+                            {pet.status.charAt(0).toUpperCase() + pet.status.slice(1)}
+                        </button>
+                    }
+                    </div>
                 
                 <div className="pet-info-container d-flex flex-row">
                   <div className="pet-icon-list d-flex flex-column pe-5">
-                    <span className="text-zinc-400 fs-8"><i className="bi bi-house"></i> <a href="shelter_detail_page.html" className="shelter-link-text"> {shelter.shelter_name}</a></span>
-                    <span className="text-zinc-400 fs-8"><i className="bi bi-chat-square-heart"></i> {pet.breed}</span>
-                    <span className="text-zinc-400 fs-8"><i className="bi bi-cake"></i> {pet.birthday}</span>
+                    <span className="text-zinc-400 fs-8"><i className="bi bi-house"></i>
+                    <Link to={`/shelter/${shelter.id}`}>
+                        <a className="shelter-link-text">{shelter.shelter_name}</a>
+                    </Link>
+                    </span>
+                    {pet.breed && <span className="text-zinc-400 fs-8"><i className="bi bi-chat-square-heart"></i>{pet.breed}</span>}
+                    {pet.birthday && <span className="text-zinc-400 fs-8"><i className="bi bi-cake"></i> {pet.birthday}</span>}
                   </div>
                   <div className="d-flex flex-column">
-                    <span className="text-zinc-400 fs-8"> <i className="bi bi-person"></i> {pet.caretaker}</span>
-                    <span className="text-zinc-400 fs-8"> <i className="bi bi-clipboard2-pulse"></i> {pet.vaccine_status}</span>
+                  <span className="text-zinc-400 fs-8"><i className="bi bi-piggy-bank"></i>{pet.animal}</span>
+                    {pet.caretaker && <span className="text-zinc-400 fs-8"> <i className="bi bi-person"></i> {pet.caretaker}</span>}
                   </div>
                 </div>
-                <p className="text-zinc-600 fs-8 mt-4">{pet.description}</p>
+                <p className="text-zinc-600 fs-8 mt-4">Description: {pet.description}</p>
+                {pet.vaccine_status && <p className="text-zinc-600 fs-8 mt-0">Vaccine Status: {pet.vaccine_status}</p>}
                 <div className="pet-info-container d-flex flex-row">
                 <div className="d-flex flex-column pe-5">
                   <span className="text-zinc-400 fs-8"><i className="bi bi-envelope"></i> {shelter.email}</span>
                   <span className="text-zinc-400 fs-8"> <i className="bi bi-geo-alt"></i> {shelter.address}</span>
-                  <span className="text-zinc-400 fs-8"> <i className="bi bi-telephone-inbound"></i> {shelter.phone_number}</span>
+                  {shelter.phone_number && <span className="text-zinc-400 fs-8"> <i className="bi bi-telephone-inbound"></i> {shelter.phone_number}</span>}
                 </div>
                 
               </div>
@@ -140,7 +162,7 @@ function PetDetail(){
                {/* <!-- PET CARDS --> */}
                <div className='listing-card-grid-container'>
                     {!loading && error && "ERROR OCCURED"}
-                    {!loading && petListData && 
+                    {!loading && petListData && petListData.results.length > 0 &&
                         <>
                         <div className="listing-card-grid">
                             {petListData.results.length == 0 && 
@@ -168,46 +190,64 @@ function PetDetail(){
                 </div>
                 </div>
               </div>
+              </div>
             );
         }
         else {
             {/* shelter view of pet*/}
             return (
+                <div className="page-container">
                 <div class="content-container d-flex flex-column align-items-center">
     <div class="pet-container d-flex">
       <div class="pet-images-container d-flex flex-column align-items-end">
-        <div class="pet-cover-image"> <img src={pet.profile_image}/> </div>
+        <div class="pet-cover-image"> <img src={pet.profile_image ? pet.profile_image : 'https://i.ibb.co/cbb4bJg/dog.png'}/> </div>
       </div>
       <div class="pet-details-container d-flex flex-column align-items-start">
         <div class="pet-info-container d-flex flex-row">
           <h1 class="text-zinc-700 fs-3 fw-bold">{pet.name}</h1>
-        <a href="profile_shelter.html"><button class="view-app-button">View Applications</button></a>
+            {pet.status == "withdrawn" &&            
+                <button className="primary-button mb-md-0 mb-3 ml-3" style={{ marginLeft:20, backgroundColor: 'crimson', height:35,}} >
+                    {pet.status}
+                </button>
+            }
+            {pet.status != "withdrawn" &&            
+                <button className="primary-button mb-md-0 mb-3 ml-3" style={{ marginLeft:20, height:35,}} >
+                    {pet.status}
+                </button>
+            }
+            {/* <HashLink to="/profile#applications"><button class="view-app-button">View Applications</button></HashLink> */}
         </div>
         
-        <div class="pet-info-container d-flex flex-row">
-          <div class="pet-icon-list d-flex flex-column pe-5">
-            <span class="text-zinc-400 fs-8"><i class="bi bi-house"></i> {shelter.shelter_name}</span>
-            <span class="text-zinc-400 fs-8"><i class="bi bi-chat-square-heart"></i>{pet.breed}</span>
-            <span class="text-zinc-400 fs-8"><i class="bi bi-cake"></i> {pet.birthday}</span>
-          </div>
-          <div class="d-flex flex-column">
-            <span class="text-zinc-400 fs-8"> <i class="bi bi-person"></i> {pet.caretaker}</span>
-            <span class="text-zinc-400 fs-8"> <i class="bi bi-clipboard2-pulse"></i> {pet.vaccine_status}</span>
-          </div>
-        </div>
-        <p class="text-zinc-600 fs-8 mt-4">{pet.description}</p>
+        <div className="pet-info-container d-flex flex-row">
+                  <div className="pet-icon-list d-flex flex-column pe-5">
+                    <span className="text-zinc-400 fs-8"><i className="bi bi-house"></i>
+                    <Link to={`/shelter/${shelter.id}`}>
+                        <a className="shelter-link-text">{shelter.shelter_name}</a>
+                    </Link>
+                    </span>
+                    {pet.breed && <span className="text-zinc-400 fs-8"><i className="bi bi-chat-square-heart"></i>{pet.breed}</span>}
+                    {pet.birthday && <span className="text-zinc-400 fs-8"><i className="bi bi-cake"></i> {pet.birthday}</span>}
+                  </div>
+                  <div className="d-flex flex-column">
+                  <span className="text-zinc-400 fs-8"><i className="bi bi-piggy-bank"></i>{pet.animal}</span>
+                    {pet.caretaker && <span className="text-zinc-400 fs-8"> <i className="bi bi-person"></i> {pet.caretaker}</span>}
+                  </div>
+                </div>
+                <p className="text-zinc-600 fs-8 mt-4">Description: {pet.description}</p>
+                {pet.vaccine_status && <p className="text-zinc-600 fs-8 mt-0">Vaccine Status: {pet.vaccine_status}</p>}
         <div class="pet-info-container d-flex flex-row">
         <div class="d-flex flex-column pe-5">
           <span class="text-zinc-400 fs-8"><i class="bi bi-envelope"></i> {shelter.email}</span>
           <span class="text-zinc-400 fs-8"> <i class="bi bi-geo-alt"></i> {shelter.address}</span>
-          <span class="text-zinc-400 fs-8"> <i class="bi bi-telephone-inbound"></i> {shelter.phone_number}</span>
+          {shelter.phone_number && <span class="text-zinc-400 fs-8"> <i class="bi bi-telephone-inbound"></i> {shelter.phone_number}</span>}
         </div>
       </div>
       </div>
     </div>
     <div className="pet-info-container d-flex flex-row">
-    <a href={redirectEdit}><button class="edit-listing-button">Edit Listing</button></a>
+    <Link to={`edit`}><button class="edit-listing-button">Edit Listing</button></Link>
     <button className="delete-listing-button" onClick={handleDeletePet}>Delete Listing</button>
+  </div>
   </div>
   </div>
             

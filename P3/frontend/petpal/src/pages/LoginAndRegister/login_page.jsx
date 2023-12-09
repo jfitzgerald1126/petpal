@@ -51,7 +51,12 @@ function LoginPage(){
 
             axios.defaults.headers['Authorization'] = `Bearer ${data['access']}`;
 
-            navigate('/testhome/')
+            if (data.user.type == "shelter") {
+                navigate('/profile')
+            }
+            else {
+                navigate('/search')
+            }
         }
         catch(error){
             logoutUser();

@@ -30,7 +30,7 @@ export default function SeekerApplication() {
         } catch (err) {
             if (err.response.status === 403) {
                 // TODO: naviagte somewhere else
-                navigate('/testHome/');
+                navigate('/profile/');
             }
             console.log(err);
         }
@@ -82,7 +82,7 @@ export default function SeekerApplication() {
                 }
             )
             console.log(res);
-            navigate('/testHome/');
+            navigate('/profile/');
 
         } catch (err) {
             console.log(err)
@@ -127,9 +127,19 @@ export default function SeekerApplication() {
                 </textarea>
                 </div>
 
-                <button className="primary-button mb-md-0 mb-3" style={{ backgroundColor: 'crimson' }} >
-                Withdraw application
-                </button>
+                {application?.status == "pending" &&
+                    <button className="primary-button mb-md-0 mb-3" style={{ backgroundColor: 'crimson' }} >
+                        Withdraw application
+                    </button>
+                }
+                {
+                    application?.status == "accepted" && 
+                    <button className="primary-button mb-md-0 mb-3 d-inline-block" disabled>{application.status}</button>
+                }
+                {
+                    (application?.status == "withdrawn" || application?.status == "denied")  && 
+                    <button className="primary-button mb-md-0 mb-3 d-inline-block" disabled style={{backgroundColor: 'crimson'}}>{application.status}</button>
+                }
                 { statusError && <div className="text-danger mb-3 mt-n3">{statusError}</div>}
             </form>
 

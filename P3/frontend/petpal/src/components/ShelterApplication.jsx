@@ -32,7 +32,7 @@ export default function ShelterApplication() {
             console.log(err);
             if (err.response.status === 403) {
                 // TODO: naviagte somewhere else
-                navigate('/testHome/');
+                navigate('/profile/');
             }
         }
     }
@@ -105,7 +105,7 @@ export default function ShelterApplication() {
                 }
             )
             console.log(res);
-            navigate('/testHome/');
+            navigate('/profile');
 
         } catch (err) {
             console.log(err)
@@ -151,9 +151,22 @@ export default function ShelterApplication() {
                 </textarea>
                 </div>
 
-                <button className="primary-button mb-md-0 mb-3 d-inline-block" onClick={() => handleButton('accepted')}>Accept application</button>
+                {application?.status == "pending" &&
+                    <>
+                        <button className="primary-button mb-md-0 mb-3 d-inline-block" onClick={() => handleButton('accepted')}>Accept application</button>
+                        <button className="primary-button mb-md-0 mb-3 d-inline-block" onClick={() => handleButton('denied')} style={{backgroundColor: 'crimson'}}>Reject application</button>
+                    </>
+                }
+                {
+                    application?.status == "accepted" && 
+                    <button className="primary-button mb-md-0 mb-3 d-inline-block" disabled>{application.status}</button>
+                }
+                {
+                    (application?.status == "withdrawn" || application?.status == "denied")  && 
+                    <button className="primary-button mb-md-0 mb-3 d-inline-block" disabled style={{backgroundColor: 'crimson'}}>{application.status}</button>
+                }
 
-                <button className="primary-button mb-md-0 mb-3 d-inline-block" onClick={() => handleButton('denied')} style={{backgroundColor: 'crimson'}}>Reject application</button>
+
 
                 { statusError && <div className="text-danger mb-3 mt-n3">{statusError}</div>}
 
