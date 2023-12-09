@@ -28,12 +28,9 @@ import EditPetDetail from './pages/pet/edit_pet_profile';
 
 import ProfilePage from './pages/Profile/ProfilePage'
 import ProfileEditPage from './pages/Profile/ProfileEditPage';
-<<<<<<< HEAD
 import ShelterListPage from './pages/Shelter/ShelterList';
-=======
 import Moderator from './pages/moderator/Moderator';
 import NotFoundPage from './pages/404_page'
->>>>>>> c944649ce1fa66799c9e8242b4adf374b95f29f3
 
 function App() {
   return (
