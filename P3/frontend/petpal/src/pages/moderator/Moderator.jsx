@@ -8,7 +8,6 @@ import '../../common/styles.css';
 export default function Moderator() {
     const [reportedComments, setReportedComments] = useState([]);
     const [nextPage, setNextPage] = useState(false);
-    const [comments, setComments] = useState([]);
 
     // use next and prev page to determine whether to show the buttons to navigate to the next and previous pages
     const [page, setPage] = useState(1);
@@ -18,16 +17,7 @@ export default function Moderator() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        if (reportedComments) {
-            for (const comment of reportedComments) {
-                fetchComments(comment.comment);
-            }
-        }
-    }, [reportedComments]);
-
-    const fetchComments = async(comment_id) => {
-        setComments([]);
+    const fetchComment = async(comment_id) => {
         try {
             const res = await axios.get(
                 `${BASE_URL}comments/specific_review/${comment_id}/`,
@@ -35,14 +25,11 @@ export default function Moderator() {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
             );
-            if (res.data) {
-                setComments([...comments, res.data]);
-            }
-            // console.log(res);
+            return res.data;
         } catch(e) {
             console.log(e);
         }
-    };
+    }
 
     const fetchData = async () => {
         try {
@@ -52,7 +39,15 @@ export default function Moderator() {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
             );
-            setReportedComments([...reportedComments, ...res.data.results]);
+            let newComments = []
+            for (let comment of res.data.results) {
+                // console.log(comment)
+                let fetchedComment = await fetchComment(comment.id);
+                let newComment = {...comment, content: fetchedComment.content}
+                // console.log(newComment)
+                newComments.push(newComment);
+            }
+            setReportedComments([...reportedComments, ...newComments]);
             console.log("reported comments",reportedComments)
             if(res.data.next) {
                 setNextPage(true);
@@ -60,9 +55,9 @@ export default function Moderator() {
             } else {
                 setNextPage(false);
             }
-            console.log(res);
-            console.log(res.data);
-            console.log(res.data.next)
+            // console.log(res);
+            // console.log(res.data);
+            // console.log(res.data.next)
         } catch (e) {
             console.log(e);
         }
@@ -73,49 +68,6 @@ export default function Moderator() {
             fetchData();
         }
     }
-
-    // const handleScroll = () => {
-    //     if (
-    //         window.innerHeight + document.documentElement.scrollTop ===
-    //         document.documentElement.offsetHeight
-    //     ) {
-    //         if (nextPage) {
-    //             fetchData();
-    //         }
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     window.addEventListener('scroll', handleScroll);
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, [nextPage]);
-
-    // format of reportedComments: 
-    // [
-    //     {
-    //         "id": 1,
-    //         "reported_user": 3,
-    //         "reporter": 8,
-    //         "comment": 6,
-    //         "reason": "cringe"
-    //     },
-    //     {
-    //         "id": 2,
-    //         "reported_user": 3,
-    //         "reporter": 8,
-    //         "comment": 6,
-    //         "reason": "cringe2"
-    //     },
-    //     {
-    //         "id": 3,
-    //         "reported_user": 3,
-    //         "reporter": 8,
-    //         "comment": 6,
-    //         "reason": "cringe3"
-    //     }
-    // ]
     
     const handleDelete = async (id) => {
      
@@ -129,10 +81,11 @@ export default function Moderator() {
                 
             })
             console.log("deleted comment", id)
-
+            setReportedComments(reportedComments.filter((comment) => comment.id != id))
         } catch (error) {
             console.log(error)
         }
+        
     }
     const handleDismiss = async (id) => {
      
@@ -146,6 +99,7 @@ export default function Moderator() {
                 
             })
             console.log("deleted comment", id)
+            setReportedComments(reportedComments.filter((comment) => comment.id != id))
         }catch(error){
             console.log("error deleting comment", error)
         }
@@ -163,20 +117,21 @@ export default function Moderator() {
       {reportedComments.map(reportComment => (
         <div className="reported-comment-item list-group-item list-group-item-action flex-column align-items-start" key={reportComment.id}>
           <div className="d-flex w-100 justify-content-between">
-          <p className="reported-comment-title">Reported Comment: {reportComment.comment}</p>
-          <p className="reported-comment-title">Content: {
-          comments.find((comment) => comment.id === reportComment.comment_id) ? 
-          comments.find((comment) => comment.id === reportComment.comment_id).content : ''
-            }</p>
-          <small className="reported-comment-date">{reportComment.date}</small>
-          <p className="reported-comment-reason mb-1">reason for report: {reportComment.reason}</p>
+            <p className="reported-comment-title">Reported Comment: {reportComment.comment}</p>
+            <p className="reported-comment-title">Content: {reportComment.content}</p>
+            <small className="reported-comment-date">{reportComment.date}</small>
+            <p className="reported-comment-reason mb-1">reason for report: {reportComment.reason}</p>
           </div>
           <button className="btn btn-secondary mr-2" onClick={()=> handleDismiss(reportComment.id)}>Dismiss</button>
           <button className="btn btn-danger" onClick={()=> handleDelete(reportComment.id)}>Delete</button>
         </div>
       ))}
       </div>
-      <button className="load-more-btn btn btn-success mt-3 mb-3" onClick={loadMore}>Load More</button>
+      {nextPage ? 
+      <button className="load-more-btn btn btn-success mt-3 mb-3" onClick={loadMore}>Load More</button> :
+      <></>
+    }
+      
     </div>
     </div> 
     );      
