@@ -1003,7 +1003,22 @@ body .petpalLogo {
     width: 80%;
 }
 
+.not-found-page {
+    height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  .not-found-page h1 {
+    font-size: 6rem;
+    color: #007bff;
+  }
+  
+  .not-found-page p {
+    font-size: 1.5rem;
+    color: #6c757d;
+  }
 
+  
 #root{
     height: 100%;
     display: flex;
