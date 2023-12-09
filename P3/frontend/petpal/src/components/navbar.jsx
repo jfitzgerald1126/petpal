@@ -40,6 +40,34 @@ const Navbar = () => {
 
                 </header>
             }
+            {user && user.type == "moderator" && 
+                <header className="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
+                    <Link to="/moderator" style={{textDecoration:'none'}}>
+                        <a className="petpalLogo fs-3 ms-3 text-white fw-medium text-decoration-none">Petpal</a>
+                    </Link>
+                    <div className="d-flex flex-row">
+                    <div className="notificationDropdown dropdown">
+                        <div className="notificationBell" style={{cursor:'pointer'}} onClick={() => {setNotifOpen(!notifOpen);setDropdownOpen(false)}}>
+                            <img src={bell}/>
+                        </div>
+                        {notifOpen && <div className="dropdown-menu" id="notifications">
+                            <a className="dropdown-item" href="#">You recieved a new message from Annex Dog Rescue <span>| Oct 12, 2023</span></a>
+                            <a className="dropdown-item" href="#">Your adoption application for Ronald was accepted by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
+                            <a className="dropdown-item" href="#">Your adoption application for Bert was rejected by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
+                        </div>}
+                    </div>
+                    <div className="profileDropdown dropdown">
+                        <div className="pfp" style={{cursor:'pointer'}} onClick={() => {setDropdownOpen(!dropdownOpen);setNotifOpen(false)}}>
+                        <img src={'https://i.ibb.co/4jkCqdm/user.png'}/>
+                        </div>
+                        {dropdownOpen && <div className="dropdown-menu" id="profileDropdown">
+                            <a className="dropdown-item" style={{cursor:'pointer'}} onClick={signOut}>Log out</a>
+                        </div>}
+                    </div>
+                    </div>
+
+                </header>
+            }
             {user && user.type == "seeker" && 
                 <header className="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
                     <div className="mx-3 d-flex flex-row">
