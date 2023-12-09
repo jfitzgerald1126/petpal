@@ -7,6 +7,7 @@ from .serializers import (
     SeekerUpdateSerializer,
     ShelterUpdateSerializer,
     ShelterSerializer,
+    UserSerializer,
 )
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -116,6 +117,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         if 'access' in response.data:
             user = User.objects.get(username=request.data['username'])
+            done = False
             try: 
                 seeker = Seeker.objects.get(user=user)
                 data = SeekerSerializer(seeker).data
@@ -125,6 +127,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     'type': 'seeker',
                     'seeker': data,
                 }
+                done = True
             except Seeker.DoesNotExist:
                 pass
             try:
@@ -137,8 +140,15 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     'type': 'shelter',
                     'shelter': data,
                 }
+                done = True
             except Shelter.DoesNotExist:
                 pass
+            
+            if not done and user.is_staff:
+                user_data = {
+                    'type': 'moderator',
+                    'user': UserSerializer(user).data
+                }
 
             response.data['user'] = user_data
 

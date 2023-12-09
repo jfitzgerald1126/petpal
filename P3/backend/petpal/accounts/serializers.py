@@ -7,6 +7,12 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "is_staff"]
+
 class SeekerSerializer(ModelSerializer):
     class Meta:
         model = Seeker
