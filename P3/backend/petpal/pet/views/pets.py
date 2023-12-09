@@ -104,6 +104,8 @@ class SearchPetsView(generics.ListAPIView):
     ordering = ['-listed']
     filter_backends = [PetFilter, filters.SearchFilter, SizeOrderingFilter]
     pagination_class = SearchPetsPagination
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
     def get_queryset(self):
         queryset = Pet.objects.all()

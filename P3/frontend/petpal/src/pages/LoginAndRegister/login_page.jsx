@@ -75,7 +75,7 @@ function LoginPage(){
                     <h4 className="fw-light">Welcome Back User</h4>
                     <p className="display-4 fw-medium">Login to your account</p>
                     {/* <h4 className="fw-light">Dont't have an account ? <a href="index.html" className="landinglink">Register</a></h4> */}
-                    <h4 className="fw-light">Dont't have an account ? <Link to="/" className="landinglink">Register</Link></h4>
+                    <h4 className="fw-light">Dont't have an account ? <Link to="/register" className="landinglink">Register</Link></h4>
                     {/* <!--for now our landing page serves as the way to either register as a user or shelter--> */}
                 </div>
 

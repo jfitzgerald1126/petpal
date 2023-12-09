@@ -4,7 +4,7 @@ import { useUserContext } from '../contexts/UserContext';
 
 const PetCard = ({id, image, status, listed, name, shelter, animal, birthday, description}) => {
     
-    const {shelters} = useUserContext();
+    const {user, shelters} = useUserContext();
 
     const listedDateObj = new Date(listed);
     const formattedListedDate = `${listedDateObj.getMonth() + 1}/${listedDateObj.getDate()}/${listedDateObj.getFullYear()}`;
@@ -31,7 +31,7 @@ const PetCard = ({id, image, status, listed, name, shelter, animal, birthday, de
     }
 
     return (
-        <Link to={`/pet/${id}/`} className='pet-card-link-wrapper'>
+        <Link to={(user?.type == "shelter" || user?.type == "seeker") ? `/pet/${id}/` : '/login'} className='pet-card-link-wrapper'>
             <div className="pet-card">
                 <div className="pet-img">
                     <img src={image ? image : 'https://i.ibb.co/cbb4bJg/dog.png'}/>

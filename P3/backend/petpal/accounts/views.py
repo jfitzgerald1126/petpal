@@ -86,7 +86,8 @@ class ShelterListCreateView(generics.ListCreateAPIView):
 """
     queryset = Shelter.objects.all()
     serializer_class = ShelterCreateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
     def get_serializer_class(self):
         if self.request.method == "GET":

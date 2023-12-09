@@ -40,6 +40,10 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
 
+  useEffect(()=>{
+    fetchShelters()
+  }, [])
+
   const fetchShelters = async () => {
     let url = 'http://127.0.0.1:8000/accounts/shelters'
 
