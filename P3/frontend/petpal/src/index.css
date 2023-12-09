@@ -407,9 +407,10 @@ login-wrapper{
     height: 40px;
     color: white;
     font-size: 20px;
-    background-color: var(--emerald-600);
+    background-color: var(--emerald-500);
     border-radius: 5px;
     margin-left: 20px;
+    border: none;
 }
 
 .pet-adopt-fail-button{

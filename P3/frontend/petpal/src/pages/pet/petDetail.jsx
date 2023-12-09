@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useFetcher, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../common/styles.css';
@@ -21,6 +21,76 @@ function PetDetail(){
         const { user } = useUserContext();
         const authToken = localStorage.getItem('access_token');
         const navigate = useNavigate();
+
+        const [app2DropdownOpen, setApp2DropdownOpen] = useState(false)
+        const [sort, setSort] = useState('-modified_date')
+        const [appDropdownOpen, setAppDropdownOpen] = useState(false)
+        const [appType, setAppType] = useState('pending')
+        const [applications, setApplicationsData] = useState(null);
+
+        const sort_mapping = {
+            'created_date': 'Created',
+            '-created_date': 'Created Desc',
+            'modified_date': 'Modified',
+            '-modified_date': 'Modified Desc',
+        }
+
+        const fetchApps = async (pagedUrl) => {
+            let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/pets/applications/'
+            let user_url = 'http://127.0.0.1:8000/accounts/seekers/'
+    
+            const params = {
+                'status': appType,
+                'shelter': user.shelter.id,
+                'sort': sort,
+                'pet': id,
+            }
+    
+            try {
+                const accumulator = []
+                const authToken = localStorage.getItem('access_token')
+                
+                const response = await axios.get(url, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                    params: params,
+                });
+                for (let i=0;i<response.data.results.length;i++) {
+                    const app = response.data.results[i]
+                    const seeker_response = await axios.get(user_url + app.seeker, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        }
+                    })
+                    app.pet_name = pet.name
+                    console.log(seeker_response)
+                    app.seeker_name = seeker_response.data.first_name
+                    app.seeker_email = seeker_response.data.email
+                    accumulator.push(response.data.results[i])
+                }
+                setApplicationsData({
+                    next: response.data.next,
+                    previous: response.data.previous, 
+                    results: accumulator
+                })
+            } catch (error) {
+              setError(error);
+            }
+        }
+
+        useEffect(() => {
+            if (isOwner) {
+                fetchApps()
+            }
+        }, [sort, appType])
+
+        useEffect(() => {
+            if (isOwner) {
+                fetchApps()
+            }
+        }, [isOwner])
+    
 
         useEffect(() => {
             setLoading(true);
@@ -166,7 +236,7 @@ function PetDetail(){
                         <>
                         <div className="listing-card-grid">
                             {petListData.results.length == 0 && 
-                                <div>NO RESULTS FOUND</div>
+                                <div>No friends found</div>
                             }
                             {petListData.results?.map((pet) => {
                                     return (
@@ -244,15 +314,96 @@ function PetDetail(){
       </div>
       </div>
     </div>
+
+
+
+    <div id="applications" className="px-5 mt-5 mb-2 d-flex flex-column align-items-start" style={{width:'50%', minWidth:300}}>
+                <div className="d-flex flex-row">
+                    <h1 className="text-zinc-700 fs-3 fw-bold">Applications</h1>
+                </div>
+                <div className="d-flex flex-row mt-3" style={{gap:10}}>
+                <div className="dropdown" style={{position:'relative'}}>
+                    <button className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setAppDropdownOpen(!appDropdownOpen)} id="dropdownMenuButton" data-expanded="false">
+                        {appType}
+                    </button>
+                        {appDropdownOpen && 
+                            <div className="dropdown-menu dropdown-menu-right-screen-edge" id="dropdownMenu">
+                                <a className="dropdown-item" href="#" onClick={() => {setAppType('pending'); setAppDropdownOpen(false)}}>Pending</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setAppType('accepted'); setAppDropdownOpen(false)}}>Accepted</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setAppType('denied'); setAppDropdownOpen(false)}}>Denied</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setAppType('withdrawn'); setAppDropdownOpen(false)}}>Withdrawn</a>
+                            </div>
+                        }
+                    </div>
+                    <div className="dropdown" style={{position:'relative', marginBottom: 20,}}>
+
+                    <button className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setApp2DropdownOpen(!app2DropdownOpen)} id="dropdownMenuButton" data-expanded="false">
+                        {sort_mapping[sort]}
+                    </button>
+                        {app2DropdownOpen && 
+                            <div className="dropdown-menu dropdown-menu-left-screen-edge" id="dropdownMenu">
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('created_date'); setApp2DropdownOpen(false)}}>Created</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('modified_date'); setApp2DropdownOpen(false)}}>Modified</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('-created_date'); setApp2DropdownOpen(false)}}>Created Desc</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('-modified_date'); setApp2DropdownOpen(false)}}>Modified Desc</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            <div className="pending-applications">
+              {applications?.results?.length > 0 ? 
+              <>
+              <table className="table application-table w-100 mt-2">
+                <thead>
+                  <tr>
+                    <th scope="col">Applicant</th>
+                    <th scope="col">Pet</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Application</th>
+                  </tr>
+                </thead>
+                {applications?.results.map((app) => {
+                     const inputDate = new Date(app.created_date);
+                     const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(inputDate.getDate()).padStart(2, '0');
+                    const year = inputDate.getFullYear();
+                    const formattedDate = `${month}/${day}/${year}`;
+
+                    return (
+                        <tr>
+                            <td>{app.seeker_name}</td>
+                            <td>{app.pet_name}</td>
+                            <td>{formattedDate}</td>
+                            <td>{app.seeker_email}</td>
+                            <td>{app.status}</td>
+                            <td><Link to={`/application/${app.id}`}>View application</Link></td>
+                        </tr>
+                    )
+                })}
+              </table>
+              <div style={{display:'flex', flexDirection:'row', gap:10}}> 
+                {applications?.previous && <button className='pagination-btn' onClick={()=>fetchApps(applications?.previous)} >{'<'} Previous</button>}
+                {applications?.next && <button className='pagination-btn' onClick={()=>fetchApps(applications?.next)}>Next {'>'}</button>}
+            </div>
+              </>: 
+                <span>No applications found</span>
+              }
+            </div>
+          </div>
+
+
+
     <div className="pet-info-container d-flex flex-row">
     <Link to={`edit`}><button class="edit-listing-button">Edit Listing</button></Link>
-    <button className="delete-listing-button" onClick={handleDeletePet}>Delete Listing</button>
+    <button className="delete-listing-button" style={{border:'none'}} onClick={handleDeletePet}>Delete Listing</button>
   </div>
   </div>
   </div>
             
             
-                );
+    );
     }
 }
 

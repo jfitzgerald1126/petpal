@@ -145,13 +145,6 @@ const ShelterProfilePage = () => {
         }
     }, [user])
 
-    const app_mapping = {
-        'pending': [pendingApps, setPendingApps],
-        'accepted': [acceptedApps, setAcceptedApps],
-        'denied': [deniedApps, setDeniedApps],
-        'withdrawn': [withdrawnApps, setWithdrawnApps]
-    }
-
     const sort_mapping = {
         'created_date': 'Created',
         '-created_date': 'Created Desc',

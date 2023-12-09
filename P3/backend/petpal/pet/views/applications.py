@@ -71,6 +71,10 @@ class ApplicationListView(ListAPIView):
             if application_status:
                 query = query.filter(status=application_status)
 
+            pet = self.request.GET.get('pet')
+            if pet:
+                query = query.filter(pet=pet)
+
             # sort
             sort_by = self.request.GET.get('sort')
             print(sort_by)
