@@ -8,6 +8,7 @@ import '../../common/styles.css';
 export default function Moderator() {
     const [reportedComments, setReportedComments] = useState([]);
     const [nextPage, setNextPage] = useState(false);
+    const [comments, setComments] = useState([]);
 
     // use next and prev page to determine whether to show the buttons to navigate to the next and previous pages
     const [page, setPage] = useState(1);
@@ -26,6 +27,7 @@ export default function Moderator() {
     }, [reportedComments]);
 
     const fetchComments = async(comment_id) => {
+        setComments([]);
         try {
             const res = await axios.get(
                 `${BASE_URL}comments/specific_review/${comment_id}/`,
@@ -33,11 +35,14 @@ export default function Moderator() {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
             );
-            console.log(res);
+            if (res.data) {
+                setComments([...comments, res.data]);
+            }
+            // console.log(res);
         } catch(e) {
             console.log(e);
         }
-    }
+    };
 
     const fetchData = async () => {
         try {
@@ -159,7 +164,10 @@ export default function Moderator() {
         <div className="reported-comment-item list-group-item list-group-item-action flex-column align-items-start" key={reportComment.id}>
           <div className="d-flex w-100 justify-content-between">
           <p className="reported-comment-title">Reported Comment: {reportComment.comment}</p>
-          <p className="reported-comment-title">ReportedCommet id: {reportComment.id}</p>
+          <p className="reported-comment-title">Content: {
+          comments.find((comment) => comment.id === reportComment.comment_id) ? 
+          comments.find((comment) => comment.id === reportComment.comment_id).content : ''
+            }</p>
           <small className="reported-comment-date">{reportComment.date}</small>
           <p className="reported-comment-reason mb-1">reason for report: {reportComment.reason}</p>
           </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles.css'; // Make sure to create this CSS file
+import '../common/styles.css'; // Make sure to create this CSS file
 
 const NotFoundPage = () => {
   return (
