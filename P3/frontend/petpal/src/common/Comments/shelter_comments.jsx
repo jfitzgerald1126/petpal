@@ -8,10 +8,9 @@ import axios from 'axios'
 import { useUserContext } from '../../contexts/UserContext.jsx';
 
 import { BASE_URL } from '../../api/constants.js';
-function ShelterComments(){
+function ShelterComments({shelter_id}) {
 
 
-    let {shelter_id} = useParams()
     console.log("shelter_id",shelter_id)
     let base_url = BASE_URL
     let shelter_comments_append=`comments/review/${shelter_id}/`
@@ -25,35 +24,32 @@ function ShelterComments(){
     console.log("next page url", nextPageUrl)
     console.log("previous page url", previousPageUrl)
 
+
+    const fetch_comments = async () => {
+        console.log("fetching comment data")
+        try{
+            const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+            if(response.data.next !== null){
+                setNextPageUrl(response.data.next)
+            }
+            if(response.data.previous !== null){
+                setPreviousPageUrl(response.data.previous)
+            }
+            // console.log("response",response.data)
+            const comments_list = response.data.results
+            setCommentData(comments_list)
+                // console.log(response.results)
+        } catch(error){
+            console.log("error retrieving comments",error)
+        }
+        console.log("finished fetching data")
+    };
+
     useEffect(() => {
-        let is_mounted = true;
         if(localStorage.getItem('access_token') === null){
             navigate('/login/')
         }
-        const fetch_comments = async () => {
-            console.log("fetching comment data")
-            try{
-                const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
-                if(response.data.next !== null){
-                    setNextPageUrl(response.data.next)
-                }
-                if(response.data.previous !== null){
-                    setPreviousPageUrl(response.data.previous)
-                }
-                // console.log("response",response.data)
-                if(is_mounted){
-                    const comments_list = response.data.results
-                    setCommentData(comments_list)
-                    // console.log(response.results)
-                }
-            } catch(error){
-                console.log("error retrieving comments",error)
-            }
-            console.log("finished fetching data")
-        };
         fetch_comments();
-        return () => {is_mounted = false}
-        // cleanup function 
     },[])
     console.log("comment data: ",comment_data)
 
@@ -176,7 +172,11 @@ function ShelterComments(){
                 headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
 
             })
-            console.log("posted comment!")
+            fetch_comments()
+            document.getElementById("text_input").value=""
+            setCommentRating(0)
+            alert("Review added successfully")
+            window.location.reload()
             }catch(error){
                 console.log("error posting comment",error)
             }
@@ -187,7 +187,22 @@ function ShelterComments(){
     return <>
         
         <div className="super-wrapper w-100 h-100 d-flex flex-column">
-            
+        <div className="comment-wrapper" >
+                <form className="rounded pt-3 d-flex" style={{flexDirection:'column', gap:10}} method="post" onSubmit={update_comments}>
+                    <input id="text_input" type="text" class="message-field rounded" placeholder="Type something..." onChange={handle_content}/>
+                    <select id="rating_select" value={comment_rating} onChange={handle_rating}>
+                        <option value={0}>Rating</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
+                    <button className="btn btn-success rounded-oval" type="submit" >
+                        Add Review
+                    </button>
+                </form>
+            </div>
             <div id="all-comments h-100">
                 {
                     formattedCommentData.map((comment, index) => {
@@ -213,22 +228,7 @@ function ShelterComments(){
                     }
 
                 </div>
-            <div className="comment-wrapper" >
-                <form className="rounded pt-3 d-flex flex-row " method="post" onSubmit={update_comments}>
-                    <input type="text" class="message-field rounded" placeholder="Type something..." onChange={handle_content}/>
-                    <select id="rating_select" value={comment_rating} onChange={handle_rating}>
-                        <option value={0}>Rating</option>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                    </select>
-                    <button className="btn btn-success rounded-oval" type="submit" >
-                        Add Review
-                    </button>
-                </form>
-            </div>
+           
             
         </div>
     

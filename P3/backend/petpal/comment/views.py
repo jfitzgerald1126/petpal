@@ -44,7 +44,10 @@ class ShelterCommentCreate(ListCreateAPIView):
         # print(self.request.user.id, shelter.user_id)
         self.check_object_permissions(self.request, shelter)
         # im not sure why you need to explicitly check permissions here but it wont work without it
-        serializer.save(shelter_id=shelter, commenter_id=commenter)
+        new_comment = serializer.save(shelter_id=shelter, commenter_id=commenter)
+        shelter.rating = (shelter.rating * shelter.num_ratings + new_comment.rating) / (shelter.num_ratings + 1)
+        shelter.num_ratings += 1
+        shelter.save()
         # set the shelter_id of the comment to the shelter object
 
 class CantDoThisLmao(PermissionDenied):
