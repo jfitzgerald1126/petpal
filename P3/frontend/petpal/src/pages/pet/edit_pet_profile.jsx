@@ -138,6 +138,12 @@ function EditPetProfile() {
                                 <select name="animal" onChange={handleChange} className="form-select bg-zinc-100 text-zinc-500" id="animal" value={profile.animal}>
                                     <option value="dog">Dog</option>
                                     <option value="cat">Cat</option>
+                                    <option value="bear">Bear</option>
+                                    <option value="turtle">Turtle</option>
+                                    <option value="rabbit">Rabbit</option>
+                                    <option value="snake">Snake</option>
+                                    <option value="lizard">Lizard</option>
+                                    <option value="hamster">Hamster</option>
                                     <option value="other">Other</option>
                                 </select>
                                 {errorMessages.animal && <div className="text-danger">{errorMessages.animal}</div>}

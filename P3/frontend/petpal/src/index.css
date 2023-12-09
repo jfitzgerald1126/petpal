@@ -571,9 +571,7 @@ login-wrapper{
 }
 
 html body .application-table{
-    overflow-y: scroll !important;
-    max-height: 100px !important;
-    width: fit-content !important;
+    height: fit-content;
 }
 
 .application-table tr {
@@ -690,7 +688,7 @@ html body .application-table{
   gap: 1rem;
 }
 
-.pagination-button-container > button {
+.pagination-button-container > button, .pagination-btn {
     padding: 5px 20px;
     color: var(--zinc-700);
     border: 1px solid var(--zinc-400);
@@ -880,10 +878,6 @@ table a {
     align-items: center;
 }
 
-.application-wrapper {
-    max-height: 300px;
-    overflow-y: auto;
-}
 
 @media screen and (max-width: 800px) {
     /* SEARCH */

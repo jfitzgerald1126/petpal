@@ -7,10 +7,57 @@ import { Link } from 'react-router-dom';
 const SeekerProfilePage = () => {
     const { user } = useUserContext();
     const [data, setData] = useState(null);
-    const [applications, setApplicationsData] = useState([]);
+    const [applications, setApplicationsData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [appDropdownOpen, setAppDropdownOpen] = useState(false)
+    const [app2DropdownOpen, setApp2DropdownOpen] = useState(false)
+    const [status, setStatus] = useState('pending')
+    const [sort, setSort] = useState('-modified_date')
     const authToken = localStorage.getItem('access_token');
+
+
+
+    const fetchApps = async (pagedUrl) => {
+        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/pets/applications/'
+        let pet_url = 'http://127.0.0.1:8000/pets/pet/'
+
+        
+        const params = {
+            'status': status,
+            'sort': sort
+        }
+
+        try {
+            const accumulator = []
+            const authToken = localStorage.getItem('access_token')
+            
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                params: params,
+            });
+            for (let i=0;i<response.data.results.length;i++) {
+                const app = response.data.results[i]
+                const pet_response = await axios.get(pet_url + app.pet, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    }
+                })
+                
+                app.pet_name = pet_response.data.name
+                accumulator.push(response.data.results[i])
+            }
+            setApplicationsData({
+                next: response.data.next,
+                previous: response.data.previous, 
+                results: accumulator
+            })
+        } catch (error) {
+          setError(error);
+        }
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -19,28 +66,10 @@ const SeekerProfilePage = () => {
         const fetchSeekerProfile = axios.get(`http://localhost:8000/accounts/seekers/${user.seeker.id}/`, {
             headers: { Authorization: `Bearer ${authToken}` }
         });
-        const fetchApplications = axios.get(`http://localhost:8000/pets/applications/`, {
-            headers: { Authorization: `Bearer ${authToken}` }
-        });
     
-        Promise.all([fetchSeekerProfile, fetchApplications])
-            .then(([profileResponse, applicationsResponse]) => {
+        Promise.all([fetchSeekerProfile])
+            .then(([profileResponse]) => {
                 setData(profileResponse.data);
-                // Fetch pet data for each application
-                const petPromises = applicationsResponse.data.results.map(application =>
-                    axios.get(`http://localhost:8000/pets/pet/${application.pet}/`, {
-                        headers: { Authorization: `Bearer ${authToken}` }
-                    })
-                );
-    
-                return Promise.all(petPromises).then(pets => {
-                    const applicationsWithPets = applicationsResponse.data.results.map((application, index) => ({
-                        ...application,
-                        petData: pets[index].data
-                    }));
-                    console.log(applicationsWithPets)
-                    setApplicationsData(applicationsWithPets);
-                });
             })
             .catch(error => {
                 setError(error);
@@ -49,7 +78,20 @@ const SeekerProfilePage = () => {
             .finally(() => {
                 setLoading(false);
             });
+            fetchApps()
     }, [user, authToken]);
+
+    const sort_mapping = {
+        'created_date': 'Created',
+        '-created_date': 'Created Desc',
+        'modified_date': 'Modified',
+        '-modified_date': 'Modified Desc',
+    }
+
+
+    useEffect(() => {
+        fetchApps()
+    }, [status, sort])
 
     if (loading) {
         return <div>Loading...</div>;
@@ -95,7 +137,39 @@ const SeekerProfilePage = () => {
       <h1 className="d-flex w-75">Your Applications</h1>
       <div className="application-wrapper w-75">
 
-      <table className="table application-table w-100">
+      <div className="d-flex flex-row" style={{gap:10}}>
+      <div className="dropdown" style={{position:'relative', marginBottom: 20,}}>
+
+        <button className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setAppDropdownOpen(!appDropdownOpen)} id="dropdownMenuButton" data-expanded="false">
+            {status}
+        </button>
+            {appDropdownOpen && 
+                <div className="dropdown-menu dropdown-menu-left-screen-edge" id="dropdownMenu">
+                    <a className="dropdown-item" href="#" onClick={() => {setStatus('pending'); setAppDropdownOpen(false)}}>Pending</a>
+                    <a className="dropdown-item" href="#" onClick={() => {setStatus('accepted'); setAppDropdownOpen(false)}}>Accepted</a>
+                    <a className="dropdown-item" href="#" onClick={() => {setStatus('denied'); setAppDropdownOpen(false)}}>Denied</a>
+                    <a className="dropdown-item" href="#" onClick={() => {setStatus('withdrawn'); setAppDropdownOpen(false)}}>Withdrawn</a>
+                </div>
+            }
+        </div>
+        <div className="dropdown" style={{position:'relative', marginBottom: 20,}}>
+
+        <button className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setApp2DropdownOpen(!app2DropdownOpen)} id="dropdownMenuButton" data-expanded="false">
+            {sort_mapping[sort]}
+        </button>
+            {app2DropdownOpen && 
+                <div className="dropdown-menu dropdown-menu-left-screen-edge" id="dropdownMenu">
+                    <a className="dropdown-item" href="#" onClick={() => {setSort('created_date'); setApp2DropdownOpen(false)}}>Created</a>
+                    <a className="dropdown-item" href="#" onClick={() => {setSort('modified_date'); setApp2DropdownOpen(false)}}>Modified</a>
+                    <a className="dropdown-item" href="#" onClick={() => {setSort('-created_date'); setApp2DropdownOpen(false)}}>Created Desc</a>
+                    <a className="dropdown-item" href="#" onClick={() => {setSort('-modified_date'); setApp2DropdownOpen(false)}}>Modified Desc</a>
+                </div>
+            }
+        </div>
+        </div>
+        {applications?.results?.length > 0 ? 
+                <>
+                    <table className="table application-table w-100">
                     <thead>
                         <tr>
                             <th scope="col">Pet</th>
@@ -108,10 +182,10 @@ const SeekerProfilePage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {applications && applications.map((application, index) => (
+                        {applications?.results?.map((application, index) => (
                             <tr key={index}>
-                                <th scope="row">{application.petData.name}</th>
-                                <td>{application.description}</td>
+                                <th scope="row">{application.pet_name}</th>
+                                <td>{application.description.length < 20 ? application.description : application.description.slice(0, 20) + '...'}</td>
                                 <td>{application.created_date}</td>
                                 <td>{application.modified_date}</td>
                                 <td>{application.preferred_contact}</td>
@@ -124,6 +198,14 @@ const SeekerProfilePage = () => {
                         ))}
                     </tbody>
                 </table>
+                <div style={{display:'flex', flexDirection:'row', gap:10}}> 
+                    {applications?.previous && <button className='pagination-btn' onClick={()=>fetchApps(applications?.previous)}>{'<'} Previous</button>}
+                    {applications?.next && <button className='pagination-btn' onClick={()=>fetchApps(applications?.next)} >Next {'>'}</button>}
+                </div>
+                </>
+                : 
+                <span>No applications found</span>
+        }
 
       </div>
 

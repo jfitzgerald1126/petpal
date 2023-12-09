@@ -14,15 +14,18 @@ const ShelterProfilePage = () => {
     const [shelter, setShelter] = useState(null)
     const [activePets, setActivePets] = useState([])
     const [withdrawnPets, setWithdrawnPets] = useState([])
-    const [pendingApps, setPendingApps] = useState([])
-    const [acceptedApps, setAcceptedApps] = useState([])
-    const [deniedApps, setDeniedApps] = useState([])
+    const [pendingApps, setPendingApps] = useState(null)
+    const [acceptedApps, setAcceptedApps] = useState(null)
+    const [deniedApps, setDeniedApps] = useState(null)
     const [withdrawnApps, setWithdrawnApps] = useState([])
     const [adoptedPets, setAdoptedPets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
+    const [app2DropdownOpen, setApp2DropdownOpen] = useState(false)
+    const [sort, setSort] = useState('-modified_date')
     const [appDropdownOpen, setAppDropdownOpen] = useState(false)
     const [appType, setAppType] = useState('pending')
+    const [applications, setApplicationsData] = useState(null);
 
 
     const fetchData = async () => {
@@ -79,63 +82,58 @@ const ShelterProfilePage = () => {
         }
     }
 
-    const fetchApps = async (status, setApps) => {
-        let url = 'http://127.0.0.1:8000/pets/applications/'
+    const fetchApps = async (pagedUrl) => {
+        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/pets/applications/'
         let pet_url = 'http://127.0.0.1:8000/pets/pet/'
         let user_url = 'http://127.0.0.1:8000/accounts/seekers/'
 
         const params = {
-            'status': status,
+            'status': appType,
             'shelter': user.shelter.id,
+            'sort': sort
         }
 
         try {
             const accumulator = []
             const authToken = localStorage.getItem('access_token')
             
-            while (true) {
-                const response = await axios.get(url, {
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                params: params,
+            });
+            for (let i=0;i<response.data.results.length;i++) {
+                const app = response.data.results[i]
+                const pet_response = await axios.get(pet_url + app.pet, {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
-                    },
-                    params: params,
-                });
-                for (let i=0;i<response.data.results.length;i++) {
-                    const app = response.data.results[i]
-                    const pet_response = await axios.get(pet_url + app.pet, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                        }
-                    })
-                    const seeker_response = await axios.get(user_url + app.seeker, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                        }
-                    })
-                    app.pet_name = pet_response.data.name
-                    console.log(seeker_response)
-                    app.seeker_name = seeker_response.data.first_name
-                    app.seeker_email = seeker_response.data.email
-                    accumulator.push(response.data.results[i])
-                }
-                if (!response.data.next) {
-                    break;
-                }
-                else {
-                    url = response.data.next
-                }
+                    }
+                })
+                const seeker_response = await axios.get(user_url + app.seeker, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    }
+                })
+                app.pet_name = pet_response.data.name
+                console.log(seeker_response)
+                app.seeker_name = seeker_response.data.first_name
+                app.seeker_email = seeker_response.data.email
+                accumulator.push(response.data.results[i])
             }
-
-            setApps(accumulator);
+            setApplicationsData({
+                next: response.data.next,
+                previous: response.data.previous, 
+                results: accumulator
+            })
         } catch (error) {
           setError(error);
         }
     }
 
-
-    // useEffect(() => {
-    //     console.log(apps)
-    // }, [apps])
+    useEffect(() => {
+        fetchApps()
+    }, [sort, appType])
 
     useEffect(() => {
         if (user?.type == "shelter") {
@@ -143,18 +141,22 @@ const ShelterProfilePage = () => {
             fetchPets('available', setActivePets);
             fetchPets('withdrawn', setWithdrawnPets);
             fetchPets('adopted', setAdoptedPets);
-            fetchApps('pending', setPendingApps);
-            fetchApps('accepted', setAcceptedApps);
-            fetchApps('denied', setDeniedApps);
-            fetchApps('withdrawn', setWithdrawnApps);
+            fetchApps();
         }
     }, [user])
 
     const app_mapping = {
-        'pending': pendingApps,
-        'accepted': acceptedApps,
-        'denied': deniedApps,
-        'withdrawn': withdrawnApps
+        'pending': [pendingApps, setPendingApps],
+        'accepted': [acceptedApps, setAcceptedApps],
+        'denied': [deniedApps, setDeniedApps],
+        'withdrawn': [withdrawnApps, setWithdrawnApps]
+    }
+
+    const sort_mapping = {
+        'created_date': 'Created',
+        '-created_date': 'Created Desc',
+        'modified_date': 'Modified',
+        '-modified_date': 'Modified Desc',
     }
 
 
@@ -189,8 +191,10 @@ const ShelterProfilePage = () => {
             <div id="applications" className="w-100 px-5 mt-5 mb-2 d-flex flex-column align-items-start">
                 <div className="d-flex flex-row">
                     <h1 className="text-zinc-700 fs-3 fw-bold">Applications</h1>
-                    <div className="dropdown" style={{position:'relative'}}>
-                    <button style={{marginLeft:20}} className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setAppDropdownOpen(!appDropdownOpen)} id="dropdownMenuButton" data-expanded="false">
+                </div>
+                <div className="d-flex flex-row mt-3" style={{gap:10}}>
+                <div className="dropdown" style={{position:'relative'}}>
+                    <button className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setAppDropdownOpen(!appDropdownOpen)} id="dropdownMenuButton" data-expanded="false">
                         {appType}
                     </button>
                         {appDropdownOpen && 
@@ -202,9 +206,25 @@ const ShelterProfilePage = () => {
                             </div>
                         }
                     </div>
+                    <div className="dropdown" style={{position:'relative', marginBottom: 20,}}>
+
+                    <button className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setApp2DropdownOpen(!app2DropdownOpen)} id="dropdownMenuButton" data-expanded="false">
+                        {sort_mapping[sort]}
+                    </button>
+                        {app2DropdownOpen && 
+                            <div className="dropdown-menu dropdown-menu-left-screen-edge" id="dropdownMenu">
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('created_date'); setApp2DropdownOpen(false)}}>Created</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('modified_date'); setApp2DropdownOpen(false)}}>Modified</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('-created_date'); setApp2DropdownOpen(false)}}>Created Desc</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setSort('-modified_date'); setApp2DropdownOpen(false)}}>Modified Desc</a>
+                            </div>
+                        }
+                    </div>
                 </div>
             <div className="pending-applications">
-              {app_mapping[appType].length > 0 ? <table className="table application-table w-100 mt-2">
+              {applications?.results?.length > 0 ? 
+              <>
+              <table className="table application-table w-100 mt-2">
                 <thead>
                   <tr>
                     <th scope="col">Applicant</th>
@@ -215,7 +235,7 @@ const ShelterProfilePage = () => {
                     <th scope="col">Application</th>
                   </tr>
                 </thead>
-                {app_mapping[appType].map((app) => {
+                {applications?.results.map((app) => {
                      const inputDate = new Date(app.created_date);
                      const month = String(inputDate.getMonth() + 1).padStart(2, '0');
                     const day = String(inputDate.getDate()).padStart(2, '0');
@@ -233,7 +253,12 @@ const ShelterProfilePage = () => {
                         </tr>
                     )
                 })}
-              </table>: 
+              </table>
+              <div style={{display:'flex', flexDirection:'row', gap:10}}> 
+                {applications?.previous && <button className='pagination-btn' onClick={()=>fetchApps(applications?.previous)} >{'<'} Previous</button>}
+                {applications?.next && <button className='pagination-btn' onClick={()=>fetchApps(applications?.next)}>Next {'>'}</button>}
+            </div>
+              </>: 
                 <span>No applications found</span>
               }
             </div>

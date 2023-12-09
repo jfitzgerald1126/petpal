@@ -127,6 +127,12 @@ export default function ListPet() {
                   <option value="" disabled>Select animal</option>
                   <option value="dog">Dog</option>
                   <option value="cat">Cat</option>
+                  <option value="bear">Bear</option>
+                  <option value="turtle">Turtle</option>
+                  <option value="rabbit">Rabbit</option>
+                  <option value="snake">Snake</option>
+                  <option value="lizard">Lizard</option>
+                  <option value="hamster">Hamster</option>
                   <option value="other">Other</option>
                 </select>
               </div>
