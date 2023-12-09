@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '3.145.152.13'
+    'localhost', 
+    '127.0.0.1'
 ]
 
 REST_FRAMEWORK = {
