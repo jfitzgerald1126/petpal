@@ -24,7 +24,7 @@ class Comment(models.Model):
     )
     content = models.TextField(default="")
     date = models.DateTimeField(auto_now_add=True)
-
+    reported = models.BooleanField(default=False)
     # def __str__(self):
     #     return f"{self.name}"
 
@@ -40,3 +40,11 @@ class ApplicationComment(models.Model):
         #     raise PermissionDenied
         self.application.save()
         super().save(*args, **kwargs)
+
+
+
+class ReportComment(models.Model):
+    reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reporter")
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    reason= models.TextField(default="", blank=False, null=False)
