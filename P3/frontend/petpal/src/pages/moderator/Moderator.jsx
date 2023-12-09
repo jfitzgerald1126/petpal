@@ -32,7 +32,7 @@ export default function Moderator() {
                 {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
-            )
+            );
             console.log(res);
         } catch(e) {
             console.log(e);
@@ -160,6 +160,7 @@ export default function Moderator() {
           <div className="d-flex w-100 justify-content-between">
           <p className="reported-comment-title">Reported Comment: {reportComment.comment}</p>
           <p className="reported-comment-title">ReportedCommet id: {reportComment.id}</p>
+          <small className="reported-comment-date">{reportComment.date}</small>
           <p className="reported-comment-reason mb-1">reason for report: {reportComment.reason}</p>
           </div>
           <button className="btn btn-secondary mr-2" onClick={()=> handleDismiss(reportComment.id)}>Dismiss</button>

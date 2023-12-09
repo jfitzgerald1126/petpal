@@ -120,6 +120,12 @@ class ApplicationCommentRetreive(RetrieveAPIView):
             if application.seeker != seeker:
                 raise CantDoThisLmao('You are not the applicant for this pet')
         return application_comment
+    
+
+
+class ReportCommentPagination(pagination.PageNumberPagination):
+    page_size = 10
+
 
 
 class ReportCommentCreate(CreateAPIView):
@@ -145,6 +151,7 @@ class ReportCommentList(ListAPIView):
 """
     serializer_class = ReportCommentSerializer
     permission_classes = [IsAdminUser]
+    pagination_class = ReportCommentPagination
     # only admins can see the report comment listed
     def get_queryset(self):
         return ReportComment.objects.filter()
