@@ -81,6 +81,9 @@ const Navbar = () => {
                         <HashLink to="/profile#applications" style={{textDecoration:'none'}}>
                             <a className="text-white fw-medium text-decoration-none">Applications</a>
                         </HashLink>
+                        <Link to="/shelters" style={{textDecoration:'none'}}>
+                            <a className="text-white fw-medium text-decoration-none">Shelters</a>
+                        </Link>
                     </div>
                     </div>
                     <div className="d-flex flex-row">
@@ -124,6 +127,9 @@ const Navbar = () => {
                         <HashLink to="/profile#applications" style={{textDecoration:'none'}}>
                             <a className="text-white fw-medium text-decoration-none">Applications</a>
                         </HashLink>
+                        <Link to="/shelters" style={{textDecoration:'none'}}>
+                            <a className="text-white fw-medium text-decoration-none">Shelters</a>
+                        </Link>
                     </div>
                     </div>
                     <div className="d-flex flex-row">

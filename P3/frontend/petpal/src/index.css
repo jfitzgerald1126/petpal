@@ -143,6 +143,15 @@ body{
     justify-content: center;
 }
 
+.page-container2 {
+    width: 100vw !important;
+    height: calc(100vh - 90px) !important;
+    margin-top: 90px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+}
+
 .content-container{
     width: 100vw !important;
     height: 100vh !important;
@@ -432,6 +441,53 @@ login-wrapper{
     font-weight: 500;
     color: var(--zinc-500);
     border:1px solid var(--zinc-400);
+}
+
+.shelterList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.shelterCard {
+    width: 500px;
+    height: 200px;
+    padding: 20px;
+    background-color: var(--zinc-200);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.shelterImg {
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.shelterImg img {
+    object-fit: cover;
+    height: 160px;
+    width: 160px;
+}
+
+.shelterInformation {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.shelterInformation h1 {
+    font-size: 20px;
+    color: var(--zinc-600);   
+}
+
+.shelterInformation span {
+    color: var(--zinc-600);   
+    font-size: 12px;
 }
 
 .view-app-button{

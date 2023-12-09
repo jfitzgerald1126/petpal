@@ -28,6 +28,7 @@ import EditPetDetail from './pages/pet/edit_pet_profile';
 
 import ProfilePage from './pages/Profile/ProfilePage'
 import ProfileEditPage from './pages/Profile/ProfileEditPage';
+import ShelterListPage from './pages/Shelter/ShelterList';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
               
               <Route path='application/:id/' element={<ViewApplication />}/>
 
+              <Route path='shelters' element={<ShelterListPage />}/>
               {/* <Route path="test/:shelter_id/" element={<TestPage/>}/> */}
               {/* <Route path="testhome/" element={<TestHomePage/>}/> */}
               {/* <Route path="seekers/:id" element={<SeekerProfile />} /> */}

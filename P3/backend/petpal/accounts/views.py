@@ -11,7 +11,7 @@ from .serializers import (
 )
 from django.contrib.auth.models import User
 from rest_framework.response import Response
-from rest_framework import status, generics
+from rest_framework import status, generics, pagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from pet.models import Application
 from django.http import HttpResponse
@@ -80,11 +80,14 @@ class SeekerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class ShelterPagination(pagination.PageNumberPagination):
+    page_size = 5
 
 class ShelterListCreateView(generics.ListCreateAPIView):
     """Creates a shelter on POST Request, lists all shelters on GET Request
 
 """
+    pagination_class = ShelterPagination
     queryset = Shelter.objects.all()
     serializer_class = ShelterCreateSerializer
     permission_classes = [AllowAny]

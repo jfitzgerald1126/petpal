@@ -49,17 +49,25 @@ export const UserProvider = ({ children }) => {
 
     try {
       const authToken = localStorage.getItem('access_token')
-      const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-      });
-      console.log(response)
-      const obj = {}
-      response.data.map((shelter) => {
-        obj[shelter['id']] = shelter
-      })
-      setShelters(obj);
+      let accum = {}
+      while (true) {
+          const response = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+        });
+        console.log(response)
+        response.data.results.map((shelter) => {
+          accum[shelter['id']] = shelter
+        })
+        if (response.data.next) {
+          url = response.data.next
+        }
+        else {
+          break
+        }
+      }
+      setShelters(accum);
     }
     catch {
       setShelters({})
