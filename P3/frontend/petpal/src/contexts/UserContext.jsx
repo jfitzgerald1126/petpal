@@ -54,6 +54,7 @@ export const UserProvider = ({ children }) => {
             Authorization: `Bearer ${authToken}`,
           },
       });
+      console.log(response)
       const obj = {}
       response.data.map((shelter) => {
         obj[shelter['id']] = shelter

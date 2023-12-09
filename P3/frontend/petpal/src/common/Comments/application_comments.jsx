@@ -25,12 +25,12 @@ function ApplicationComments(){
         console.log("fetching message data")
         try{
             const response = await axios.get(base_url+application_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
-            if(response.data.next !== null){
+            // if(response.data.next !== null){
                 setNextPageUrl(response.data.next)
-            }
-            if(response.data.previous !== null){
+            // }
+            // if(response.data.previous !== null){
                 setPreviousPageUrl(response.data.previous)
-            }
+            // }
             setApplicationComments(response.data.results)
         } catch(error){
             console.log("error retrieving messages",error)
@@ -121,6 +121,7 @@ function ApplicationComments(){
                 
             })
             fetch_messages()
+            console.log('aASDASDASDASDASD')
             document.getElementById('message_input').value = ""
             console.log("message sent, success")
         }catch(error){
@@ -186,12 +187,11 @@ function ApplicationComments(){
             }
             <div className='pagination-button-container'>
                     {
-                        open && previousPageUrl && <button onClick={previous_page}>recent messages{'>'}</button>
-                    }
-                    {
                         open && nextPageUrl && <button onClick={next_page}>previous messages {'<'}</button>
                     }
-
+                    {
+                        open && previousPageUrl && <button onClick={previous_page}>recent messages{'>'}</button>
+                    }
                 </div>
             {open && 
                 <form className="card-footer rounded pt-3 d-flex flex-row " method="post" onSubmit={handle_user_message}>
