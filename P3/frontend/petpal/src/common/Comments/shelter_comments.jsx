@@ -76,6 +76,7 @@ function ShelterComments({shelter_id}) {
             let commenter_id = comment.commenter_id
             let commenter_name = await fetch_commenter_info(commenter_id) 
             let individual_comment= {
+                comment_id : comment.id,
                 commenter_name: commenter_name,
                 comment: comment.content,
                 rating: comment.rating,
@@ -182,6 +183,33 @@ function ShelterComments({shelter_id}) {
             }
     };
 
+
+    const[report_reason, setReportReason] = useState("")
+
+    const handle_report_reason = (event) => {
+        setReportReason(event.target.value)
+        console.log("report reason", report_reason)
+    }
+
+    
+    const report_comment = async (event, comment_id) => {
+        console.log("comment id", comment_id)
+
+        event.preventDefault();
+        try{
+            await axios({
+                method: 'post',
+                url: base_url+`comments/report/${comment_id}/`,
+                data: {reason: report_reason},
+                headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
+            })
+            console.log("reported comment reason", report_reason)
+            alert("Comment reported successfully")
+            window.location.reload()
+        }catch(error){
+            console.log("error reporting comment",error)
+        }
+    }
        
 
     return <>
@@ -214,6 +242,15 @@ function ShelterComments({shelter_id}) {
                                     <p>Date: {comment.date}</p>
                                     <p>Rating: {comment.rating}/5</p>
                                 </div>
+                                <details className='btn alert alert-danger'> 
+                                    <summary>Report Comment</summary>
+                                    <form method="post" onSubmit={(event) => report_comment(event, comment.comment_id)}>
+                                        <label >Reason: </label>
+                                        <textarea onChange={handle_report_reason}>
+                                        </textarea>
+                                        <button className="btn btn-secondary" type="submit" >submit Report</button>
+                                    </form>
+                                </details>
                             </div>
                         </>
                     })
