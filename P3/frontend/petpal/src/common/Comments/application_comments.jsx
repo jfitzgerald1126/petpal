@@ -1,4 +1,4 @@
-import { Link , useParams, useNavigate} from 'react-router-dom'
+import { Link , useParams, useNavigate, useFetcher} from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import './comments.css'
 import axios from 'axios'
@@ -6,7 +6,7 @@ import { useUserContext } from '../../contexts/UserContext.jsx';
 
 import { BASE_URL } from '../../api/constants.js';
 
-function ApplicationComments({pet}){
+function ApplicationComments({pet, chatOpen}){
 
     //TODO: when making the axios call, do a check to see if the user is the shelter or the applicant
     // if the user is the shelter, then while parsing the data, set is_user to true if the sender is the shelter,
@@ -20,6 +20,10 @@ function ApplicationComments({pet}){
     const[application_comments, setApplicationComments] = useState([]) 
     const[nextPageUrl, setNextPageUrl] = useState(null)
     const[previousPageUrl, setPreviousPageUrl] = useState(null)
+
+    useEffect(() => {
+        setOpen(chatOpen)
+    }, [chatOpen])
 
     const fetch_messages = async () => {
         console.log("fetching message data")

@@ -6,10 +6,9 @@ import bell from '../assets/bell.png'
 import axios from 'axios'
 
 const Navbar = () => {
-    const {user, logoutUser} = useUserContext();
+    const {user, logoutUser, isLoaded} = useUserContext();
     const navigate = useNavigate();
 
-    console.log(user)
 
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const [notifOpen, setNotifOpen] = useState(false)
@@ -76,11 +75,24 @@ const Navbar = () => {
                 Authorization: `Bearer ${authToken}`,
             },
         });
-        navigate(response.data.url)
+        let redirect = response.data.url
+        if (response.data.open_chat) {
+            redirect += "?open_chat=true"
+        }
+        navigate(redirect)
         console.log(response)
         fetchNotifs()
         setNotifOpen(false)
     }
+
+    useEffect(() => {
+        if (user && isLoaded) {
+            fetchNotifs()
+        }
+        else {
+            setNotifs(null)
+        }
+    }, [user])
 
     
 

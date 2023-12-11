@@ -67,16 +67,19 @@ class UpdateDeleteRetrieveNotificationView(APIView):
         if notification.type == 'application':
             notification = get_object_or_404(ApplicationNotification, id=kwargs['pk'])
             url = "/application/" + str(notification.application.pk)
+            open_chat = False
         elif notification.type == 'comment':
             notification = get_object_or_404(CommentNotification, id=kwargs['pk'])
             url = "/shelter/" + str(notification.comment.shelter_id.pk)
+            open_chat = True
         else:
             notification = get_object_or_404(ApplicationCommentNotification, id=kwargs['pk'])
             url = "/application/" + str(notification.application_comment.application.pk)
+            open_chat = True
 
         notification.read_status = True
         notification.save()
-        return Response({"url": url}, status=status.HTTP_200_OK)
+        return Response({"url": url, "open_chat": open_chat}, status=status.HTTP_200_OK)
     
     def delete(self, request, *args, **kwargs):
         notification = get_object_or_404(Notification, id=kwargs['pk'])

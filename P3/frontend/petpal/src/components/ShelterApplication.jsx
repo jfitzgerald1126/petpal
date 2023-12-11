@@ -13,12 +13,22 @@ export default function ShelterApplication() {
     const [application, setApplication] = useState(null);
     const [seeker, setSeeker] = useState(null);
     const [statusError, setStatusError] = useState('');
+    const [chatOpen, setChatOpen] = useState(false)
+
     const {user} = useUserContext()
     const bearerToken = localStorage.getItem('access_token');
 
     const { id } = useParams();
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        const queryParams = new URLSearchParams(window.location.search);
+        const open_chat = queryParams.get('open_chat');
+        if (open_chat == "true") {
+            setChatOpen(true)
+        }
+    }, [])
 
     const getApplication = async (app_id) => {
         try {
@@ -205,7 +215,7 @@ export default function ShelterApplication() {
             </form>
 
             {/* Chat section */}
-            <ApplicationComments pet={pet}/>
+            <ApplicationComments pet={pet} chatOpen={chatOpen}/>
             </div>
 
             {/* Card */}

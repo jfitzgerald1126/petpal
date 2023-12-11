@@ -27,6 +27,14 @@ const ShelterPage = () => {
         }
     }, [user, isLoaded])
 
+    useEffect(()=>{
+        const queryParams = new URLSearchParams(window.location.search);
+        const open_chat = queryParams.get('open_chat');
+        if (open_chat == "true") {
+            setModalOpen(true)
+        }
+    }, [])
+
 
 
     const fetchData = async () => {

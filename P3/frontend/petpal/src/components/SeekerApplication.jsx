@@ -13,12 +13,21 @@ export default function SeekerApplication() {
     const [application, setApplication] = useState(null);
     const [statusError, setStatusError] = useState('');
     const [shelter, setShelter] = useState(null)
+    const [chatOpen, setChatOpen] = useState(false)
     const {user} = useUserContext()
 
     const { id } = useParams();
 
     const navigate = useNavigate();
     const bearerToken = localStorage.getItem('access_token');
+
+    useEffect(()=>{
+        const queryParams = new URLSearchParams(window.location.search);
+        const open_chat = queryParams.get('open_chat');
+        if (open_chat == "true") {
+            setChatOpen(true)
+        }
+    }, [])
 
     const getApplication = async (app_id) => {
         try {
@@ -191,7 +200,7 @@ export default function SeekerApplication() {
             </form>
 
             {/* Chat section */}
-            <ApplicationComments pet={pet}/>
+            <ApplicationComments pet={pet} chatOpen={chatOpen}/>
             </div>
 
             {/* Card */}
