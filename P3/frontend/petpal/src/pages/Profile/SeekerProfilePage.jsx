@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
 import { Link } from 'react-router-dom';
@@ -14,19 +14,16 @@ const SeekerProfilePage = () => {
     const [app2DropdownOpen, setApp2DropdownOpen] = useState(false)
     const [status, setStatus] = useState('pending')
     const [sort, setSort] = useState('-modified_date')
+    const [page, setPage] = useState(1)
     const authToken = localStorage.getItem('access_token');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [loadingApps, setLoadingApps] = useState(true);
 
 
 
-    const fetchApps = async (pagedUrl) => {
-        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/pets/applications/'
+    const fetchApps = async (params) => {
+        let url = 'http://127.0.0.1:8000/pets/applications/'
         let pet_url = 'http://127.0.0.1:8000/pets/pet/'
-
-        
-        const params = {
-            'status': status,
-            'sort': sort
-        }
 
         try {
             const accumulator = []
@@ -57,6 +54,7 @@ const SeekerProfilePage = () => {
         } catch (error) {
           setError(error);
         }
+        setLoadingApps(false)
     }
 
     useEffect(() => {
@@ -78,8 +76,16 @@ const SeekerProfilePage = () => {
             .finally(() => {
                 setLoading(false);
             });
-            fetchApps()
+            if (!loadingApps) {
+                fetchApps({status, sort, page})
+            }
     }, [user, authToken]);
+
+    useEffect(() => {
+        setPage(parseInt(searchParams.get("page")) ? parseInt(searchParams.get("page")) : 1)
+        setSort(searchParams.get("sort") ? searchParams.get("sort") : '-modified_date')
+        setStatus(searchParams.get("status") ? searchParams.get("status") : 'pending')
+    }, [])
 
     const sort_mapping = {
         'created_date': 'Created',
@@ -89,8 +95,16 @@ const SeekerProfilePage = () => {
     }
 
 
+    const updatePage = (p) => {
+        setPage(p)
+        setSearchParams({status, sort, page:p})
+        fetchApps({status, sort, page:p})
+    } 
+
     useEffect(() => {
-        fetchApps()
+        setSearchParams({status, sort, page:1})
+        fetchApps({status, sort, page:1})
+        setPage(1)
     }, [status, sort])
 
     if (loading) {
@@ -199,8 +213,8 @@ const SeekerProfilePage = () => {
                     </tbody>
                 </table>
                 <div style={{display:'flex', flexDirection:'row', gap:10}}> 
-                    {applications?.previous && <button className='pagination-btn' onClick={()=>fetchApps(applications?.previous)}>{'<'} Previous</button>}
-                    {applications?.next && <button className='pagination-btn' onClick={()=>fetchApps(applications?.next)} >Next {'>'}</button>}
+                    {applications?.previous && <button className='pagination-btn' onClick={()=>updatePage(page- 1)}>{'<'} Previous</button>}
+                    {applications?.next && <button className='pagination-btn' onClick={()=>updatePage(page + 1)} >Next {'>'}</button>}
                 </div>
                 </>
                 : 

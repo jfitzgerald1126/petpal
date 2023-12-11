@@ -6,7 +6,7 @@ import PetCard from '../../components/PetCard';
 import axios from 'axios';
 import debounce from 'lodash/debounce';
 import { useUserContext } from '../../contexts/UserContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 const ShelterProfilePage = () => {
 
@@ -14,18 +14,17 @@ const ShelterProfilePage = () => {
     const [shelter, setShelter] = useState(null)
     const [activePets, setActivePets] = useState([])
     const [withdrawnPets, setWithdrawnPets] = useState([])
-    const [pendingApps, setPendingApps] = useState(null)
-    const [acceptedApps, setAcceptedApps] = useState(null)
-    const [deniedApps, setDeniedApps] = useState(null)
-    const [withdrawnApps, setWithdrawnApps] = useState([])
     const [adoptedPets, setAdoptedPets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     const [app2DropdownOpen, setApp2DropdownOpen] = useState(false)
     const [sort, setSort] = useState('-modified_date')
     const [appDropdownOpen, setAppDropdownOpen] = useState(false)
-    const [appType, setAppType] = useState('pending')
+    const [status, setStatus] = useState('pending')
     const [applications, setApplicationsData] = useState(null);
+    const [page, setPage] = useState(1)
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [loadingApps, setLoadingApps] = useState(true);
 
 
     const fetchData = async () => {
@@ -82,16 +81,12 @@ const ShelterProfilePage = () => {
         }
     }
 
-    const fetchApps = async (pagedUrl) => {
-        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/pets/applications/'
+    const fetchApps = async (params) => {
+        let url = 'http://127.0.0.1:8000/pets/applications/'
         let pet_url = 'http://127.0.0.1:8000/pets/pet/'
         let user_url = 'http://127.0.0.1:8000/accounts/seekers/'
 
-        const params = {
-            'status': appType,
-            'shelter': user.shelter.id,
-            'sort': sort
-        }
+        console.log(params)
 
         try {
             const accumulator = []
@@ -101,7 +96,7 @@ const ShelterProfilePage = () => {
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 },
-                params: params,
+                params,
             });
             for (let i=0;i<response.data.results.length;i++) {
                 const app = response.data.results[i]
@@ -129,11 +124,26 @@ const ShelterProfilePage = () => {
         } catch (error) {
           setError(error);
         }
+        setLoadingApps(false)
     }
 
     useEffect(() => {
-        fetchApps()
-    }, [sort, appType])
+        setPage(parseInt(searchParams.get("page")) ? parseInt(searchParams.get("page")) : 1)
+        setSort(searchParams.get("sort") ? searchParams.get("sort") : '-modified_date')
+        setStatus(searchParams.get("status") ? searchParams.get("status") : 'pending')
+    }, [])
+
+    const updatePage = (p) => {
+        setPage(p)
+        setSearchParams({status, sort, page:p})
+        fetchApps({status, sort, page:p})
+    } 
+
+    useEffect(() => {
+        setSearchParams({status, sort, page:1})
+        fetchApps({status, sort, page:1})
+        setPage(1)
+    }, [status, sort])
 
     useEffect(() => {
         if (user?.type == "shelter") {
@@ -141,7 +151,9 @@ const ShelterProfilePage = () => {
             fetchPets('available', setActivePets);
             fetchPets('withdrawn', setWithdrawnPets);
             fetchPets('adopted', setAdoptedPets);
-            fetchApps();
+            if (!loadingApps) {
+                fetchApps({status, sort, page})
+            }
         }
     }, [user])
 
@@ -188,14 +200,14 @@ const ShelterProfilePage = () => {
                 <div className="d-flex flex-row mt-3" style={{gap:10}}>
                 <div className="dropdown" style={{position:'relative'}}>
                     <button className="btn btn-secondary dropdown-toggle text-capitalize" type="button" onClick={()=>setAppDropdownOpen(!appDropdownOpen)} id="dropdownMenuButton" data-expanded="false">
-                        {appType}
+                        {status}
                     </button>
                         {appDropdownOpen && 
                             <div className="dropdown-menu dropdown-menu-right-screen-edge" id="dropdownMenu">
-                                <a className="dropdown-item" href="#" onClick={() => {setAppType('pending'); setAppDropdownOpen(false)}}>Pending</a>
-                                <a className="dropdown-item" href="#" onClick={() => {setAppType('accepted'); setAppDropdownOpen(false)}}>Accepted</a>
-                                <a className="dropdown-item" href="#" onClick={() => {setAppType('denied'); setAppDropdownOpen(false)}}>Denied</a>
-                                <a className="dropdown-item" href="#" onClick={() => {setAppType('withdrawn'); setAppDropdownOpen(false)}}>Withdrawn</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setStatus('pending'); setAppDropdownOpen(false)}}>Pending</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setStatus('accepted'); setAppDropdownOpen(false)}}>Accepted</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setStatus('denied'); setAppDropdownOpen(false)}}>Denied</a>
+                                <a className="dropdown-item" href="#" onClick={() => {setStatus('withdrawn'); setAppDropdownOpen(false)}}>Withdrawn</a>
                             </div>
                         }
                     </div>
@@ -248,8 +260,8 @@ const ShelterProfilePage = () => {
                 })}
               </table>
               <div style={{display:'flex', flexDirection:'row', gap:10}}> 
-                {applications?.previous && <button className='pagination-btn' onClick={()=>fetchApps(applications?.previous)} >{'<'} Previous</button>}
-                {applications?.next && <button className='pagination-btn' onClick={()=>fetchApps(applications?.next)}>Next {'>'}</button>}
+                {applications?.previous && <button className='pagination-btn' onClick={()=>updatePage(page - 1)} >{'<'} Previous</button>}
+                {applications?.next && <button className='pagination-btn' onClick={()=>updatePage(page + 1)}>Next {'>'}</button>}
             </div>
               </>: 
                 <span>No applications found</span>
