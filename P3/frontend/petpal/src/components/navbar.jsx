@@ -99,7 +99,7 @@ const Navbar = () => {
     
     return (
         <>
-            {!user && 
+            {!user && isLoaded && 
                 <header className="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
                     <Link to="/" style={{textDecoration:'none'}}>
                         <a className="petpalLogo fs-3 ms-3 text-white fw-medium text-decoration-none">Petpal</a>
@@ -160,7 +160,7 @@ const Navbar = () => {
             {user && user.type == "seeker" && 
                 <header className="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
                     <div className="mx-3 d-flex flex-row">
-                    <Link to="/" style={{textDecoration:'none'}}>
+                    <Link onClick={() => window.location.href = "/"} style={{textDecoration:'none'}}>
                         <a className="petpalLogo fs-3 text-white fw-medium text-decoration-none">Petpal</a>
                     </Link>
                     <div className="navLinksContainer">
@@ -220,7 +220,7 @@ const Navbar = () => {
             {user && user.type == "shelter" && 
                 <header className="landing-page-header position-fixed top-0 left-0 d-flex flex-row align-items-center justify-content-between">
                     <div className="mx-3 d-flex flex-row">
-                    <Link to="/" style={{textDecoration:'none'}}>
+                    <Link onClick={() => window.location.href = "/"} style={{textDecoration:'none'}}>
                         <a className="petpalLogo fs-3 text-white fw-medium text-decoration-none">Petpal</a>
                     </Link>
                     <div className="navLinksContainer">

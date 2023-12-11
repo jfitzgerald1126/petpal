@@ -45,11 +45,30 @@ const SearchPage = () => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [searchParams])
+        setTimeout(() => {
+            updatePage(parseInt(searchParams.get("page")) ? parseInt(searchParams.get("page")) : 1)            
+        }, 800);
+        setSortOption(searchParams.get("ordering") ? searchParams.get("ordering") : 'listed')
+        setSearch(searchParams.get("search") ? searchParams.get("search") : '')
+
+        const filtersCopy = {
+            'shelter': [],
+            'status': [],
+            'gender': [],
+            'size': [],
+            'animal': [],
+            'color': [],
+        }
+
+        Object.keys(filtersCopy).map((key) => {
+            const val = searchParams.get(key) ? searchParams.get(key) : null
+            filtersCopy[key] = val != null ? val.split(",") : []
+        })
+        setFilters(filtersCopy)
+    }, [])
 
 
-    const fetchData = async () => {
+    const fetchData = async (params) => {
         const url = 'http://127.0.0.1:8000/pets/pets/'
         try {
           const authToken = localStorage.getItem('access_token')
@@ -57,7 +76,7 @@ const SearchPage = () => {
               headers: {
                 Authorization: `Bearer ${authToken}`,
               },
-              params: searchParams,
+              params,
           });
           setData(response.data);
           setResultsCount(response.data.count)
@@ -72,6 +91,7 @@ const SearchPage = () => {
 
 
     const updateSearch = (search, sortOption, filters, page) => {
+        console.log("CALLED", search, sortOption, filters, page)
         const params = {}
 
         if (search != "") {
@@ -80,7 +100,6 @@ const SearchPage = () => {
 
         params['ordering'] = sortOption
 
-
         Object.keys(filters).map((category)=>{
             if (filters[category].length > 0) {
                 params[category] = filters[category].join(",")
@@ -88,14 +107,41 @@ const SearchPage = () => {
         })
         
         if (page) {
-            setSearchParams({page:page, ...params})
+            return({page:page, ...params})
         }
         else {
-            setSearchParams(params)
+            return(params)
         }
     }
+
+    const doSearchWork = (search, sortOption, filters, searchParams) => {
+        const res = updateSearch(search, sortOption, filters, 1)
+        setSearchParams(res)
+        fetchData(res)
+        setPage(1)
+    }
+
+    const debouncedDoSearchWork = useMemo(() => debounce(doSearchWork, 500), [])
+
+
+    useEffect(() => {
+        debouncedDoSearchWork(search, sortOption, filters, searchParams)
+    }, [search])
+
+    useEffect(() => {
+        const res = updateSearch(search, sortOption, filters, 1)
+        setSearchParams(res)
+        fetchData(res)
+        setPage(1)
+    }, [filters, sortOption])
+
+    const updatePage = (p) => {
+        setPage(p)
+        const res = updateSearch(search, sortOption, filters, p)
+        setSearchParams(res)
+        fetchData(res)
+    }
     
-    const debouncedFetchData = useMemo(() => debounce(updateSearch, 500), [])
 
 
     const all_filters = {
@@ -132,30 +178,18 @@ const SearchPage = () => {
         setMobileDropdownOpen(false)
     }, [sortOption])
 
-    const previousPage = () => {
-        if (data.previous && !loading) {
-            updateSearch(search, sortOption, filters, page - 1)
-        }
-    }
+    // useEffect(() => {
+    //     if (!loading) {
 
-    const nextPage = () => {
-        if (data.next && !loading) {
-            updateSearch(search, sortOption, filters, page + 1)
-        }
-    }
+    //     updateSearch(search, sortOption, filters);
+    //     }
+    // }, [sortOption, filters])
 
-    useEffect(() => {
-        if (!loading) {
-
-        updateSearch(search, sortOption, filters);
-        }
-    }, [sortOption, filters])
-
-    useEffect(() => {
-        if (!loading) {
-            debouncedFetchData(search, sortOption, filters)
-        }
-    }, [search])
+    // useEffect(() => {
+    //     if (!loading) {
+    //         debouncedFetchData(search, sortOption, filters)
+    //     }
+    // }, [search])
 
     return (
     <div className="content-container">
@@ -299,8 +333,8 @@ const SearchPage = () => {
             {!loading && data && 
                 <>
                 <div className='pagination-button-container'>
-                    <button onClick={previousPage} style={{visibility:data.previous ? 'visible':'hidden'}}>{'<'} Previous</button>
-                    <button onClick={nextPage} style={{visibility:data.next ? 'visible':'hidden'}}>Next {'>'}</button>
+                    <button onClick={()=>updatePage(page - 1)} style={{visibility:data.previous ? 'visible':'hidden'}}>{'<'} Previous</button>
+                    <button onClick={()=>updatePage(page + 1)} style={{visibility:data.next ? 'visible':'hidden'}}>Next {'>'}</button>
                 </div>
                 <div className="listing-card-grid">
                     {data.results.length == 0 && 
@@ -324,8 +358,8 @@ const SearchPage = () => {
                     }
                 </div>
                 <div className='pagination-button-container'>
-                    <button onClick={previousPage} style={{visibility:data.previous ? 'visible':'hidden'}}>{'<'} Previous</button>
-                    <button onClick={nextPage} style={{visibility:data.next ? 'visible':'hidden'}}>Next {'>'}</button>
+                    <button onClick={()=>updatePage(page - 1)} style={{visibility:data.previous ? 'visible':'hidden'}}>{'<'} Previous</button>
+                    <button onClick={()=>updatePage(page + 1)} style={{visibility:data.next ? 'visible':'hidden'}}>Next {'>'}</button>
                 </div>
                 </>
             }
