@@ -161,47 +161,48 @@ function ApplicationComments(){
         <div className="chat-wrapper d-flex flex-column">
             <a className="btn btn-success mt-3 text-white" onClick={toggle}>
                 {`Chat with the ${user.type === 'shelter' ? 'applicant' : 'shelter'}`}
-            </a> {
-                open && (
-                    <div className="chatbox-wrapper d-flex flex-column card card-body" ref={chatboxRef}>
-                    {
-                        formatted_messages.reverse().map((message, index) => {
-                            let styling ="user-styling rounded-2"
-                            let alignment = "text-right"
-                            if(!message.is_user){
-                                styling = "recipiant-styling rounded-2"
-                                alignment = "text-left"
-                            }
-                            return<>
-                            <div className={alignment}>
-                                <div className={styling} key={index}>
-                                    <p>{message.content}</p>
-                                </div>
-                            </div>
-                            </>
-                        })
-                    }
-                    
-                    </div>
-                )
-            }
-            <div className='pagination-button-container'>
-                    {
-                        open && nextPageUrl && <button onClick={next_page}>previous messages {'<'}</button>
-                    }
-                    {
-                        open && previousPageUrl && <button onClick={previous_page}>recent messages{'>'}</button>
-                    }
-                </div>
+            </a>
             {open && 
-                <form className="card-footer rounded pt-3 d-flex flex-row " method="post" onSubmit={handle_user_message}>
-                    <input type="text" id='message_input' class="message-field rounded" placeholder="Type something..." onInput={handle_user_input}/>
-                    <button className="btn btn-success rounded-circle" type="submit">
-                        {'>'}
-                    </button>
-                </form>
-            }
-            
+                <>
+                <div className='reviewsBackSplash' onClick={()=>setOpen(false)}></div>
+                <div className='messageContainerContainer'>
+                    <div className='messageContainer'>
+                        <div className='closebtn' onClick={()=>setOpen(false)}>
+                            Close
+                        </div>
+                        <div className="chatbox-wrapper d-flex flex-column card card-body" ref={chatboxRef}>
+                        {
+                            formatted_messages.reverse().map((message, index) => {
+                                let styling ="user-styling rounded-2"
+                                let alignment = "text-right"
+                                if(!message.is_user){
+                                    styling = "recipiant-styling rounded-2"
+                                    alignment = "text-left"
+                                }
+                                return<>
+                                <div className={alignment}>
+                                    <div className={styling} key={index}>
+                                        <p>{message.content}</p>
+                                    </div>
+                                </div>
+                                </>
+                            })
+                        }
+                        </div>
+                        <div className='pagination-button-container'>
+                            {nextPageUrl && <button onClick={next_page}>previous messages {'<'}</button>}
+                            {previousPageUrl && <button onClick={previous_page}>recent messages{'>'}</button>}
+                        </div>
+                        <form className="card-footer rounded pt-3 d-flex flex-row" style={{gap:10, alignItems:'center'}} method="post" onSubmit={handle_user_message}>
+                            <input type="text" id='message_input' class="message-field rounded" placeholder="Type something..." onInput={handle_user_input}/>
+                            <button className="btn btn-success rounded-circle textSend" type="submit">
+                                {'>'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                </>
+            } 
         </div>
         
 
