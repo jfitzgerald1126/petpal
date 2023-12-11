@@ -59,7 +59,7 @@ export const UserProvider = ({ children }) => {
               Authorization: `Bearer ${authToken}`,
             },
         });
-        console.log(response)
+        // console.log(response)
         response.data.results.map((shelter) => {
           accum[shelter['id']] = shelter
         })

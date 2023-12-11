@@ -38,7 +38,7 @@ class UpdateDeleteRetrievePetView(generics.RetrieveUpdateDestroyAPIView):
             return pet
 
 class SearchPetsPagination(pagination.PageNumberPagination):
-    page_size = 10
+    page_size = 5
 
 class SizeOrderingFilter(filters.OrderingFilter):
     size_order = Case(

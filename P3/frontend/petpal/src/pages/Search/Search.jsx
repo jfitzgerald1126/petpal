@@ -1,20 +1,22 @@
 
 import { useEffect, useInsertionEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useFetcher } from 'react-router-dom'
 import cloneDeep from 'lodash/cloneDeep';
 import PetCard from '../../components/PetCard';
 import axios from 'axios';
 import debounce from 'lodash/debounce';
 import { useUserContext } from '../../contexts/UserContext';
+import { useSearchParams } from 'react-router-dom';
 
 const SearchPage = () => {
 
     const {shelters} = useUserContext();
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false)
-    const [sortOption, setSortOption] = useState('Newer')
+    const [sortOption, setSortOption] = useState('listed')
     const [mobileFilterModalOpen, setMobileFilterModalOpen] = useState(false)
     const [search, setSearch] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
     const [filters, setFilters] = useState({
         'shelter': [],
         'status': [],
@@ -33,51 +35,29 @@ const SearchPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const sort_mapping_reverse = {
+        'name': 'Name',
+        '-name': 'Name descending',
+        'size': 'Smallest',
+        '-size': 'Largest',
+        'listed': 'Newer',
+        '-listed': 'Older',
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [searchParams])
 
 
-    const fetchData = async (search, sortOption, filters, pagedUrl) => {
-        setLoading(true)
-        setError(false)
-        setData(null)
-        setPage(1)
-
-        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/pets/pets/'
-
-        const params = {}
-
-        if (search != "") {
-            params['search'] = search
-        }
-
-        params['ordering'] = sort_mapping[sortOption]
-
-        Object.keys(filters).map((category)=>{
-            if (filters[category].length > 0) {
-                if (category == "shelter") {
-                    const shelter_ids = filters[category].map((shelter_name) => {
-                        for (const key in shelters) {
-                            if (shelters[key].shelter_name === shelter_name) {
-                              return key;
-                            }
-                        }
-                    })
-                    params[category] = shelter_ids.join(",")
-                }
-                else {
-                    params[category] = filters[category].join(",")
-                }
-            }
-        })
-
-        console.log(params)
-
+    const fetchData = async () => {
+        const url = 'http://127.0.0.1:8000/pets/pets/'
         try {
           const authToken = localStorage.getItem('access_token')
           const response = await axios.get(url, {
               headers: {
                 Authorization: `Bearer ${authToken}`,
               },
-              params: params,
+              params: searchParams,
           });
           setData(response.data);
           setResultsCount(response.data.count)
@@ -88,15 +68,38 @@ const SearchPage = () => {
           setLoading(false);
         }
     }
-    
-    const debouncedFetchData = useMemo(() => debounce(fetchData, 500), [])
 
-    useEffect(() => {
-        fetchData(search, sortOption, filters);
-    }, []);
+
+
+    const updateSearch = (search, sortOption, filters, page) => {
+        const params = {}
+
+        if (search != "") {
+            params['search'] = search
+        }
+
+        params['ordering'] = sortOption
+
+
+        Object.keys(filters).map((category)=>{
+            if (filters[category].length > 0) {
+                params[category] = filters[category].join(",")
+            }
+        })
+        
+        if (page) {
+            setSearchParams({page:page, ...params})
+        }
+        else {
+            setSearchParams(params)
+        }
+    }
+    
+    const debouncedFetchData = useMemo(() => debounce(updateSearch, 500), [])
+
 
     const all_filters = {
-        'shelter': Object.values(shelters).map((shelter)=>shelter['shelter_name']),
+        'shelter': [],
         'status': ['available', 'withdrawn', 'adopted'],
         'gender': ['male', 'female', 'other'],
         'size': ['small', 'medium', 'large'],
@@ -130,25 +133,28 @@ const SearchPage = () => {
     }, [sortOption])
 
     const previousPage = () => {
-        if (data.previous) {
-            setPage(page - 1)
-            fetchData(search, sortOption, filters, data.previous)
+        if (data.previous && !loading) {
+            updateSearch(search, sortOption, filters, page - 1)
         }
     }
 
     const nextPage = () => {
-        if (data.next) {
-            setPage(page + 1)
-            fetchData(search, sortOption, filters, data.next)
+        if (data.next && !loading) {
+            updateSearch(search, sortOption, filters, page + 1)
         }
     }
 
     useEffect(() => {
-        fetchData(search, sortOption, filters);
+        if (!loading) {
+
+        updateSearch(search, sortOption, filters);
+        }
     }, [sortOption, filters])
 
     useEffect(() => {
-        debouncedFetchData(search, sortOption, filters)
+        if (!loading) {
+            debouncedFetchData(search, sortOption, filters)
+        }
     }, [search])
 
     return (
@@ -165,16 +171,16 @@ const SearchPage = () => {
             <span className="text-zinc-400 fs-8 mx-3 fw-medium">{resultsCount} results found</span>
             <div className="dropdown" style={{position:'relative'}}>
               <button className="btn btn-secondary dropdown-toggle" type="button" onClick={()=>setDropdownOpen(!dropdownOpen)} id="dropdownMenuButton" data-expanded="false">
-                Sort By: {sortOption}
+                Sort By: {sort_mapping_reverse[sortOption]}
               </button>
                 {dropdownOpen && 
                     <div className="dropdown-menu dropdown-menu-right-screen-edge" id="dropdownMenu">
-                        <a className="dropdown-item" href="#" onClick={() => setSortOption('Name')}>Name</a>
-                        <a className="dropdown-item" href="#" onClick={() => setSortOption('Name descending')}>Name descending</a>
-                        <a className="dropdown-item" href="#" onClick={() => setSortOption('Smallest')}>Smallest</a>
-                        <a className="dropdown-item" href="#" onClick={() => setSortOption('Largest')}>Largest</a>
-                        <a className="dropdown-item" href="#" onClick={() => setSortOption('Newer')}>Newer</a>
-                        <a className="dropdown-item" href="#" onClick={() => setSortOption('Older')}>Older</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Name'])}>Name</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Name descending'])}>Name descending</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Smallest'])}>Smallest</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Largest'])}>Largest</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Newer'])}>Newer</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Older'])}>Older</a>
                     </div>
                 }
             </div>
@@ -189,16 +195,16 @@ const SearchPage = () => {
           <div className="d-flex flex-row align-items-center justify-content-between w-100 mt-3 px-2">
             <div className="dropdown">
               <button className="btn btn-secondary dropdown-toggle" type="button" onClick={()=>setMobileDropdownOpen(!mobileDropdownOpen)} id="dropdownMenuButtonMobile" data-expanded="false">
-              Sort By: {sortOption}
+              Sort By: {sort_mapping_reverse[sortOption]}
               </button>
               {mobileDropdownOpen && 
                 <div className="dropdown-menu" id="dropdownMenuMobile">
-                    <a className="dropdown-item" href="#" onClick={() => setSortOption('Name')}>Name</a>
-                    <a className="dropdown-item" href="#" onClick={() => setSortOption('Name descending')}>Name descending</a>
-                    <a className="dropdown-item" href="#" onClick={() => setSortOption('Smallest')}>Smallest</a>
-                    <a className="dropdown-item" href="#" onClick={() => setSortOption('Largest')}>Largest</a>
-                    <a className="dropdown-item" href="#" onClick={() => setSortOption('Newer')}>Newer</a>
-                    <a className="dropdown-item" href="#" onClick={() => setSortOption('Older')}>Older</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Name'])}>Name</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Name descending'])}>Name descending</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Smallest'])}>Smallest</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Largest'])}>Largest</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Newer'])}>Newer</a>
+                        <a className="dropdown-item" href="#" onClick={() => setSortOption(sort_mapping['Older'])}>Older</a>
                 </div>
               }
             </div>
@@ -210,6 +216,22 @@ const SearchPage = () => {
               <button className="modalCloseButton" onClick={()=>setMobileFilterModalOpen(false)}>×</button>
               <h3 className="font-weight-medium fs-5 text-zinc-700">Filtering</h3>
               {Object.keys(all_filters).map((category) => {
+                if (category == "shelter") {
+                    return (
+                        <div className="filtering-category-container w-100">
+                            <h6 className="font-weight-medium fs-6 text-zinc-500 text-capitalize">{category}</h6>
+                            <div className="filtering-category-options w-100 ps-2 d-flex flex-column">
+                                {Object.keys(shelters).map((shelter_id) => {
+                                    return (
+                                        <div className="filtering-option">
+                                            <input type="checkbox" checked={filters[category].includes(shelter_id)} onChange={() => toggleFilter(category, shelter_id)}/><span>{shelters[shelter_id]['shelter_name']}</span>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )
+                }
                 return (
                     <div className="filtering-category-container w-100">
                         <h6 className="font-weight-medium fs-6 text-zinc-500 text-capitalize">{category}</h6>
@@ -224,7 +246,8 @@ const SearchPage = () => {
                         </div>
                     </div>
                 )
-                })}
+                }
+                )}
             </div>
             }
           </div>
@@ -237,6 +260,22 @@ const SearchPage = () => {
         <div className="filtering-sidebar d-flex flex-column me-5">
           <h3 className="font-weight-medium fs-5 text-zinc-700">Filtering</h3>
             {Object.keys(all_filters).map((category) => {
+                if (category == "shelter") {
+                    return (
+                        <div className="filtering-category-container w-100">
+                            <h6 className="font-weight-medium fs-6 text-zinc-500 text-capitalize">{category}</h6>
+                            <div className="filtering-category-options w-100 ps-2 d-flex flex-column">
+                                {Object.keys(shelters).map((shelter_id) => {
+                                    return (
+                                        <div className="filtering-option">
+                                            <input type="checkbox" checked={filters[category].includes(shelter_id)} onChange={() => toggleFilter(category, shelter_id)}/><span>{shelters[shelter_id]['shelter_name']}</span>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )
+                }
                 return (
                     <div className="filtering-category-container w-100">
                         <h6 className="font-weight-medium fs-6 text-zinc-500 text-capitalize">{category}</h6>

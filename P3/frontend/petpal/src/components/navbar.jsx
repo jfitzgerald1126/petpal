@@ -41,8 +41,8 @@ const Navbar = () => {
                 },
                 params: params,
             });
-            console.log("AHHHHHHHHHHHHHHHHHHHHHHH")
-            console.log(response.data)
+            // console.log("AHHHHHHHHHHHHHHHHHHHHHHH")
+            // console.log(response.data)
             setNotifs(response.data)
         }
         catch {
@@ -164,7 +164,7 @@ const Navbar = () => {
                         <a className="petpalLogo fs-3 text-white fw-medium text-decoration-none">Petpal</a>
                     </Link>
                     <div className="navLinksContainer">
-                        <Link to="/search" style={{textDecoration:'none'}}>
+                        <Link to="/" style={{textDecoration:'none'}}>
                             <a className="text-white fw-medium text-decoration-none">Search</a>
                         </Link>
                         <HashLink to="/profile#applications" style={{textDecoration:'none'}}>

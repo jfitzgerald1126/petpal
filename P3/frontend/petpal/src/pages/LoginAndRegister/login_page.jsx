@@ -58,7 +58,7 @@ function LoginPage(){
                 navigate('/moderator')
             }
             else {
-                navigate('/search')
+                navigate('/')
             }
         }
         catch(error){
