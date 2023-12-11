@@ -115,7 +115,7 @@ const SeekerProfilePage = () => {
             <h3 className="fw-medium">{data.first_name} {data.last_name}</h3>
             <h4 className="fw-light" style={{fontSize:16}}>{data.email}</h4>
             <h4 className="fw-light" style={{fontSize:16}}>{data.address}</h4>
-            <h4 className="fw-light" style={{fontSize:16}}>{ `(${data.phone_number.slice(0, 3)})-${data.phone_number.slice(3, 6)}-${data.phone_number.slice(6)}`}</h4>
+            {data.phone_number && <h4 className="fw-light" style={{fontSize:16}}>{ `(${data.phone_number.slice(0, 3)})-${data.phone_number.slice(3, 6)}-${data.phone_number.slice(6)}`}</h4>}
           </div>
 
         </div>

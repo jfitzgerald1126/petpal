@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import  axios  from 'axios';
 import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
@@ -62,7 +62,7 @@ export default function ShelterApplication() {
                 }
             )
 
-            console.log(res);
+            console.log("SEEKER", res.data);
             setSeeker(res.data);
         } catch (err) {
             console.log(err);
@@ -120,8 +120,20 @@ export default function ShelterApplication() {
 
     return (
         <div className='page-container'>
-            <main className="container" style={{ marginTop: '150px' }}>
-        <h3 className="mt-5 fw-bold">View {seeker ? seeker.first_name + "'s" : 'This'} Application</h3>
+            <main className="container" style={{ marginBottom:30, }}>
+        <h3 className="mt-5 mb-4 fw-bold">View {seeker ? seeker.first_name + "'s" : 'This'} Application</h3>
+        {seeker && <Link to={`/seeker/${application.seeker}`} style={{textDecoration:'none', color:'black', display:'inline-block'}}>
+                    <div className='shelterCardSmall'>
+                        <div className='shelterImg'>
+                            <img src={seeker.profile_image ? seeker.profile_image : 'https://i.ibb.co/4jkCqdm/user.png'}/>
+                        </div>
+                        <div className='shelterInformation'>
+                            <h1>{`${seeker.first_name} ${seeker.last_name}`}</h1>
+                            <span>{seeker.email}</span>
+                            <span>{seeker.description}</span>
+                        </div>
+                    </div>
+        </Link>}
         <div className="row mt-5">
             {/* form */}
             <div className="col-md-6 col-12">

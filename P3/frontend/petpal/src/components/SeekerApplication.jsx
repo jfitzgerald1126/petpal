@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import  axios  from 'axios';
 import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
@@ -11,6 +11,7 @@ export default function SeekerApplication() {
     const [pet, setPet] = useState(null);
     const [application, setApplication] = useState(null);
     const [statusError, setStatusError] = useState('');
+    const [shelter, setShelter] = useState(null)
 
     const { id } = useParams();
 
@@ -25,7 +26,6 @@ export default function SeekerApplication() {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
             )
-            console.log(res);
             setApplication(res.data);
         } catch (err) {
             if (err.response.status === 403) {
@@ -44,9 +44,21 @@ export default function SeekerApplication() {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
             )
-
-            console.log(res);
             setPet(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getShelter = async (id) => {
+        try {
+            const res = await axios.get(
+                `${BASE_URL}accounts/shelters/${id}/`,
+                {
+                    headers: { Authorization: `Bearer ${bearerToken}`, }
+                }
+            )
+            setShelter(res.data);
         } catch (err) {
             console.log(err);
         }
@@ -58,6 +70,12 @@ export default function SeekerApplication() {
             getPet(application.pet);
         }
     }, [application])
+
+    useEffect(() => {
+        if (pet) {
+            getShelter(pet.shelter)
+        }
+    }, [pet])
 
     // get application
     useEffect(() => {
@@ -94,7 +112,20 @@ export default function SeekerApplication() {
     return (
         <div className="page-container">
         <main className="container">
-        <h3 className="mt-5 fw-bold">View Your Application</h3>
+        <h3 className="mb-4 fw-bold">View Your Application</h3>
+        {shelter && <Link to={`/shelter/${shelter.id}`} style={{textDecoration:'none', color:'black', display:'inline-block'}}>
+                    <div className='shelterCardSmall'>
+                        <div className='shelterImg'>
+                            <img src={shelter.shelter_image ? shelter.shelter_image : 'https://i.ibb.co/4JLwVSq/shelter.png'}/>
+                        </div>
+                        <div className='shelterInformation'>
+                            <h1>{shelter.shelter_name}</h1>
+                            <span>{shelter.email}</span>
+                            <span>{shelter.address}</span>
+                            <span>{shelter.description}</span>
+                        </div>
+                    </div>
+        </Link>}
         <div className="row mt-5">
             {/* form */}
             <div className="col-md-6 col-12">

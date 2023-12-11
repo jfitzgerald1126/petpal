@@ -31,6 +31,7 @@ import ProfileEditPage from './pages/Profile/ProfileEditPage';
 import ShelterListPage from './pages/Shelter/ShelterList';
 import Moderator from './pages/moderator/Moderator';
 import NotFoundPage from './pages/404_page'
+import SeekerPage from './pages/Profile/SeekerPage';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
               <Route path='pet/create/' element={<ListPet />}/>
 
               <Route path='shelter/:id/' element={<ShelterPage />}/>
+              <Route path='seeker/:id/' element={<SeekerPage />}/>
               
               <Route path='application/:id/' element={<ViewApplication />}/>
 

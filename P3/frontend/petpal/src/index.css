@@ -449,7 +449,7 @@ login-wrapper{
     gap: 20px;
 }
 
-.shelterCard {
+.shelterCard, .shelterCardSmall {
     width: 500px;
     height: 200px;
     padding: 20px;
@@ -461,11 +461,22 @@ login-wrapper{
     gap: 20px;
 }
 
+.shelterCardSmall {
+    width: 320px;
+    height: 100px;
+    padding: 10px;
+}
+
 .shelterImg {
     width: 160px;
     height: 160px;
     border-radius: 10px;
     overflow: hidden;
+}
+
+.shelterCardSmall .shelterImg {
+    width: 70px;
+    height: 70px;
 }
 
 .shelterImg img {
@@ -474,10 +485,19 @@ login-wrapper{
     width: 160px;
 }
 
+.shelterCardSmall .shelterImg img {
+    width: 70px;
+    height: 70px;
+}
+
 .shelterInformation {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.shelterCardSmall .shelterInformation {
+    gap: 0;
 }
 
 .shelterInformation h1 {
@@ -488,6 +508,14 @@ login-wrapper{
 .shelterInformation span {
     color: var(--zinc-600);   
     font-size: 12px;
+}
+
+.shelterCardSmall h1 {
+    font-size: 16px;
+}
+
+.shelterCardSmall span {
+    font-size: 10px;
 }
 
 .view-app-button{
