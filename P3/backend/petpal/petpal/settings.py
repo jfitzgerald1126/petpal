@@ -34,8 +34,8 @@ ALLOWED_HOSTS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        # 'rest_framework.permissions.AllowAny'
-        "rest_framework.permissions.IsAuthenticated"
+        'rest_framework.permissions.AllowAny'
+        # "rest_framework.permissions.IsAuthenticated"
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -169,3 +169,7 @@ from datetime import timedelta
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+
+# CORS_ALLOWED_ORIGINS = ["http://localhost:8080"]
+CORS_ALLOW_CREDENTIALS = True

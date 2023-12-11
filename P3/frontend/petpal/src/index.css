@@ -181,6 +181,33 @@ login-wrapper{
    
 }
 
+#notifications {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    min-width: 360px !important;
+}
+
+.notif-option-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.notif-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.notif-delete {
+    color: var(--zinc-600) !important;
+    padding: 3px 5px;
+    margin-left: 5px;
+    background-color: #D4D4D8;
+    border-radius: 5px;
+}
+
 
 .form-control::placeholder {
     color: var(--zinc-500);

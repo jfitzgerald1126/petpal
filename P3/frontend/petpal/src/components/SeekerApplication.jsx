@@ -6,12 +6,14 @@ import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
 import '../common/styles.css';
 import { BASE_URL } from '../api/constants';
+import { useUserContext } from '../contexts/UserContext';
 
 export default function SeekerApplication() {
     const [pet, setPet] = useState(null);
     const [application, setApplication] = useState(null);
     const [statusError, setStatusError] = useState('');
     const [shelter, setShelter] = useState(null)
+    const {user} = useUserContext()
 
     const { id } = useParams();
 
@@ -97,6 +99,23 @@ export default function SeekerApplication() {
                 }
             )
             console.log(res);
+
+            const app_id = res.data.id
+
+            const content = {
+                content: `${user.seeker.first_name} ${user.seeker.last_name} withdrew their application for your pet ${pet.name}.` 
+            }
+
+            await axios.post(
+                `${BASE_URL}notifications/application/${app_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+
             navigate('/profile/');
 
         } catch (err) {
@@ -172,7 +191,7 @@ export default function SeekerApplication() {
             </form>
 
             {/* Chat section */}
-            <ApplicationComments />
+            <ApplicationComments pet={pet}/>
             </div>
 
             {/* Card */}

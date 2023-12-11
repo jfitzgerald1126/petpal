@@ -11,7 +11,7 @@ import { BASE_URL } from '../../api/constants.js';
 function ShelterComments({shelter_id}) {
 
 
-    console.log("shelter_id",shelter_id)
+    // console.log("shelter_id",shelter_id)
     let base_url = BASE_URL
     let shelter_comments_append=`comments/review/${shelter_id}/`
 
@@ -21,12 +21,12 @@ function ShelterComments({shelter_id}) {
     const [formattedCommentData, setFormattedCommentData] = useState([])
     const[nextPageUrl, setNextPageUrl] = useState(null)
     const[previousPageUrl, setPreviousPageUrl] = useState(null)
-    console.log("next page url", nextPageUrl)
-    console.log("previous page url", previousPageUrl)
+    // console.log("next page url", nextPageUrl)
+    // console.log("previous page url", previousPageUrl)
 
 
     const fetch_comments = async () => {
-        console.log("fetching comment data")
+        // console.log("fetching comment data")
         try{
             const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
             if(response.data.next !== null){
@@ -35,14 +35,14 @@ function ShelterComments({shelter_id}) {
             if(response.data.previous !== null){
                 setPreviousPageUrl(response.data.previous)
             }
-            // console.log("response",response.data)
+            // // console.log("response",response.data)
             const comments_list = response.data.results
             setCommentData(comments_list)
-                // console.log(response.results)
+                // // console.log(response.results)
         } catch(error){
-            console.log("error retrieving comments",error)
+            // console.log("error retrieving comments",error)
         }
-        console.log("finished fetching data")
+        // console.log("finished fetching data")
     };
 
     useEffect(() => {
@@ -51,7 +51,7 @@ function ShelterComments({shelter_id}) {
         }
         fetch_comments();
     },[])
-    console.log("comment data: ",comment_data)
+    // console.log("comment data: ",comment_data)
 
     
 
@@ -63,7 +63,7 @@ function ShelterComments({shelter_id}) {
             const response = await axios.get(base_url+user_info_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
             return response.data.name
         }catch(error){
-            console.log("error retrieving commenter info",error)
+            // console.log("error retrieving commenter info",error)
             return ""
         }
     }
@@ -92,7 +92,7 @@ function ShelterComments({shelter_id}) {
     }, [comment_data])
 
     useEffect(() => {
-        console.log("FORMAT COMMENT DATA", formattedCommentData)
+        // console.log("FORMAT COMMENT DATA", formattedCommentData)
     }, [formattedCommentData])
 
     
@@ -114,11 +114,11 @@ function ShelterComments({shelter_id}) {
     if(user !== null){
         if (user.type === "seeker"){
             user_id = user.seeker.user
-            console.log("user_id",user_id)
+            // console.log("user_id",user_id)
         }
         if (user.type === "shelter"){
             user_id = user.shelter.user
-            console.log("user_id",user_id)
+            // console.log("user_id",user_id)
         }
     }
         
@@ -131,7 +131,7 @@ function ShelterComments({shelter_id}) {
                 setPreviousPageUrl(response.data.previous)
             })
             .catch((error) => {
-                console.log("error retrieving next page", error)
+                // console.log("error retrieving next page", error)
             })
         }
     }
@@ -145,7 +145,7 @@ function ShelterComments({shelter_id}) {
                 setPreviousPageUrl(response.data.previous)
             })
             .catch((error) => {
-                console.log("error retrieving previous page", error)
+                // console.log("error retrieving previous page", error)
             })
         }
     }
@@ -166,13 +166,28 @@ function ShelterComments({shelter_id}) {
         event.preventDefault();
 
         try{
-            await axios({
+            const res = await axios({
                 method: 'post',
                 url: base_url+shelter_comments_append,
                 data: packaged_data,
                 headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
 
             })
+
+            const comment_id = res.data.id
+            const content = {
+                "content": user.type == "seeker" ? `${user.seeker.first_name} ${user.seeker.last_name} left a comment on your shelter.` : `${user.shelter.shelter_name} left a comment on your shelter.`
+            }
+
+            await axios.post(
+                `${base_url}notifications/comment/${comment_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
             fetch_comments()
             document.getElementById("text_input").value=""
             setCommentRating(0)
@@ -188,12 +203,12 @@ function ShelterComments({shelter_id}) {
 
     const handle_report_reason = (event) => {
         setReportReason(event.target.value)
-        console.log("report reason", report_reason)
+        // console.log("report reason", report_reason)
     }
 
     
     const report_comment = async (event, comment_id) => {
-        console.log("comment id", comment_id)
+        // console.log("comment id", comment_id)
 
         event.preventDefault();
         try{
@@ -203,11 +218,11 @@ function ShelterComments({shelter_id}) {
                 data: {reason: report_reason},
                 headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
             })
-            console.log("reported comment reason", report_reason)
+            // console.log("reported comment reason", report_reason)
             alert("Comment reported successfully")
             window.location.reload()
         }catch(error){
-            console.log("error reporting comment",error)
+            // console.log("error reporting comment",error)
         }
     }
        

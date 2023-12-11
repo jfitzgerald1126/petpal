@@ -6,7 +6,7 @@ import { useUserContext } from '../../contexts/UserContext.jsx';
 
 import { BASE_URL } from '../../api/constants.js';
 
-function ApplicationComments(){
+function ApplicationComments({pet}){
 
     //TODO: when making the axios call, do a check to see if the user is the shelter or the applicant
     // if the user is the shelter, then while parsing the data, set is_user to true if the sender is the shelter,
@@ -113,13 +113,31 @@ function ApplicationComments(){
         event.preventDefault()
 
         try{
-            await axios({
+            const res = await axios({
                 method: 'post',
                 url: base_url+application_comments_append,
                 data: packaged_data,
                 headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
                 
             })
+            
+            const comment_id = res.data.id
+            const content = {
+                "content": user.type == "seeker" ? `${user.seeker.first_name} ${user.seeker.last_name} left a comment on their application for ${pet.name}.` : `${user.shelter.shelter_name} left a comment on your application for ${pet.name}.`
+            }
+
+            console.log("AHHHHHH", content)
+
+            await axios.post(
+                `${base_url}notifications/application_comment/${comment_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+            
             fetch_messages()
             console.log('aASDASDASDASDASD')
             document.getElementById('message_input').value = ""

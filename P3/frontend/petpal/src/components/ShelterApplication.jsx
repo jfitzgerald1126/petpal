@@ -6,12 +6,14 @@ import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
 import '../common/styles.css';    
 import { BASE_URL } from '../api/constants';
+import { useUserContext } from '../contexts/UserContext';
 
 export default function ShelterApplication() {
     const [pet, setPet] = useState(null);
     const [application, setApplication] = useState(null);
     const [seeker, setSeeker] = useState(null);
     const [statusError, setStatusError] = useState('');
+    const {user} = useUserContext()
     const bearerToken = localStorage.getItem('access_token');
 
     const { id } = useParams();
@@ -102,6 +104,23 @@ export default function ShelterApplication() {
                 }
             )
             console.log(res);
+
+            const app_id = res.data.id
+
+            const content = {
+                content: `${user.shelter.shelter_name} ${status} your application for ${pet.name}.` 
+            }
+
+            await axios.post(
+                `${BASE_URL}notifications/application/${app_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+
             navigate('/profile');
 
         } catch (err) {
@@ -186,7 +205,7 @@ export default function ShelterApplication() {
             </form>
 
             {/* Chat section */}
-            <ApplicationComments />
+            <ApplicationComments pet={pet}/>
             </div>
 
             {/* Card */}

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link, useFetcher, useNavigate } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link';
 import { useUserContext } from '../contexts/UserContext';
 import bell from '../assets/bell.png'
+import axios from 'axios'
 
 const Navbar = () => {
     const {user, logoutUser} = useUserContext();
@@ -12,6 +13,9 @@ const Navbar = () => {
 
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const [notifOpen, setNotifOpen] = useState(false)
+    const [notifs, setNotifs] = useState(null)
+    const [readStatus, setReadStatus] = useState(false)
+
 
     const signOut = () => {
         logoutUser();
@@ -20,6 +24,65 @@ const Navbar = () => {
         setDropdownOpen(false)
         navigate('/login')
     }
+
+    const fetchNotifs = async (pagedUrl) => {
+        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/notifications/notifications/'
+
+        
+        const params = {
+            'read_status': readStatus ? "True" : "False",
+        }
+
+        try {
+            const authToken = localStorage.getItem('access_token')
+            
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                params: params,
+            });
+            console.log("AHHHHHHHHHHHHHHHHHHHHHHH")
+            console.log(response.data)
+            setNotifs(response.data)
+        }
+        catch {
+
+        }
+    }
+
+    useEffect(() => {
+        fetchNotifs()
+    }, [readStatus])
+
+    const deleteNotif = async (e, id) => {
+        e.stopPropagation()
+        let url = 'http://127.0.0.1:8000/notifications/notification/' + id
+        const authToken = localStorage.getItem('access_token')
+        const response = await axios.delete(url, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        });
+        console.log(response)
+        fetchNotifs()
+    }
+
+    const getNotif = async (id) => {
+        let url = 'http://127.0.0.1:8000/notifications/notification/' + id
+        const authToken = localStorage.getItem('access_token')
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        });
+        navigate(response.data.url)
+        console.log(response)
+        fetchNotifs()
+        setNotifOpen(false)
+    }
+
+    
 
     
     return (
@@ -50,10 +113,24 @@ const Navbar = () => {
                         <div className="notificationBell" style={{cursor:'pointer'}} onClick={() => {setNotifOpen(!notifOpen);setDropdownOpen(false)}}>
                             <img src={bell}/>
                         </div>
-                        {notifOpen && <div className="dropdown-menu" id="notifications">
-                            <a className="dropdown-item" href="#">You recieved a new message from Annex Dog Rescue <span>| Oct 12, 2023</span></a>
-                            <a className="dropdown-item" href="#">Your adoption application for Ronald was accepted by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
-                            <a className="dropdown-item" href="#">Your adoption application for Bert was rejected by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
+                        {notifOpen && 
+                        <div className="dropdown-menu" id="notifications">
+                            <div className='notif-option-container'>
+                                <div style={{display:'flex', flexDirection:'row', gap:10}}> 
+                                    {notifs?.previous && <button className='pagination-btn' onClick={()=>fetchNotifs(notifs?.previous)}>{'<'} Previous</button>}
+                                    {notifs?.next && <button className='pagination-btn' onClick={()=>fetchNotifs(notifs?.next)} >Next {'>'}</button>}
+                                </div>
+                                <button className='pagination-btn' onClick={()=>setReadStatus(!readStatus)}>{readStatus ? "Show Unread" : "Show Read"}</button>
+                            </div>
+                            <div className='notif-container'>
+                                {notifs?.results?.map((notif)=>{
+
+                                    return (
+                                        <a style={{cursor:'pointer'}} className="dropdown-item" onClick={() => getNotif(notif.id)}>{notif.content}<span> | {notif.timestamp}</span> <span onClick={(e) => deleteNotif(e, notif.id)} className='notif-delete'>Delete</span></a>
+                                    )
+                                })}
+                                {!notifs?.results?.length > 0 && "No notifications"}
+                            </div>
                         </div>}
                     </div>
                     <div className="profileDropdown dropdown">
@@ -91,10 +168,24 @@ const Navbar = () => {
                         <div className="notificationBell" style={{cursor:'pointer'}} onClick={() => {setNotifOpen(!notifOpen);setDropdownOpen(false)}}>
                             <img src={bell}/>
                         </div>
-                        {notifOpen && <div className="dropdown-menu" id="notifications">
-                            <a className="dropdown-item" href="#">You recieved a new message from Annex Dog Rescue <span>| Oct 12, 2023</span></a>
-                            <a className="dropdown-item" href="#">Your adoption application for Ronald was accepted by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
-                            <a className="dropdown-item" href="#">Your adoption application for Bert was rejected by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
+                        {notifOpen && 
+                        <div className="dropdown-menu" id="notifications">
+                            <div className='notif-option-container'>
+                                <div style={{display:'flex', flexDirection:'row', gap:10}}> 
+                                    {notifs?.previous && <button className='pagination-btn' onClick={()=>fetchNotifs(notifs?.previous)}>{'<'} Previous</button>}
+                                    {notifs?.next && <button className='pagination-btn' onClick={()=>fetchNotifs(notifs?.next)} >Next {'>'}</button>}
+                                </div>
+                                <button className='pagination-btn' onClick={()=>setReadStatus(!readStatus)}>{readStatus ? "Show Unread" : "Show Read"}</button>
+                            </div>
+                            <div className='notif-container'>
+                                {notifs?.results?.map((notif)=>{
+
+                                    return (
+                                        <a style={{cursor:'pointer'}} className="dropdown-item" onClick={() => getNotif(notif.id)}>{notif.content}<span> | {notif.timestamp}</span> <span onClick={(e) => deleteNotif(e, notif.id)} className='notif-delete'>Delete</span></a>
+                                    )
+                                })}
+                                {!notifs?.results?.length > 0 && "No notifications"}
+                            </div>
                         </div>}
                     </div>
                     <div className="profileDropdown dropdown">
@@ -137,10 +228,24 @@ const Navbar = () => {
                     <div className="notificationBell" style={{cursor:'pointer'}} onClick={() => {setNotifOpen(!notifOpen);setDropdownOpen(false)}}>
                             <img src={bell}/>
                         </div>
-                        {notifOpen && <div className="dropdown-menu" id="notifications">
-                            <a className="dropdown-item" href="#">You recieved a new message from Annex Dog Rescue <span>| Oct 12, 2023</span></a>
-                            <a className="dropdown-item" href="#">Your adoption application for Ronald was accepted by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
-                            <a className="dropdown-item" href="#">Your adoption application for Bert was rejected by Annex Dog Rescue <span>| Oct 11, 2023</span></a>
+                        {notifOpen && 
+                        <div className="dropdown-menu" id="notifications">
+                            <div className='notif-option-container'>
+                                <div style={{display:'flex', flexDirection:'row', gap:10}}> 
+                                    {notifs?.previous && <button className='pagination-btn' onClick={()=>fetchNotifs(notifs?.previous)}>{'<'} Previous</button>}
+                                    {notifs?.next && <button className='pagination-btn' onClick={()=>fetchNotifs(notifs?.next)} >Next {'>'}</button>}
+                                </div>
+                                <button className='pagination-btn' onClick={()=>setReadStatus(!readStatus)}>{readStatus ? "Show Unread" : "Show Read"}</button>
+                            </div>
+                            <div className='notif-container'>
+                                {notifs?.results?.map((notif)=>{
+
+                                    return (
+                                        <a style={{cursor:'pointer'}} className="dropdown-item" onClick={() => getNotif(notif.id)}>{notif.content}<span> | {notif.timestamp}</span> <span onClick={(e) => deleteNotif(e, notif.id)} className='notif-delete'>Delete</span></a>
+                                    )
+                                })}
+                                {!notifs?.results?.length > 0  && "No notifications"}
+                            </div>
                         </div>}
                     </div>
                     <div className="profileDropdown dropdown">

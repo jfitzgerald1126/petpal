@@ -24,7 +24,7 @@ class IsNotShelter(permissions.BasePermission):
     message = "You do not have permission to comment on your own shelter"
     def has_object_permission(self, request, view, shelter):
         # comment = obj
-        print(shelter.user, request.user)
+        # print(shelter.user, request.user)
         return shelter.user != request.user
 
 class ShelterCommentCreate(ListCreateAPIView):

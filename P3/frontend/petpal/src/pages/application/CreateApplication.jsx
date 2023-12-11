@@ -74,6 +74,23 @@ export default function CreateApplication() {
                       },
                 }
             )
+
+            const app_id = res.data.id
+
+            const content = {
+                content: `${user.seeker.first_name} ${user.seeker.last_name} submitted an application for your pet ${pet.name}.` 
+            }
+
+            await axios.post(
+                `${BASE_URL}notifications/application/${app_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+
             console.log(res.data);
             navigate('/profile/');
         } catch (err) {
