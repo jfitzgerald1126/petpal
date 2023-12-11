@@ -12,6 +12,14 @@ import ShelterComments from '../../common/Comments/shelter_comments';
 const ShelterListPage = () => {
 
     const [shelters, setShelters] = useState(null)
+    const {user, isLoaded} = useUserContext()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (isLoaded && !user) {
+            navigate('/404')
+        }
+    }, [user, isLoaded]);
 
     const fetchShelters = async (pagedUrl) => {
         let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/accounts/shelters'

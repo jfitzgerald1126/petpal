@@ -19,6 +19,9 @@ export const UserProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
       setIsLoaded(true)
     }
+    else {
+      setIsLoaded(true);
+    }
   }, []);
 
   const loginUser = (userData) => {

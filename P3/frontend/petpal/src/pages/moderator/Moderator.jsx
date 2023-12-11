@@ -4,10 +4,20 @@ import axios from 'axios';
 import { BASE_URL } from '../../api/constants';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../common/styles.css';
+import { useUserContext } from '../../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Moderator() {
     const [reportedComments, setReportedComments] = useState([]);
     const [nextPage, setNextPage] = useState(false);
+    const {user, isLoaded} = useUserContext()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (isLoaded && user?.type != "moderator") {
+            navigate('/404')
+        }
+    }, [user, isLoaded]);
 
     // use next and prev page to determine whether to show the buttons to navigate to the next and previous pages
     const [page, setPage] = useState(1);

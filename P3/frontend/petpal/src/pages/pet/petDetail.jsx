@@ -18,15 +18,22 @@ function PetDetail(){
         const [isOwner, setIsOwner] = useState(false);
         const [error, setError] = useState(null);
         const { id } = useParams();
-        const { user } = useUserContext();
+        const {user, isLoaded} = useUserContext()
+        const navigate = useNavigate()       
         const authToken = localStorage.getItem('access_token');
-        const navigate = useNavigate();
 
         const [app2DropdownOpen, setApp2DropdownOpen] = useState(false)
         const [sort, setSort] = useState('-modified_date')
         const [appDropdownOpen, setAppDropdownOpen] = useState(false)
         const [appType, setAppType] = useState('pending')
         const [applications, setApplicationsData] = useState(null);
+
+            
+        useEffect(()=>{
+            if (isLoaded && !user) {
+                navigate('/404')
+            }
+        }, [user, isLoaded]) 
 
         const sort_mapping = {
             'created_date': 'Created',

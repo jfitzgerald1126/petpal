@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
 import { Link } from 'react-router-dom';
 
 const SeekerPage = () => {
-    const { user } = useUserContext();
+    const { user, isLoaded} = useUserContext();
+    const navigate = useNavigate()
     const [data, setData] = useState(null);
     const [applications, setApplicationsData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -16,6 +17,13 @@ const SeekerPage = () => {
     const [status, setStatus] = useState('pending')
     const [sort, setSort] = useState('-modified_date')
     const authToken = localStorage.getItem('access_token');
+
+    useEffect(() => {
+      if (isLoaded && !user) {
+          navigate('/404')
+      }
+  }, [user, isLoaded])
+
 
 
     useEffect(() => {

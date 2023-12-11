@@ -28,10 +28,7 @@ export default function SeekerApplication() {
             )
             setApplication(res.data);
         } catch (err) {
-            if (err.response.status === 403) {
-                // TODO: naviagte somewhere else
-                navigate('/profile/');
-            }
+            navigate('/404/');
             console.log(err);
         }
     }

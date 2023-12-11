@@ -29,11 +29,8 @@ export default function ShelterApplication() {
             console.log(res);
             setApplication(res.data);
         } catch (err) {
+            navigate('/404/');
             console.log(err);
-            if (err.response.status === 403) {
-                // TODO: naviagte somewhere else
-                navigate('/profile/');
-            }
         }
     }
 

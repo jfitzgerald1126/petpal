@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import  axios  from 'axios';
@@ -32,12 +32,18 @@ export default function ListPet() {
     const [descriptionError, setDescriptionError] = useState('');
     const [imageError, setImageError] = useState('');
     
-    const {user} = useUserContext()
+    const {user, isLoaded} = useUserContext()
 
     const bearerToken = localStorage.getItem('access_token');
 
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+      if (isLoaded && user?.type != "shelter") {
+        navigate('/404')
+      }
+    }, [user, isLoaded])
 
     const handleSubmit = async (e) => {
         // for custom form logic

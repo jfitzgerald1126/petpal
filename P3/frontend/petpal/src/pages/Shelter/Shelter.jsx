@@ -12,13 +12,20 @@ import ShelterComments from '../../common/Comments/shelter_comments';
 const ShelterPage = () => {
 
     const { id } = useParams();
-    const { user } = useUserContext();
+    const { user, isLoaded } = useUserContext();
+    const navigate = useNavigate()
     const [shelter, setShelter] = useState(null)
     const [pets, setPets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
     const [modalOpen, setModalOpen] = useState(false)
+
+    useEffect(() => {
+        if (isLoaded && !user) {
+            navigate('/404')
+        }
+    }, [user, isLoaded])
 
 
 

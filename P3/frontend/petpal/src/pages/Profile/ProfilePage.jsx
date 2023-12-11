@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
 import SeekerProfilePage from './SeekerProfilePage';
 import ShelterProfilePage from './ShelterProfilePage';
 
 const ProfilePage = () => {
-    const {user} = useUserContext()
+    const {user, isLoaded} = useUserContext()
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        if (isLoaded && !user) {
+            navigate('/404')
+        }
+    }, [user, isLoaded])
 
     return (
         <>

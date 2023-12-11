@@ -9,7 +9,7 @@ function EditPetProfile() {
     const [errorMessages, setErrorMessages] = useState({});
     const [isOwner, setIsOwner] = useState(false);
     const [loading, setLoading] = useState(true);
-    const { user } = useUserContext();
+    const { user, isLoaded } = useUserContext();
     const [profile, setProfile] = useState({
         breed: '',
         name: '',
@@ -96,12 +96,19 @@ function EditPetProfile() {
     }, []);
 
     useEffect(() => {
-        if (user?.type === "shelter" && profile && !loading) {
-            setIsOwner(user.shelter.id === profile.shelter);
-        } else {  
-            setIsOwner(false);
+        if (isLoaded && profile && !loading) {
+            if (!user || user.type != "shelter") {
+                navigate('/404')
+                return
+            }
+            else if (user.shelter.id !== profile.shelter) {
+                navigate('/404')
+            }
+            else {
+                setIsOwner(true)
+            }
         }
-    }, [user, profile, loading]);
+    }, [user, profile, loading, isLoaded]);
 
     if (loading){
         return <div>loading...</div>
