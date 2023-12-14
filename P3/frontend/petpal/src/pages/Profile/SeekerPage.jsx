@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../api/constants';
 
 const SeekerPage = () => {
     const { user, isLoaded} = useUserContext();
@@ -30,7 +31,7 @@ const SeekerPage = () => {
         setLoading(true);
         setError(null);
     
-        const fetchSeekerProfile = axios.get(`http://localhost:8000/accounts/seekers/${id}/`, {
+        const fetchSeekerProfile = axios.get(BASE_URL +`accounts/seekers/${id}/`, {
             headers: { Authorization: `Bearer ${authToken}` }
         });
     

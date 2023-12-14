@@ -62,7 +62,7 @@ const SeekerProfilePage = () => {
         setLoading(true);
         setError(null);
     
-        const fetchSeekerProfile = axios.get(`http://localhost:8000/accounts/seekers/${user.seeker.id}/`, {
+        const fetchSeekerProfile = axios.get(BASE_URL +`accounts/seekers/${user.seeker.id}/`, {
             headers: { Authorization: `Bearer ${authToken}` }
         });
     

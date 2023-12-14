@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
+import { BASE_URL } from '../../api/constants';
 
 
 function SeekerProfileEditPage() {
@@ -58,7 +59,7 @@ function SeekerProfileEditPage() {
         }
     
         try {
-            const response = await axios.put(`http://localhost:8000/accounts/seekers/${user.seeker.id}/`, formData, {
+            const response = await axios.put(BASE_URL +`accounts/seekers/${user.seeker.id}/`, formData, {
                 headers: { Authorization: `Bearer ${authToken}` }
             });
             setSuccessMessage('Profile updated successfully.');
@@ -74,7 +75,7 @@ function SeekerProfileEditPage() {
     // Fetch existing data when the component mounts
         const fetchProfileData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/accounts/seekers/${user.seeker.id}/`, {
+                const response = await axios.get(BASE_URL +`accounts/seekers/${user.seeker.id}/`, {
                     headers: { Authorization: `Bearer ${authToken}` }
                 });
                 setProfile(response.data);

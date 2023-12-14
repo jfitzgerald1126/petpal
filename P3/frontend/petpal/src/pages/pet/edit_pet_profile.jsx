@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '../../api/constants';
 import { useUserContext } from '../../contexts/UserContext';
 
 
@@ -63,7 +64,7 @@ function EditPetProfile() {
         }
 
         try {
-            const response = await axios.put(`http://localhost:8000/pets/pet/${id}/`, formData, {
+            const response = await axios.put(BASE_URL +`pets/pet/${id}/`, formData, {
                 headers: { Authorization: `Bearer ${authToken}` }
             });
             navigate(`/pet/${id}`)
@@ -81,7 +82,7 @@ function EditPetProfile() {
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/pets/pet/${id}/`, {
+                const response = await axios.get(BASE_URL +`pets/pet/${id}/`, {
                     headers: { Authorization: `Bearer ${authToken}` }
                 });
                 setLoading(false)

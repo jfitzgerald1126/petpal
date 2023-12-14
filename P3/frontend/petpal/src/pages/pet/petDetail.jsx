@@ -103,13 +103,13 @@ function PetDetail(){
         useEffect(() => {
             setLoading(true);
             setError(false);
-            axios.get(`http://localhost:8000/pets/pet/${id}/`, 
+            axios.get(BASE_URL +`pets/pet/${id}/`, 
             {
                 headers: { Authorization: `Bearer ${authToken}` }
             })
             .then(response => {
                 setPet(response.data);
-                return axios.get(`http://localhost:8000/accounts/shelters/${response.data.shelter}/`, 
+                return axios.get(BASE_URL +`accounts/shelters/${response.data.shelter}/`, 
                 {
                     headers: { Authorization: `Bearer ${authToken}` }
                 });
@@ -151,7 +151,7 @@ function PetDetail(){
 
         const handleDeletePet = () => {
             if (window.confirm('Are you sure you want to delete this pet listing?')) {
-                axios.delete(`http://localhost:8000/pets/pet/${id}/`, {
+                axios.delete(BASE_URL +`pets/pet/${id}/`, {
                     headers: { Authorization: `Bearer ${authToken}` }
                 })
                 .then(() => {
