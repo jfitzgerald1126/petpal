@@ -1,6 +1,7 @@
 // UserContext.js
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '../api/constants';
 
 const UserContext = createContext();
 
@@ -48,7 +49,7 @@ export const UserProvider = ({ children }) => {
   }, [])
 
   const fetchShelters = async () => {
-    let url = 'http://127.0.0.1:8000/accounts/shelters'
+    let url = BASE_URL +'accounts/shelters'
 
     try {
       const authToken = localStorage.getItem('access_token')

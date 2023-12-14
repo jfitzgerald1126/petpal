@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../api/constants';
 
 const SeekerProfilePage = () => {
     const { user } = useUserContext();
@@ -22,8 +23,8 @@ const SeekerProfilePage = () => {
 
 
     const fetchApps = async (params) => {
-        let url = 'http://127.0.0.1:8000/pets/applications/'
-        let pet_url = 'http://127.0.0.1:8000/pets/pet/'
+        let url = BASE_URL +'pets/applications/'
+        let pet_url = BASE_URL +'pets/pet/'
 
         try {
             const accumulator = []

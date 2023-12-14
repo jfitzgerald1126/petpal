@@ -8,6 +8,7 @@ import { useUserContext } from '../../contexts/UserContext';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Link } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link';
+import { BASE_URL } from '../../api/constants';
 
 
 function PetDetail(){
@@ -43,8 +44,8 @@ function PetDetail(){
         }
 
         const fetchApps = async (pagedUrl) => {
-            let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/pets/applications/'
-            let user_url = 'http://127.0.0.1:8000/accounts/seekers/'
+            let url = pagedUrl ? pagedUrl : BASE_URL +'pets/applications/'
+            let user_url = BASE_URL + 'accounts/seekers/'
     
             const params = {
                 'status': appType,
@@ -126,7 +127,7 @@ function PetDetail(){
     
         useEffect(() => {
             if (pet?.shelter) {
-                axios.get('http://127.0.0.1:8000/pets/pets/?shelter=' + pet.shelter, 
+                axios.get(BASE_URL +'pets/pets/?shelter=' + pet.shelter, 
                 {
                     headers: { Authorization: `Bearer ${authToken}` }
                 })

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useFetcher, useNavigate } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link';
 import { useUserContext } from '../contexts/UserContext';
+import { BASE_URL } from '../api/constants';
 import bell from '../assets/bell.png'
 import axios from 'axios'
 
@@ -25,7 +26,7 @@ const Navbar = () => {
     }
 
     const fetchNotifs = async (pagedUrl) => {
-        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/notifications/notifications/'
+        let url = pagedUrl ? pagedUrl :  BASE_URL + 'notifications/notifications/'
 
         
         const params = {
@@ -56,7 +57,7 @@ const Navbar = () => {
 
     const deleteNotif = async (e, id) => {
         e.stopPropagation()
-        let url = 'http://127.0.0.1:8000/notifications/notification/' + id
+        let url = BASE_URL +'notifications/notification/' + id
         const authToken = localStorage.getItem('access_token')
         const response = await axios.delete(url, {
             headers: {
@@ -68,7 +69,7 @@ const Navbar = () => {
     }
 
     const getNotif = async (id) => {
-        let url = 'http://127.0.0.1:8000/notifications/notification/' + id
+        let url = BASE_URL +'notifications/notification/' + id
         const authToken = localStorage.getItem('access_token')
         const response = await axios.get(url, {
             headers: {

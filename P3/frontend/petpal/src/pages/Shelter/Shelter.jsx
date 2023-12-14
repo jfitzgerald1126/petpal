@@ -8,6 +8,7 @@ import debounce from 'lodash/debounce';
 import { useUserContext } from '../../contexts/UserContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import ShelterComments from '../../common/Comments/shelter_comments';
+import { BASE_URL } from '../../api/constants';
 
 const ShelterPage = () => {
 
@@ -38,7 +39,7 @@ const ShelterPage = () => {
 
 
     const fetchData = async () => {
-        let url = 'http://127.0.0.1:8000/accounts/shelters/' + id
+        let url = BASE_URL +'accounts/shelters/' + id
 
         try {
           const authToken = localStorage.getItem('access_token')
@@ -56,7 +57,7 @@ const ShelterPage = () => {
     }
 
     const fetchPets = async () => {
-        let url = 'http://127.0.0.1:8000/pets/pets/'
+        let url = BASE_URL +'/pets/pets/'
 
         const params = {
             'shelter': id,

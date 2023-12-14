@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '../../contexts/UserContext';
+import { BASE_URL } from '../../api/constants';
 
 function ShelterProfileEditPage() {
     const { user } = useUserContext();
@@ -69,7 +70,7 @@ function ShelterProfileEditPage() {
         }
     
         try {
-            let url = 'http://127.0.0.1:8000/accounts/shelters/' + user.shelter.id + `/`;
+            let url = BASE_URL + 'accounts/shelters/' + user.shelter.id + `/`;
             const response = await axios.put(url, formData, {
                 headers: { Authorization: `Bearer ${authToken}` }
             });
@@ -89,7 +90,7 @@ function ShelterProfileEditPage() {
 
         const fetchProfileData = async () => {
             try {
-                let url = 'http://127.0.0.1:8000/accounts/shelters/' + user.shelter.id
+                let url =  BASE_URL +'accounts/shelters/' + user.shelter.id
                 const response = await axios.get(url, {
                     headers: { Authorization: `Bearer ${authToken}` }
                 });

@@ -8,6 +8,7 @@ import debounce from 'lodash/debounce';
 import { useUserContext } from '../../contexts/UserContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import ShelterComments from '../../common/Comments/shelter_comments';
+import { BASE_URL } from '../../api/constants';
 
 const ShelterListPage = () => {
 
@@ -22,7 +23,7 @@ const ShelterListPage = () => {
     }, [user, isLoaded]);
 
     const fetchShelters = async (pagedUrl) => {
-        let url = pagedUrl ? pagedUrl : 'http://127.0.0.1:8000/accounts/shelters'
+        let url = pagedUrl ? pagedUrl : BASE_URL +'accounts/shelters'
     
         try {
           const authToken = localStorage.getItem('access_token')

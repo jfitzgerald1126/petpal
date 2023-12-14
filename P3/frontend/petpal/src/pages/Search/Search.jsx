@@ -7,6 +7,7 @@ import axios from 'axios';
 import debounce from 'lodash/debounce';
 import { useUserContext } from '../../contexts/UserContext';
 import { useSearchParams } from 'react-router-dom';
+import { BASE_URL } from '../../api/constants';
 
 const SearchPage = () => {
 
@@ -69,7 +70,7 @@ const SearchPage = () => {
 
 
     const fetchData = async (params) => {
-        const url = 'http://127.0.0.1:8000/pets/pets/'
+        const url = BASE_URL +'/pets/pets/'
         try {
           const authToken = localStorage.getItem('access_token')
           const response = await axios.get(url, {

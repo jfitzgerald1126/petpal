@@ -7,6 +7,7 @@ import axios from 'axios';
 import debounce from 'lodash/debounce';
 import { useUserContext } from '../../contexts/UserContext';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { BASE_URL } from '../../api/constants';
 
 const ShelterProfilePage = () => {
 
@@ -28,7 +29,7 @@ const ShelterProfilePage = () => {
 
 
     const fetchData = async () => {
-        let url = 'http://127.0.0.1:8000/accounts/shelters/' + user.shelter.id
+        let url = BASE_URL +'accounts/shelters/' + user.shelter.id
 
         try {
           const authToken = localStorage.getItem('access_token')
@@ -46,7 +47,7 @@ const ShelterProfilePage = () => {
     }
 
     const fetchPets = async (status, setPets) => {
-        let url = 'http://127.0.0.1:8000/pets/pets/'
+        let url = BASE_URL +'pets/pets/'
 
         const params = {
             'shelter': user.shelter.id,
@@ -82,9 +83,9 @@ const ShelterProfilePage = () => {
     }
 
     const fetchApps = async (params) => {
-        let url = 'http://127.0.0.1:8000/pets/applications/'
-        let pet_url = 'http://127.0.0.1:8000/pets/pet/'
-        let user_url = 'http://127.0.0.1:8000/accounts/seekers/'
+        let url = BASE_URL +'pets/applications/'
+        let pet_url = BASE_URL +'pets/pet/'
+        let user_url = BASE_URL +'accounts/seekers/'
 
         console.log(params)
 
