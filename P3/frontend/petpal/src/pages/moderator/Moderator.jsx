@@ -51,8 +51,8 @@ export default function Moderator() {
             );
             let newComments = []
             for (let comment of res.data.results) {
-                // console.log(comment)
-                let fetchedComment = await fetchComment(comment.id);
+                console.log(comment)
+                let fetchedComment = await fetchComment(comment.comment);
                 let newComment = {...comment, content: fetchedComment.content}
                 // console.log(newComment)
                 newComments.push(newComment);
@@ -91,7 +91,9 @@ export default function Moderator() {
                 
             })
             console.log("deleted comment", id)
-            setReportedComments(reportedComments.filter((comment) => comment.id != id))
+            alert("Comment successfully deleted")
+            window.location.reload()
+            // setReportedComments(reportedComments.filter((comment) => comment.comment != id))
         } catch (error) {
             console.log(error)
         }
@@ -109,6 +111,7 @@ export default function Moderator() {
                 
             })
             console.log("deleted comment", id)
+            alert("Report dismissed")
             setReportedComments(reportedComments.filter((comment) => comment.id != id))
         }catch(error){
             console.log("error deleting comment", error)
@@ -124,6 +127,7 @@ export default function Moderator() {
       </p>
       <h1 className="mb-4">Reported Comments</h1>
         <div className="list-group">
+        {reportedComments.length == 0 && <span>No reports founds</span>}
       {reportedComments.map(reportComment => (
         <div className="reported-comment-item list-group-item list-group-item-action flex-column align-items-start" key={reportComment.id}>
           <div className="d-flex w-100 justify-content-between">
