@@ -74,7 +74,6 @@ server {
     server_name 3.143.68.230;
 
     root /home/ubuntu/group_3772/P3/frontend/petpal/build;
-    # index index.html;
 
     location / {
         try_files $uri $uri/ /index.html;
