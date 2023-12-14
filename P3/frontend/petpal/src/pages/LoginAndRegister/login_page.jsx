@@ -12,7 +12,6 @@ function LoginPage(){
     const { loginUser, logoutUser } = useUserContext();
     let login_append='accounts/api/token/'
 
-    console.log(base_url+login_append)
     const[username, setUsername] = useState("");
     const[password, setPassword] = useState("");
 
