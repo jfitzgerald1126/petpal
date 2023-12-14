@@ -57,7 +57,7 @@ const ShelterPage = () => {
     }
 
     const fetchPets = async () => {
-        let url = BASE_URL +'/pets/pets/'
+        let url = BASE_URL +'pets/pets/'
 
         const params = {
             'shelter': id,
