@@ -70,7 +70,7 @@ const SearchPage = () => {
 
 
     const fetchData = async (params) => {
-        const url = BASE_URL +'/pets/pets/'
+        const url = BASE_URL +'pets/pets/'
         try {
           const authToken = localStorage.getItem('access_token')
           const response = await axios.get(url, {
