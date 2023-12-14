@@ -109,7 +109,7 @@ const ShelterPage = () => {
     return (
         <>
         {!loading && 
-                <div className="page-container d-flex flex-column align-items-center">
+                <div className="content-container d-flex flex-column align-items-center">
             <div className="shelter-container d-flex">
                 <div className="shelter-images-container d-flex flex-column align-items-end">
                 <div className="shelter-cover-image"><img src={shelter.shelter_image ? shelter.shelter_image : 'https://i.ibb.co/4JLwVSq/shelter.png'}/></div>

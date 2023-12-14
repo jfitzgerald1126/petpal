@@ -102,8 +102,8 @@ export default function ListPet() {
 
     return (
     <>
-    <div className="page-container">
-    <main className="container" style={{paddingBottom:30}}>
+    <div className="content-container">
+    <main style={{paddingBottom:30}}>
       <div className="row mt-5 mx-auto">
         {/* form */}
         <h3 className="mb-5 fw-bold">List a new pet for adoption</h3>

@@ -135,7 +135,7 @@ export default function SeekerApplication() {
     }
 
     return (
-        <div className="page-container">
+        <div className="content-container">
         <main className="container">
         <h3 className="mb-4 fw-bold">View Your Application</h3>
         {shelter && <Link to={`/shelter/${shelter.id}`} style={{textDecoration:'none', color:'black', display:'inline-block'}}>
