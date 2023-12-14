@@ -81,6 +81,7 @@ function ShelterComments({shelter_id}) {
                 comment: comment.content,
                 rating: comment.rating,
                 date: comment.date,
+                reported: comment.reported,
             }
             formatted_comment_data.push(individual_comment)
         };
@@ -249,6 +250,13 @@ function ShelterComments({shelter_id}) {
             <div id="all-comments h-100">
                 {
                     formattedCommentData.map((comment, index) => {
+                        if (comment.reported) {
+                            return (
+                                <div className="comment-wrapper">This comment was deleted</div>
+                            )
+
+                        }
+
                         return <>
                             <div className="comment-wrapper">
                                 <div key={index}>
