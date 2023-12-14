@@ -145,7 +145,7 @@ export default function ShelterApplication() {
     }
 
     return (
-        <div className='page-container'>
+        <div className='content-container'>
             <main className="container" style={{ marginBottom:30, }}>
         <h3 className="mt-5 mb-4 fw-bold">View {seeker ? seeker.first_name + "'s" : 'This'} Application</h3>
         {seeker && <Link to={`/seeker/${application.seeker}`} style={{textDecoration:'none', color:'black', display:'inline-block'}}>

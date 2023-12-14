@@ -194,12 +194,12 @@ const SearchPage = () => {
 
     return (
     <div className="content-container">
-      <div className="search-top-container d-flex flex-column w-100 px-5 pt-5">
+      <div className="search-top-container d-flex flex-column w-100 px-5">
         <h1 className="fs-3 fw-bold text-zinc-800">Browse Pets</h1>
         <div className="search-filtering-container d-flex flex-row w-100 pt-3 align-items-center justify-content-between">
           <div className="d-flex flex-row align-items-center">
             <input type="text" className="search-bar text-zinc-600" placeholder="🔍 search" value={search} onChange={(e)=>setSearch(e.target.value)}/>
-            <span className="text-zinc-400 fs-8 ms-3 fw-medium">Viewing page {page} of {Math.ceil(resultsCount / 10)}</span>
+            <span className="text-zinc-400 fs-8 ms-3 fw-medium">Viewing page {page} of {Math.ceil(resultsCount / 5)}</span>
           </div>
 
           <div className="d-flex flex-row align-items-center">
@@ -224,7 +224,7 @@ const SearchPage = () => {
         <div className="mobile-search-filtering-container d-flex flex-column w-100 mt-2">
           <input type="text" className="search-bar text-zinc-600 w-100" placeholder="🔍 search"/>
           <div className="d-flex flex-row align-items-center justify-content-between w-100 mt-3 px-2">
-            <span className="text-zinc-400 fs-8 fw-medium">Viewing page {page} of {Math.ceil(resultsCount / 10)}</span>
+            <span className="text-zinc-400 fs-8 fw-medium">Viewing page {page} of {Math.ceil(resultsCount / 5)}</span>
             <span className="text-zinc-400 fs-8 fw-medium">{resultsCount} results found</span>
           </div>
           <div className="d-flex flex-row align-items-center justify-content-between w-100 mt-3 px-2">

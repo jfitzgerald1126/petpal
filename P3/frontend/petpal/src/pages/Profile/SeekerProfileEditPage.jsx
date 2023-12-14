@@ -96,8 +96,8 @@ function SeekerProfileEditPage() {
     }
 
     return (
-        <div className="page-container">
-        <main className="container pt-5">
+        <div className="content-container">
+        <main className="container">
             <div className="row mt-5 mx-auto">
                 <h3 className="mb-5 fw-bold">Edit Profile</h3>
                 <form onSubmit={handleSubmit} className="col-12">
