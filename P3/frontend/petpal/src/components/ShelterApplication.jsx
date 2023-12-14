@@ -1,22 +1,34 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import  axios  from 'axios';
 import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
 import '../common/styles.css';    
 import { BASE_URL } from '../api/constants';
+import { useUserContext } from '../contexts/UserContext';
 
 export default function ShelterApplication() {
     const [pet, setPet] = useState(null);
     const [application, setApplication] = useState(null);
     const [seeker, setSeeker] = useState(null);
     const [statusError, setStatusError] = useState('');
+    const [chatOpen, setChatOpen] = useState(false)
+
+    const {user} = useUserContext()
     const bearerToken = localStorage.getItem('access_token');
 
     const { id } = useParams();
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        const queryParams = new URLSearchParams(window.location.search);
+        const open_chat = queryParams.get('open_chat');
+        if (open_chat == "true") {
+            setChatOpen(true)
+        }
+    }, [])
 
     const getApplication = async (app_id) => {
         try {
@@ -29,11 +41,8 @@ export default function ShelterApplication() {
             console.log(res);
             setApplication(res.data);
         } catch (err) {
+            navigate('/404/');
             console.log(err);
-            if (err.response.status === 403) {
-                // TODO: naviagte somewhere else
-                navigate('/profile/');
-            }
         }
     }
 
@@ -62,7 +71,7 @@ export default function ShelterApplication() {
                 }
             )
 
-            console.log(res);
+            console.log("SEEKER", res.data);
             setSeeker(res.data);
         } catch (err) {
             console.log(err);
@@ -105,6 +114,23 @@ export default function ShelterApplication() {
                 }
             )
             console.log(res);
+
+            const app_id = res.data.id
+
+            const content = {
+                content: `${user.shelter.shelter_name} ${status} your application for ${pet.name}.` 
+            }
+
+            await axios.post(
+                `${BASE_URL}notifications/application/${app_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+
             navigate('/profile');
 
         } catch (err) {
@@ -120,8 +146,20 @@ export default function ShelterApplication() {
 
     return (
         <div className='page-container'>
-            <main className="container" style={{ marginTop: '150px' }}>
-        <h3 className="mt-5 fw-bold">View {seeker ? seeker.first_name + "'s" : 'This'} Application</h3>
+            <main className="container" style={{ marginBottom:30, }}>
+        <h3 className="mt-5 mb-4 fw-bold">View {seeker ? seeker.first_name + "'s" : 'This'} Application</h3>
+        {seeker && <Link to={`/seeker/${application.seeker}`} style={{textDecoration:'none', color:'black', display:'inline-block'}}>
+                    <div className='shelterCardSmall'>
+                        <div className='shelterImg'>
+                            <img src={seeker.profile_image ? seeker.profile_image : 'https://i.ibb.co/4jkCqdm/user.png'}/>
+                        </div>
+                        <div className='shelterInformation'>
+                            <h1>{`${seeker.first_name} ${seeker.last_name}`}</h1>
+                            <span>{seeker.email}</span>
+                            <span>{seeker.description}</span>
+                        </div>
+                    </div>
+        </Link>}
         <div className="row mt-5">
             {/* form */}
             <div className="col-md-6 col-12">
@@ -177,7 +215,7 @@ export default function ShelterApplication() {
             </form>
 
             {/* Chat section */}
-            <ApplicationComments />
+            <ApplicationComments pet={pet} chatOpen={chatOpen}/>
             </div>
 
             {/* Card */}

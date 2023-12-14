@@ -118,7 +118,7 @@ class ApplicationRetrieveUpdateView(RetrieveUpdateAPIView):
 
     def get_object(self):
         # TODO: permissions for who can view an application? -- only seeker / shelter involved?
-
+        print(self.request.user)
         application = get_object_or_404(Application, id=self.kwargs['pk'])
         # check if seeker or shelter is authorized to view this application
         if hasattr(self.request.user, 'shelter'):

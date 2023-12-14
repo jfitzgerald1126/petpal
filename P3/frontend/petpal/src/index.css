@@ -143,6 +143,15 @@ body{
     justify-content: center;
 }
 
+.page-container2 {
+    width: 100vw !important;
+    height: calc(100vh - 90px) !important;
+    margin-top: 90px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+}
+
 .content-container{
     width: 100vw !important;
     height: 100vh !important;
@@ -170,6 +179,33 @@ login-wrapper{
         width: 100%;
     }
    
+}
+
+#notifications {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    min-width: 360px !important;
+}
+
+.notif-option-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.notif-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.notif-delete {
+    color: var(--zinc-600) !important;
+    padding: 3px 5px;
+    margin-left: 5px;
+    background-color: #D4D4D8;
+    border-radius: 5px;
 }
 
 
@@ -389,6 +425,173 @@ login-wrapper{
     background-color: var(--emerald-600);
     border-radius: 5px;
     margin-left: 20px;
+}
+
+
+.reviewsBackSplash {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 999;
+}
+
+.reviewsContainer {
+    width: 400px;
+    height: fit-content;
+    position: fixed;
+    z-index: 1000;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-height: 60%;
+    overflow-y: auto;
+}
+
+.messageContainerContainer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.messageContainer {
+    width: 400px;
+    height: fit-content;
+    z-index: 1000;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-height: 60%;
+    overflow-y: auto;
+}
+
+.messageContainer .closebtn {
+    padding: 5px 10px;
+    background-color: var(--zinc-200);
+    width: fit-content;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--zinc-500);
+    border:1px solid var(--zinc-400);
+    margin-bottom: 20px;
+}
+
+.textSend {
+    width: 40px;
+    height: 40px;
+}
+
+.messageContainer p {
+    font-size: 12px;
+    font-weight: normal;
+    padding:8px 10px;
+    margin-bottom: 0;
+}
+
+.message-field {
+    padding: 10px;
+    width: 100% !important;
+}
+
+#rating_select {
+    padding: 5px;
+}
+
+.reviewsContainer .closebtn {
+    margin-bottom: -50px;
+    padding: 5px 10px;
+    background-color: var(--zinc-200);
+    width: fit-content;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--zinc-500);
+    border:1px solid var(--zinc-400);
+}
+
+.shelterList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.shelterCard, .shelterCardSmall {
+    width: 500px;
+    height: 200px;
+    padding: 20px;
+    background-color: var(--zinc-200);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.shelterCardSmall {
+    width: 320px;
+    height: 100px;
+    padding: 10px;
+}
+
+.shelterImg {
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.shelterCardSmall .shelterImg {
+    width: 70px;
+    height: 70px;
+}
+
+.shelterImg img {
+    object-fit: cover;
+    height: 160px;
+    width: 160px;
+}
+
+.shelterCardSmall .shelterImg img {
+    width: 70px;
+    height: 70px;
+}
+
+.shelterInformation {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.shelterCardSmall .shelterInformation {
+    gap: 0;
+}
+
+.shelterInformation h1 {
+    font-size: 20px;
+    color: var(--zinc-600);   
+}
+
+.shelterInformation span {
+    color: var(--zinc-600);   
+    font-size: 12px;
+}
+
+.shelterCardSmall h1 {
+    font-size: 16px;
+}
+
+.shelterCardSmall span {
+    font-size: 10px;
 }
 
 .view-app-button{

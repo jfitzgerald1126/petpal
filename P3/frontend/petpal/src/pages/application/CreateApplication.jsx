@@ -25,11 +25,11 @@ export default function CreateApplication() {
 
     const navigate = useNavigate();
 
-    const { user } = useUserContext();
+    const { user, isLoaded } = useUserContext();
 
     useEffect(() => {
         if(localStorage.getItem('access_token') === null){
-            navigate('/login/')
+            navigate('/404/')
         }
     }, []);
 
@@ -45,7 +45,7 @@ export default function CreateApplication() {
             console.log(res);
             setPet(res.data);
         } catch (err) {
-            console.log(err);
+            navigate('/404')
         }
     }
 
@@ -74,6 +74,23 @@ export default function CreateApplication() {
                       },
                 }
             )
+
+            const app_id = res.data.id
+
+            const content = {
+                content: `${user.seeker.first_name} ${user.seeker.last_name} submitted an application for your pet ${pet.name}.` 
+            }
+
+            await axios.post(
+                `${BASE_URL}notifications/application/${app_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+
             console.log(res.data);
             navigate('/profile/');
         } catch (err) {
@@ -85,9 +102,9 @@ export default function CreateApplication() {
         }
     }
 
-    if (user && user.type === 'shelter') {
+    if (user && user.type !== 'seeker') {
         // TODO: navigate somewhere else
-        navigate('/testhome/');
+        navigate('/404/');
     } else {
         return (
             <div className="page-container">

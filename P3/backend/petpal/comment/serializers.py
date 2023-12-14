@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, DateTimeField, ListField, \
-    PrimaryKeyRelatedField, HyperlinkedRelatedField
+    PrimaryKeyRelatedField, HyperlinkedRelatedField, BooleanField
 
 from comment.models import Comment, ApplicationComment, ReportComment
 
@@ -7,7 +7,7 @@ class CommentSerializer(ModelSerializer):
     date = DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
     shelter_id = PrimaryKeyRelatedField(read_only=True)
     commenter_id = PrimaryKeyRelatedField(read_only=True)
-    reported = ListField(read_only=True)
+    reported = BooleanField(read_only=True)
     # format checking for date
     class Meta:
         model = Comment

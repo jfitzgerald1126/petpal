@@ -10,7 +10,7 @@ export default function ViewApplication() {
 
     useEffect(() => {
         if(localStorage.getItem('access_token') === null){
-            navigate('/login/')
+            navigate('/404/')
         }
     }, []);
 

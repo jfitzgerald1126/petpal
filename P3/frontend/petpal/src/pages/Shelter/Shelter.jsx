@@ -7,16 +7,33 @@ import axios from 'axios';
 import debounce from 'lodash/debounce';
 import { useUserContext } from '../../contexts/UserContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import ShelterComments from '../../common/Comments/shelter_comments';
 
 const ShelterPage = () => {
 
     const { id } = useParams();
-    const { user } = useUserContext();
+    const { user, isLoaded } = useUserContext();
+    const navigate = useNavigate()
     const [shelter, setShelter] = useState(null)
     const [pets, setPets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
+
+    useEffect(() => {
+        if (isLoaded && !user) {
+            navigate('/404')
+        }
+    }, [user, isLoaded])
+
+    useEffect(()=>{
+        const queryParams = new URLSearchParams(window.location.search);
+        const open_chat = queryParams.get('open_chat');
+        if (open_chat == "true") {
+            setModalOpen(true)
+        }
+    }, [])
 
 
 
@@ -77,6 +94,16 @@ const ShelterPage = () => {
         }
     }, [user])
 
+    const stars = useMemo(() => {
+        let temp = ""
+        if (shelter?.rating) {
+            for(let i = 0; i < Math.round(shelter.rating);i++) {
+                temp += '⭐'
+            }
+        }
+        return temp + " "
+    }, [shelter])
+
 
     return (
         <>
@@ -88,7 +115,7 @@ const ShelterPage = () => {
                 </div>
                 <div className="shelter-details-container d-flex flex-column align-items-start">
                 <h1 className="text-zinc-700 fs-3 fw-bold">{shelter.shelter_name}</h1>
-                <span className="mb-2">⭐⭐⭐⭐ <span className="fs-7 text-zinc-500"><u>26 reviews</u></span></span>
+                <span className="mb-2" onClick={() => setModalOpen(true)}><span className="fs-7 text-zinc-500" style={{cursor:'pointer'}}>{stars}<u>{shelter.num_ratings} ratings</u></span></span>
                 <div className="shelter-info-container d-flex flex-row">
                     <div className="d-flex flex-column pe-5">
                     <span className="text-zinc-400 fs-8">{shelter.website}</span>
@@ -102,6 +129,17 @@ const ShelterPage = () => {
                 <p className="text-zinc-600 fs-8 mt-4">Description: {shelter.description}</p>
                 </div>
             </div>
+            {modalOpen && 
+            <>
+            <div className='reviewsBackSplash' onClick={()=>setModalOpen(false)}></div>
+            <div className='reviewsContainer'>
+                <div className='closebtn' onClick={()=>setModalOpen(false)}>
+                    Close
+                </div>
+                <ShelterComments shelter_id={id}/>
+            </div>
+            </>
+            }
             <div className="our-friends-container w-100 px-5 mt-3 d-flex flex-column align-items-start">
                 <h1 className="text-zinc-700 fs-3 fw-bold">Our Friends</h1>
                 <div className="shelter-pets-container">

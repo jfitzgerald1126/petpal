@@ -28,6 +28,10 @@ import EditPetDetail from './pages/pet/edit_pet_profile';
 
 import ProfilePage from './pages/Profile/ProfilePage'
 import ProfileEditPage from './pages/Profile/ProfileEditPage';
+import ShelterListPage from './pages/Shelter/ShelterList';
+import Moderator from './pages/moderator/Moderator';
+import NotFoundPage from './pages/404_page'
+import SeekerPage from './pages/Profile/SeekerPage';
 
 function App() {
   return (
@@ -58,9 +62,13 @@ function App() {
               <Route path='pet/create/' element={<ListPet />}/>
 
               <Route path='shelter/:id/' element={<ShelterPage />}/>
+              <Route path='seeker/:id/' element={<SeekerPage />}/>
               
               <Route path='application/:id/' element={<ViewApplication />}/>
 
+              <Route path='shelters' element={<ShelterListPage />}/>
+              <Route path='moderator/' element={<Moderator />}/>
+              <Route path="*" element={<NotFoundPage />} />
               {/* <Route path="test/:shelter_id/" element={<TestPage/>}/> */}
               {/* <Route path="testhome/" element={<TestHomePage/>}/> */}
               {/* <Route path="seekers/:id" element={<SeekerProfile />} /> */}

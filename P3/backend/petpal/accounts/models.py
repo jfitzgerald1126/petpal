@@ -23,6 +23,8 @@ class Shelter(models.Model):
     description = models.CharField(max_length=600, null=False, blank=False)
     address = models.CharField(max_length=200, null=False, blank=False)
     website = models.URLField(max_length=128, blank=True)
+    rating = models.FloatField(null=False, blank=False, default=0)
+    num_ratings = models.IntegerField(null=False, blank=False, default=0)
     shelter_image = models.ImageField(
         upload_to="shelter_profile/", null=True, blank=True
     )

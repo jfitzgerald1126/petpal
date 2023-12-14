@@ -8,11 +8,10 @@ import axios from 'axios'
 import { useUserContext } from '../../contexts/UserContext.jsx';
 
 import { BASE_URL } from '../../api/constants.js';
-function ShelterComments(){
+function ShelterComments({shelter_id}) {
 
 
-    let {shelter_id} = useParams()
-    console.log("shelter_id",shelter_id)
+    // console.log("shelter_id",shelter_id)
     let base_url = BASE_URL
     let shelter_comments_append=`comments/review/${shelter_id}/`
 
@@ -22,40 +21,37 @@ function ShelterComments(){
     const [formattedCommentData, setFormattedCommentData] = useState([])
     const[nextPageUrl, setNextPageUrl] = useState(null)
     const[previousPageUrl, setPreviousPageUrl] = useState(null)
-    console.log("next page url", nextPageUrl)
-    console.log("previous page url", previousPageUrl)
+    // console.log("next page url", nextPageUrl)
+    // console.log("previous page url", previousPageUrl)
+
+
+    const fetch_comments = async () => {
+        // console.log("fetching comment data")
+        try{
+            const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
+            if(response.data.next !== null){
+                setNextPageUrl(response.data.next)
+            }
+            if(response.data.previous !== null){
+                setPreviousPageUrl(response.data.previous)
+            }
+            // // console.log("response",response.data)
+            const comments_list = response.data.results
+            setCommentData(comments_list)
+                // // console.log(response.results)
+        } catch(error){
+            // console.log("error retrieving comments",error)
+        }
+        // console.log("finished fetching data")
+    };
 
     useEffect(() => {
-        let is_mounted = true;
         if(localStorage.getItem('access_token') === null){
             navigate('/login/')
         }
-        const fetch_comments = async () => {
-            console.log("fetching comment data")
-            try{
-                const response = await axios.get(base_url+shelter_comments_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
-                if(response.data.next !== null){
-                    setNextPageUrl(response.data.next)
-                }
-                if(response.data.previous !== null){
-                    setPreviousPageUrl(response.data.previous)
-                }
-                // console.log("response",response.data)
-                if(is_mounted){
-                    const comments_list = response.data.results
-                    setCommentData(comments_list)
-                    // console.log(response.results)
-                }
-            } catch(error){
-                console.log("error retrieving comments",error)
-            }
-            console.log("finished fetching data")
-        };
         fetch_comments();
-        return () => {is_mounted = false}
-        // cleanup function 
     },[])
-    console.log("comment data: ",comment_data)
+    // console.log("comment data: ",comment_data)
 
     
 
@@ -67,7 +63,7 @@ function ShelterComments(){
             const response = await axios.get(base_url+user_info_append, {headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}})
             return response.data.name
         }catch(error){
-            console.log("error retrieving commenter info",error)
+            // console.log("error retrieving commenter info",error)
             return ""
         }
     }
@@ -80,6 +76,7 @@ function ShelterComments(){
             let commenter_id = comment.commenter_id
             let commenter_name = await fetch_commenter_info(commenter_id) 
             let individual_comment= {
+                comment_id : comment.id,
                 commenter_name: commenter_name,
                 comment: comment.content,
                 rating: comment.rating,
@@ -95,7 +92,7 @@ function ShelterComments(){
     }, [comment_data])
 
     useEffect(() => {
-        console.log("FORMAT COMMENT DATA", formattedCommentData)
+        // console.log("FORMAT COMMENT DATA", formattedCommentData)
     }, [formattedCommentData])
 
     
@@ -117,11 +114,11 @@ function ShelterComments(){
     if(user !== null){
         if (user.type === "seeker"){
             user_id = user.seeker.user
-            console.log("user_id",user_id)
+            // console.log("user_id",user_id)
         }
         if (user.type === "shelter"){
             user_id = user.shelter.user
-            console.log("user_id",user_id)
+            // console.log("user_id",user_id)
         }
     }
         
@@ -134,7 +131,7 @@ function ShelterComments(){
                 setPreviousPageUrl(response.data.previous)
             })
             .catch((error) => {
-                console.log("error retrieving next page", error)
+                // console.log("error retrieving next page", error)
             })
         }
     }
@@ -148,7 +145,7 @@ function ShelterComments(){
                 setPreviousPageUrl(response.data.previous)
             })
             .catch((error) => {
-                console.log("error retrieving previous page", error)
+                // console.log("error retrieving previous page", error)
             })
         }
     }
@@ -169,25 +166,86 @@ function ShelterComments(){
         event.preventDefault();
 
         try{
-            await axios({
+            const res = await axios({
                 method: 'post',
                 url: base_url+shelter_comments_append,
                 data: packaged_data,
                 headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
 
             })
-            console.log("posted comment!")
+
+            const comment_id = res.data.id
+            const content = {
+                "content": user.type == "seeker" ? `${user.seeker.first_name} ${user.seeker.last_name} left a comment on your shelter.` : `${user.shelter.shelter_name} left a comment on your shelter.`
+            }
+
+            await axios.post(
+                `${base_url}notifications/comment/${comment_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+            fetch_comments()
+            document.getElementById("text_input").value=""
+            setCommentRating(0)
+            alert("Review added successfully")
+            window.location.reload()
             }catch(error){
                 console.log("error posting comment",error)
             }
     };
 
+
+    const[report_reason, setReportReason] = useState("")
+
+    const handle_report_reason = (event) => {
+        setReportReason(event.target.value)
+        // console.log("report reason", report_reason)
+    }
+
+    
+    const report_comment = async (event, comment_id) => {
+        // console.log("comment id", comment_id)
+
+        event.preventDefault();
+        try{
+            await axios({
+                method: 'post',
+                url: base_url+`comments/report/${comment_id}/`,
+                data: {reason: report_reason},
+                headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
+            })
+            // console.log("reported comment reason", report_reason)
+            alert("Comment reported successfully")
+            window.location.reload()
+        }catch(error){
+            // console.log("error reporting comment",error)
+        }
+    }
        
 
     return <>
         
         <div className="super-wrapper w-100 h-100 d-flex flex-column">
-            
+        <div className="comment-wrapper" >
+                <form className="rounded pt-3 d-flex" style={{flexDirection:'column', gap:10}} method="post" onSubmit={update_comments}>
+                    <input id="text_input" type="text" class="message-field rounded" placeholder="Type something..." onChange={handle_content}/>
+                    <select id="rating_select" value={comment_rating} onChange={handle_rating}>
+                        <option value={0}>Rating</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                    </select>
+                    <button className="btn btn-success rounded-oval" type="submit" >
+                        Add Review
+                    </button>
+                </form>
+            </div>
             <div id="all-comments h-100">
                 {
                     formattedCommentData.map((comment, index) => {
@@ -199,6 +257,15 @@ function ShelterComments(){
                                     <p>Date: {comment.date}</p>
                                     <p>Rating: {comment.rating}/5</p>
                                 </div>
+                                <details className='btn alert alert-danger'> 
+                                    <summary>Report Comment</summary>
+                                    <form method="post" onSubmit={(event) => report_comment(event, comment.comment_id)}>
+                                        <label >Reason: </label>
+                                        <textarea onChange={handle_report_reason}>
+                                        </textarea>
+                                        <button className="btn btn-secondary" type="submit" >submit Report</button>
+                                    </form>
+                                </details>
                             </div>
                         </>
                     })
@@ -213,22 +280,7 @@ function ShelterComments(){
                     }
 
                 </div>
-            <div className="comment-wrapper" >
-                <form className="rounded pt-3 d-flex flex-row " method="post" onSubmit={update_comments}>
-                    <input type="text" class="message-field rounded" placeholder="Type something..." onChange={handle_content}/>
-                    <select id="rating_select" value={comment_rating} onChange={handle_rating}>
-                        <option value={0}>Rating</option>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                    </select>
-                    <button className="btn btn-success rounded-oval" type="submit" >
-                        Add Review
-                    </button>
-                </form>
-            </div>
+           
             
         </div>
     

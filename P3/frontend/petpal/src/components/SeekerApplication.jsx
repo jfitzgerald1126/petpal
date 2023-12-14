@@ -1,21 +1,33 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import  axios  from 'axios';
 import PetCard from './PetCard';
 import ApplicationComments from '../common/Comments/application_comments'
 import '../common/styles.css';
 import { BASE_URL } from '../api/constants';
+import { useUserContext } from '../contexts/UserContext';
 
 export default function SeekerApplication() {
     const [pet, setPet] = useState(null);
     const [application, setApplication] = useState(null);
     const [statusError, setStatusError] = useState('');
+    const [shelter, setShelter] = useState(null)
+    const [chatOpen, setChatOpen] = useState(false)
+    const {user} = useUserContext()
 
     const { id } = useParams();
 
     const navigate = useNavigate();
     const bearerToken = localStorage.getItem('access_token');
+
+    useEffect(()=>{
+        const queryParams = new URLSearchParams(window.location.search);
+        const open_chat = queryParams.get('open_chat');
+        if (open_chat == "true") {
+            setChatOpen(true)
+        }
+    }, [])
 
     const getApplication = async (app_id) => {
         try {
@@ -25,13 +37,9 @@ export default function SeekerApplication() {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
             )
-            console.log(res);
             setApplication(res.data);
         } catch (err) {
-            if (err.response.status === 403) {
-                // TODO: naviagte somewhere else
-                navigate('/profile/');
-            }
+            navigate('/404/');
             console.log(err);
         }
     }
@@ -44,9 +52,21 @@ export default function SeekerApplication() {
                     headers: { Authorization: `Bearer ${bearerToken}`, }
                 }
             )
-
-            console.log(res);
             setPet(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getShelter = async (id) => {
+        try {
+            const res = await axios.get(
+                `${BASE_URL}accounts/shelters/${id}/`,
+                {
+                    headers: { Authorization: `Bearer ${bearerToken}`, }
+                }
+            )
+            setShelter(res.data);
         } catch (err) {
             console.log(err);
         }
@@ -58,6 +78,12 @@ export default function SeekerApplication() {
             getPet(application.pet);
         }
     }, [application])
+
+    useEffect(() => {
+        if (pet) {
+            getShelter(pet.shelter)
+        }
+    }, [pet])
 
     // get application
     useEffect(() => {
@@ -82,6 +108,23 @@ export default function SeekerApplication() {
                 }
             )
             console.log(res);
+
+            const app_id = res.data.id
+
+            const content = {
+                content: `${user.seeker.first_name} ${user.seeker.last_name} withdrew their application for your pet ${pet.name}.` 
+            }
+
+            await axios.post(
+                `${BASE_URL}notifications/application/${app_id}/`,
+                content,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      },
+                }
+            )
+
             navigate('/profile/');
 
         } catch (err) {
@@ -94,7 +137,20 @@ export default function SeekerApplication() {
     return (
         <div className="page-container">
         <main className="container">
-        <h3 className="mt-5 fw-bold">View Your Application</h3>
+        <h3 className="mb-4 fw-bold">View Your Application</h3>
+        {shelter && <Link to={`/shelter/${shelter.id}`} style={{textDecoration:'none', color:'black', display:'inline-block'}}>
+                    <div className='shelterCardSmall'>
+                        <div className='shelterImg'>
+                            <img src={shelter.shelter_image ? shelter.shelter_image : 'https://i.ibb.co/4JLwVSq/shelter.png'}/>
+                        </div>
+                        <div className='shelterInformation'>
+                            <h1>{shelter.shelter_name}</h1>
+                            <span>{shelter.email}</span>
+                            <span>{shelter.address}</span>
+                            <span>{shelter.description}</span>
+                        </div>
+                    </div>
+        </Link>}
         <div className="row mt-5">
             {/* form */}
             <div className="col-md-6 col-12">
@@ -144,7 +200,7 @@ export default function SeekerApplication() {
             </form>
 
             {/* Chat section */}
-            <ApplicationComments />
+            <ApplicationComments pet={pet} chatOpen={chatOpen}/>
             </div>
 
             {/* Card */}

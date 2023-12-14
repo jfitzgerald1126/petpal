@@ -24,7 +24,7 @@ class IsNotShelter(permissions.BasePermission):
     message = "You do not have permission to comment on your own shelter"
     def has_object_permission(self, request, view, shelter):
         # comment = obj
-        print(shelter.user, request.user)
+        # print(shelter.user, request.user)
         return shelter.user != request.user
 
 class ShelterCommentCreate(ListCreateAPIView):
@@ -44,7 +44,10 @@ class ShelterCommentCreate(ListCreateAPIView):
         # print(self.request.user.id, shelter.user_id)
         self.check_object_permissions(self.request, shelter)
         # im not sure why you need to explicitly check permissions here but it wont work without it
-        serializer.save(shelter_id=shelter, commenter_id=commenter)
+        new_comment = serializer.save(shelter_id=shelter, commenter_id=commenter)
+        shelter.rating = (shelter.rating * shelter.num_ratings + new_comment.rating) / (shelter.num_ratings + 1)
+        shelter.num_ratings += 1
+        shelter.save()
         # set the shelter_id of the comment to the shelter object
 
 class CantDoThisLmao(PermissionDenied):
@@ -117,6 +120,12 @@ class ApplicationCommentRetreive(RetrieveAPIView):
             if application.seeker != seeker:
                 raise CantDoThisLmao('You are not the applicant for this pet')
         return application_comment
+    
+
+
+class ReportCommentPagination(pagination.PageNumberPagination):
+    page_size = 10
+
 
 
 class ReportCommentCreate(CreateAPIView):
@@ -142,6 +151,7 @@ class ReportCommentList(ListAPIView):
 """
     serializer_class = ReportCommentSerializer
     permission_classes = [IsAdminUser]
+    pagination_class = ReportCommentPagination
     # only admins can see the report comment listed
     def get_queryset(self):
         return ReportComment.objects.filter()

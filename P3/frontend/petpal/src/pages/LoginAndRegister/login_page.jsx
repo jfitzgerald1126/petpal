@@ -54,8 +54,11 @@ function LoginPage(){
             if (data.user.type == "shelter") {
                 navigate('/profile')
             }
+            else if (data.user.type == "moderator") {
+                navigate('/moderator')
+            }
             else {
-                navigate('/search')
+                navigate('/')
             }
         }
         catch(error){
