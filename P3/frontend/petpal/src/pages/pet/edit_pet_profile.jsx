@@ -189,7 +189,7 @@ function EditPetProfile() {
                         </div>
                         <div className="col-md-6 d-flex justify-content-center">
                             <div className="flex-container">
-                                <img src={displayImage} className="img-preview img-fluid mt-2" alt="upload-image placeholder" />
+                                <img src={displayImage} className="img-fluid mt-2" alt="upload-image placeholder" />
                                 <h6>Pet Photo</h6>
                                 <input type="file" name="profile_image" accept="image/*" onChange={handleFileChange} className="form-control bg-zinc-100 text-zinc-500 mt-md-0 mt-3 mb-3" />
                                 {errorMessages.profile_image && <div className="text-danger">{errorMessages.profile_image}</div>}
