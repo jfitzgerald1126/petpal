@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUserContext } from '../../contexts/UserContext';
+import { BASE_URL } from '../../api/constants' 
 
 import  axios  from 'axios';
 function LoginPage(){
 
     const { loginUser, logoutUser } = useUserContext();
-    let base_url ='http://127.0.0.1:8000/'
     let login_append='accounts/api/token/'
 
     console.log(base_url+login_append)
@@ -39,7 +39,7 @@ function LoginPage(){
         try{
 
             const {data} = await 
-                        axios.post(base_url+login_append,
+                        axios.post(BASE_URL+login_append,
                         user, 
                         {headers:
                             {'Content-Type': 'application/json'}}, {withCredentials: true});

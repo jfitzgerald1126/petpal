@@ -3,6 +3,7 @@ import '../../common/styles.css'
 
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { BASE_URL } from '../../api/constants'
 import axios from 'axios'
 
 function RegisterPageShelter() { 
@@ -55,7 +56,6 @@ function RegisterPageShelter() {
 
     console.log(packaged_data);
 
-    let base_url ='http://127.0.0.1:8000/'
     let create_seeker_append='accounts/shelters/'
     let navigate = useNavigate();
     const[error, setError] = useState("")  
@@ -66,7 +66,7 @@ function RegisterPageShelter() {
         try{
             await axios({
                 method: 'post',
-                url: base_url+create_seeker_append,
+                url: BASE_URL+create_seeker_append,
                 data: JSON.stringify(packaged_data),
                 headers: {'Content-Type': 'application/json' }
             });
