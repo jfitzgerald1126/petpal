@@ -1,6 +1,6 @@
 # PetPal
 
-PetPal is a full-stack application developed as a group project for CSC309. It is designed to serve as a platform for pet adoption and management.
+[PetPal](http://3.143.68.230/) is a full-stack application developed as a group project for CSC309. It is designed to serve as a platform for pet adoption and management.
 
 ## Features
 
